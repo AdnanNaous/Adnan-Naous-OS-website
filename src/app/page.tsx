@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import { FaXTwitter, FaGithub, FaLinkedinIn } from "react-icons/fa6";
 import { useLanguage } from "@/context/LanguageContext";
@@ -31,9 +32,12 @@ export default function Home() {
           
           <div className="absolute inset-0 rounded-full overflow-hidden border-2 border-neutral-300 dark:border-neutral-700 bg-neutral-900 shadow-2xl z-10">
             {/* The Image with CSS Filters */}
-            <img 
+            <Image
               src="/profile.jpg" 
-              alt="Adnan Naous" 
+              alt="Abstract monochrome orb representing Adnan Naous"
+              fill
+              priority
+              sizes="(min-width: 768px) 10rem, 8rem"
               className="w-full h-full object-cover dark:grayscale dark:contrast-125 dark:brightness-90"
             />
             {/* Retro Scanlines Overlay */}

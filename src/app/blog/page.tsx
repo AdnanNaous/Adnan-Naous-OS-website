@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { MessageSquare, Heart, Repeat2 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -38,8 +39,8 @@ export default function Blog() {
               className="p-6 border-b border-[var(--border)] transition-colors cursor-pointer"
             >
               <div className="flex gap-4">
-                <div className="w-12 h-12 rounded-full bg-neutral-200 dark:bg-neutral-800 shrink-0 overflow-hidden">
-                  <img src="/profile.jpg" alt="Avatar" className="w-full h-full object-cover grayscale contrast-125" />
+                <div className="relative w-12 h-12 rounded-full bg-neutral-200 dark:bg-neutral-800 shrink-0 overflow-hidden">
+                  <Image src="/profile.jpg" alt="" aria-hidden="true" fill sizes="3rem" className="object-cover grayscale contrast-125" />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
