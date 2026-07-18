@@ -6,16 +6,22 @@ import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
 import { useLanguage } from "@/context/LanguageContext";
 import { Sun, Moon, Languages, Menu, X, Wrench } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
+
+const subscribeToClient = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
+function useHasMounted() {
+  return useSyncExternalStore(subscribeToClient, getClientSnapshot, getServerSnapshot);
+}
 
 export function Navbar() {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const { t, language, setLanguage } = useLanguage();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useHasMounted();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => setMounted(true), []);
 
   const navLinks = [
     { name: t("home"), href: "/" },

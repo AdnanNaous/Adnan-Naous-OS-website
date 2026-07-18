@@ -17,7 +17,7 @@ const learningLinks = [
 ];
 
 export function LearningWidget() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
 
   return (
     <div className="h-full w-full p-4 flex flex-col justify-center">

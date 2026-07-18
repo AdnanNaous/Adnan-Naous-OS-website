@@ -44,7 +44,7 @@ export default function Contact() {
               <p className="text-neutral-400">Loading modules...</p>
               <p className="text-neutral-400">Establishing secure connection [||||||||||] 100%</p>
               <p className="text-yellow-400">Warning: High traffic detected.</p>
-              <p><span className="text-blue-400">adnan@os</span>:<span className="text-purple-400">~</span>$ mailx -s "Incoming Project" Adnan.Naous@outlook.com</p>
+              <p><span className="text-blue-400">adnan@os</span>:<span className="text-purple-400">~</span>$ mailx -s &quot;Incoming Project&quot; Adnan.Naous@outlook.com</p>
               <p className="text-neutral-500 italic">Waiting for input... <span className="animate-pulse inline-block w-2 h-4 bg-green-400 align-middle ml-1"></span></p>
             </div>
           </motion.div>

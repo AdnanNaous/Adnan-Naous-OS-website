@@ -43,7 +43,7 @@ export default function Testimonials() {
             >
               <div>
                 <Quote className="text-[var(--foreground)] mb-6 opacity-20" size={32} />
-                <p className="text-lg text-[var(--foreground)] mb-8 leading-relaxed font-medium">"{item.text}"</p>
+                <p className="text-lg text-[var(--foreground)] mb-8 leading-relaxed font-medium">&quot;{item.text}&quot;</p>
               </div>
               <div>
                 <p className="font-bold text-sm">{item.author}</p>
