@@ -12,10 +12,6 @@ export default function Home() {
     <main className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center px-6 text-center relative overflow-hidden" dir={language === "ar" ? "rtl" : "ltr"}>
       
       {/* Background decoration */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center opacity-10 dark:opacity-20 blur-[50px] pointer-events-none"
-        style={{ backgroundImage: "url('/custom-bg.png')" }}
-      />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-neutral-500 opacity-[0.02] blur-[100px] pointer-events-none rounded-full" />
       
       <motion.div 
