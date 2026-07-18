@@ -69,14 +69,14 @@ export default function Home() {
         </div>
 
         <div className="flex justify-center gap-8 text-neutral-400">
-          <motion.a whileHover={{ y: -3, color: "var(--foreground)" }} whileTap={{ scale: 0.9 }} href="https://x.com/aantrueman" target="_blank" rel="noreferrer" className="transition-colors">
-            <FaXTwitter size={24} />
+          <motion.a aria-label={`X — Adnan Naous (${t("opensInNewTab")})`} whileHover={{ y: -3, color: "var(--foreground)" }} whileTap={{ scale: 0.9 }} href="https://x.com/aantrueman" target="_blank" rel="noopener noreferrer" className="transition-colors">
+            <FaXTwitter size={24} aria-hidden="true" />
           </motion.a>
-          <motion.a whileHover={{ y: -3, color: "var(--foreground)" }} whileTap={{ scale: 0.9 }} href="https://github.com/AdnanNaous" target="_blank" rel="noreferrer" className="transition-colors">
-            <FaGithub size={24} />
+          <motion.a aria-label={`GitHub — Adnan Naous (${t("opensInNewTab")})`} whileHover={{ y: -3, color: "var(--foreground)" }} whileTap={{ scale: 0.9 }} href="https://github.com/AdnanNaous" target="_blank" rel="noopener noreferrer" className="transition-colors">
+            <FaGithub size={24} aria-hidden="true" />
           </motion.a>
-          <motion.a whileHover={{ y: -3, color: "var(--foreground)" }} whileTap={{ scale: 0.9 }} href="https://www.linkedin.com/in/adnan-naous/" target="_blank" rel="noreferrer" className="transition-colors">
-            <FaLinkedinIn size={24} />
+          <motion.a aria-label={`LinkedIn — Adnan Naous (${t("opensInNewTab")})`} whileHover={{ y: -3, color: "var(--foreground)" }} whileTap={{ scale: 0.9 }} href="https://www.linkedin.com/in/adnan-naous/" target="_blank" rel="noopener noreferrer" className="transition-colors">
+            <FaLinkedinIn size={24} aria-hidden="true" />
           </motion.a>
         </div>
       </motion.div>

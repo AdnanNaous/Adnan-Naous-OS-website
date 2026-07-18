@@ -36,7 +36,7 @@ export default function Blog() {
             <motion.div 
               whileHover={{ backgroundColor: "rgba(128,128,128,0.05)" }}
               key={idx} 
-              className="p-6 border-b border-[var(--border)] transition-colors cursor-pointer"
+              className="p-6 border-b border-[var(--border)] transition-colors"
             >
               <div className="flex gap-4">
                 <div className="relative w-12 h-12 rounded-full bg-neutral-200 dark:bg-neutral-800 shrink-0 overflow-hidden">
@@ -51,15 +51,15 @@ export default function Blog() {
                   <p className="text-[var(--foreground)] mb-4 leading-relaxed">{tweet.content}</p>
                   
                   <div className="flex gap-8 text-neutral-500" dir="ltr">
-                    <button className="flex items-center gap-2 hover:text-[var(--foreground)] transition-colors text-sm">
-                      <MessageSquare size={16} /> {tweet.stats.replies}
-                    </button>
-                    <button className="flex items-center gap-2 hover:text-[var(--foreground)] transition-colors text-sm">
-                      <Repeat2 size={16} /> {tweet.stats.retweets}
-                    </button>
-                    <button className="flex items-center gap-2 hover:text-[var(--foreground)] transition-colors text-sm">
-                      <Heart size={16} /> {tweet.stats.likes}
-                    </button>
+                    <span className="flex items-center gap-2 text-sm" aria-label={`${tweet.stats.replies} ${language === "ar" ? "ردود" : "replies"}`}>
+                      <MessageSquare size={16} aria-hidden="true" /> {tweet.stats.replies}
+                    </span>
+                    <span className="flex items-center gap-2 text-sm" aria-label={`${tweet.stats.retweets} ${language === "ar" ? "إعادات نشر" : "reposts"}`}>
+                      <Repeat2 size={16} aria-hidden="true" /> {tweet.stats.retweets}
+                    </span>
+                    <span className="flex items-center gap-2 text-sm" aria-label={`${tweet.stats.likes} ${language === "ar" ? "إعجابات" : "likes"}`}>
+                      <Heart size={16} aria-hidden="true" /> {tweet.stats.likes}
+                    </span>
                   </div>
                 </div>
               </div>

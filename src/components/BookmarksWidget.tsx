@@ -7,6 +7,8 @@ import { motion } from "framer-motion";
 
 type Bookmark = { icon: string, link: string, name: string };
 
+const bookmarkClassName = "flex items-center gap-2 px-3 py-1.5 bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 rounded-lg text-sm text-[var(--foreground)] transition-colors shadow-sm";
+
 const categories: Record<string, Bookmark[]> = {
   "Main AI": [
     { icon: "✨", link: "https://gemini.google.com", name: "Gemini" },
@@ -81,18 +83,30 @@ export function BookmarksWidget() {
             <span className="text-[11px] uppercase tracking-widest text-neutral-500 font-bold pl-1">{cat}</span>
             <div className="flex flex-wrap gap-2">
               {categories[cat].map((bm) => (
-                <motion.a 
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  key={bm.name} 
-                  href={bm.link} 
-                  target="_blank" 
-                  rel="noreferrer"
-                  className="flex items-center gap-2 px-3 py-1.5 bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 rounded-lg text-sm text-[var(--foreground)] hover:bg-neutral-200 dark:hover:bg-white/10 transition-colors shadow-sm"
-                >
-                  <span className="text-base leading-none">{bm.icon}</span>
-                  <span className="font-medium">{bm.name}</span>
-                </motion.a>
+                bm.link === "#" ? (
+                  <span
+                    key={bm.name}
+                    aria-disabled="true"
+                    className={`${bookmarkClassName} cursor-not-allowed opacity-60`}
+                  >
+                    <span className="text-base leading-none" aria-hidden="true">{bm.icon}</span>
+                    <span className="font-medium">{bm.name}</span>
+                  </span>
+                ) : (
+                  <motion.a
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    key={bm.name}
+                    href={bm.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${bookmarkClassName} hover:bg-neutral-200 dark:hover:bg-white/10`}
+                  >
+                    <span className="text-base leading-none" aria-hidden="true">{bm.icon}</span>
+                    <span className="font-medium">{bm.name}</span>
+                    <span className="sr-only"> ({t("opensInNewTab")})</span>
+                  </motion.a>
+                )
               ))}
             </div>
           </div>

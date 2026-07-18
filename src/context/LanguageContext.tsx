@@ -96,6 +96,7 @@ const translations = {
     bio: "Passionate learner & explorer. Gaming & tech enthusiast. Building my Personal OS.",
     stack: "Stack",
     sessions: "Sessions",
+    opensInNewTab: "opens in a new tab",
     
     developedBy: "Developed by Adnan Naous",
     rightsReserved: "© 2026. All rights reserved."
@@ -183,6 +184,7 @@ const translations = {
     bio: "متعلم ومستكشف شغوف. مهتم بالألعاب والتقنية. أقوم ببناء نظامي الشخصي.",
     stack: "الأدوات",
     sessions: "الجلسات",
+    opensInNewTab: "يفتح في علامة تبويب جديدة",
 
     developedBy: "تم التطوير بواسطة عدنان نعوس",
     rightsReserved: "© 2026. جميع الحقوق محفوظة."

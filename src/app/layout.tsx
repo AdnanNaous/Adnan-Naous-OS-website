@@ -32,8 +32,11 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           <LanguageProvider>
             <DashboardProvider>
+              <a href="#main-content" className="skip-link">
+                Skip to main content
+              </a>
               <Navbar />
-              <div className="pt-16 min-h-screen">
+              <div id="main-content" tabIndex={-1} className="pt-16 min-h-screen">
                 {children}
               </div>
             </DashboardProvider>
