@@ -2,14 +2,23 @@
 
 import { GitHubCalendar } from "react-github-calendar";
 import { useTheme } from "next-themes";
-import { SpotlightCard } from "./SpotlightCard";
 import { FaGithub } from "react-icons/fa6";
 import { motion } from "framer-motion";
+import { useSyncExternalStore } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+
+const subscribeToClient = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
+function useHasMounted() {
+  return useSyncExternalStore(subscribeToClient, getClientSnapshot, getServerSnapshot);
+}
 
 export function GitHubTracker() {
   const { theme } = useTheme();
   const { language } = useLanguage();
+  const mounted = useHasMounted();
 
   return (
     <div className="h-full w-full p-6 flex flex-col justify-start">
@@ -22,14 +31,16 @@ export function GitHubTracker() {
 
       <div className="flex justify-center items-center w-full overflow-x-auto no-scrollbar pb-2" dir="ltr">
         <motion.div whileHover={{ scale: 1.01 }} className="px-2">
-          <GitHubCalendar 
-            username="AdnanNaous" 
-            colorScheme={theme === "dark" ? "dark" : "light"}
-            theme={{
-              light: ['#f0f0f0', '#c4edde', '#7ac7c4', '#f73859', '#384259'],
-              dark: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'],
-            }}
-          />
+          {mounted && (
+            <GitHubCalendar
+              username="AdnanNaous"
+              colorScheme={theme === "dark" ? "dark" : "light"}
+              theme={{
+                light: ['#f0f0f0', '#c4edde', '#7ac7c4', '#f73859', '#384259'],
+                dark: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'],
+              }}
+            />
+          )}
         </motion.div>
       </div>
     </div>

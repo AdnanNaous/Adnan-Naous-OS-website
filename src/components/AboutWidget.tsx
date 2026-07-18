@@ -2,10 +2,9 @@
 
 import { useLanguage } from "@/context/LanguageContext";
 import { User, GraduationCap, Code, HeartPulse, BrainCircuit } from "lucide-react";
-import { motion } from "framer-motion";
 
 export function AboutWidget() {
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
 
   return (
     <div className="h-full w-full p-5 flex flex-col relative overflow-hidden group">

@@ -24,12 +24,14 @@ export function Pomodoro() {
   }, [isRunning, mode, setIsFocusMode]);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isRunning && timeLeft > 0) {
-      interval = setInterval(() => {
-        setTimeLeft((prev) => prev - 1);
-      }, 1000);
-    } else if (timeLeft === 0 && isRunning) {
+    if (!isRunning) return;
+
+    const timeout = setTimeout(() => {
+      if (timeLeft > 1) {
+        setTimeLeft(timeLeft - 1);
+        return;
+      }
+
       setIsRunning(false);
       if (mode === "focus") {
         setSessionsCompleted((prev) => prev + 1);
@@ -39,8 +41,9 @@ export function Pomodoro() {
         setMode("focus");
         setTimeLeft(50 * 60);
       }
-    }
-    return () => clearInterval(interval);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
   }, [isRunning, timeLeft, mode, setSessionsCompleted]);
 
   const toggleTimer = () => setIsRunning(!isRunning);
