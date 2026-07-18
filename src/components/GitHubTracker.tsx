@@ -24,12 +24,18 @@ export function GitHubTracker() {
     <div className="h-full w-full p-6 flex flex-col justify-start">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-base font-bold text-[var(--foreground)] flex items-center gap-2">
-          <FaGithub size={18} className="text-neutral-500" /> 
+          <FaGithub size={18} aria-hidden="true" className="text-neutral-500" />
           {language === "ar" ? "نشاط جيت هاب" : "GitHub Activity"}
         </h2>
       </div>
 
-      <div className="flex justify-center items-center w-full overflow-x-auto no-scrollbar pb-2" dir="ltr">
+      <div
+        role="region"
+        aria-label={language === "ar" ? "تقويم مساهمات جيت هاب" : "GitHub contribution calendar"}
+        tabIndex={0}
+        className="flex justify-center items-center w-full overflow-x-auto no-scrollbar pb-2"
+        dir="ltr"
+      >
         <motion.div whileHover={{ scale: 1.01 }} className="px-2">
           {mounted && (
             <GitHubCalendar

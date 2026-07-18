@@ -22,7 +22,7 @@ export default function Contact() {
             className="inline-flex items-center gap-3 text-2xl md:text-4xl font-bold text-[var(--foreground)] hover:text-neutral-500 transition-colors mb-16"
           >
             Adnan.Naous@outlook.com
-            <Send size={24} className={language === "ar" ? "rotate-180" : ""} />
+            <Send size={24} aria-hidden="true" className={language === "ar" ? "rotate-180" : ""} />
           </a>
 
           {/* Visual Coding Effect */}
@@ -32,6 +32,7 @@ export default function Contact() {
             transition={{ delay: 0.3, duration: 0.6 }}
             className="w-full max-w-2xl bg-[#0a0a0a] border border-neutral-800 rounded-xl overflow-hidden shadow-2xl font-mono text-sm sm:text-base text-green-400 p-4 sm:p-6"
             dir="ltr"
+            aria-hidden="true"
           >
             <div className="flex gap-2 mb-6">
               <div className="w-3 h-3 rounded-full bg-red-500/80" />
