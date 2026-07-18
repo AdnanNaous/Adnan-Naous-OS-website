@@ -4,21 +4,23 @@
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FAdnanNaous%2FAdnan-Naous-OS-website)
 
-A minimalist, high-performance web experience blending Computer Science, Artificial Intelligence, and interactive media.
+A minimalist web experience blending Computer Science, Artificial Intelligence, and interactive media.
 
 *(Scroll down for Arabic | النسخة العربية بالأسفل)*
 
 ## Features
-- **Grayscale / Glassmorphism UI**: High-end Apple-inspired aesthetic.
-- **RTL Arabic Localization**: Complete bidirectional translation support.
-- **Personal OS Dashboard**: Integrated widgets (Pomodoro, GitHub tracker, Bookmarks).
-- **Interactive Terminal**: Custom CSS & Framer Motion terminal simulations.
+- **Grayscale-led / Glassmorphism UI**: A neutral, Apple-inspired visual direction with a small number of existing accent-color deviations.
+- **English and Arabic Localization**: Substantial bilingual and RTL support; some content is still not localized.
+- **Personal OS Dashboard**: The `/tools` route contains the Pomodoro timer, command center, GitHub tracker, and bookmarks.
+- **Interactive Terminal**: A terminal-style contact presentation built with CSS and Framer Motion.
 
 ## Tech Stack
-- [Next.js 14 (App Router)](https://nextjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [TypeScript](https://www.typescriptlang.org/)
+- [Next.js 16.2.10 (App Router)](https://nextjs.org/)
+- React and React DOM 19.2.4
+- [TypeScript 5](https://www.typescriptlang.org/)
+- [Tailwind CSS 4](https://tailwindcss.com/) via `@tailwindcss/postcss`
+- [Framer Motion 12](https://www.framer.com/motion/)
+- `next-themes` 0.4.6
 
 ## Local Development
 
@@ -27,10 +29,10 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in a browser.
 
 ## Deployment
-This repository is connected to Vercel for continuous deployment. Any pushes to the `main` branch will automatically trigger a new production build.
+The intended production flow uses the `main` branch and Vercel's standard Next.js configuration. No custom `vercel.json` is present in the repository.
 
 ---
 
@@ -38,19 +40,21 @@ This repository is connected to Vercel for continuous deployment. Any pushes to 
 
 **الموقع المباشر:** [https://adnannaous.vercel.app/](https://adnannaous.vercel.app/)
 
-تجربة ويب بسيطة وعالية الأداء تمزج بين علوم الحاسوب، الذكاء الاصطناعي، والوسائط التفاعلية.
+تجربة ويب بسيطة تمزج بين علوم الحاسوب والذكاء الاصطناعي والوسائط التفاعلية.
 
 ## المميزات
-- **واجهة مستخدم (Grayscale / Glassmorphism)**: جمالية راقية مستوحاة من تصميم Apple.
-- **دعم اللغة العربية (RTL)**: ترجمة كاملة لجميع أقسام الموقع.
-- **لوحة تحكم النظام الشخصي**: أدوات مدمجة (مؤقت بومودورو، متتبع GitHub، إشارات مرجعية).
-- **واجهة أوامر تفاعلية (Terminal)**: محاكاة تفاعلية للـ Terminal باستخدام CSS و Framer Motion.
+- **واجهة بتدرجات رمادية وGlassmorphism**: توجه بصري محايد مستوحى من Apple، مع وجود عدد محدود من الألوان الإضافية في التطبيق الحالي.
+- **دعم اللغتين الإنجليزية والعربية**: دعم واسع للترجمة واتجاه RTL، مع بقاء بعض المحتوى غير مترجم حالياً.
+- **لوحة تحكم النظام الشخصي**: يحتوي المسار `/tools` على مؤقت بومودورو ومركز الأوامر ومتتبع GitHub والإشارات المرجعية.
+- **واجهة أوامر تفاعلية**: عرض بأسلوب Terminal في صفحة التواصل باستخدام CSS وFramer Motion.
 
 ## التقنيات المستخدمة
-- [Next.js 14 (App Router)](https://nextjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [TypeScript](https://www.typescriptlang.org/)
+- [Next.js 16.2.10 (App Router)](https://nextjs.org/)
+- React وReact DOM 19.2.4
+- [TypeScript 5](https://www.typescriptlang.org/)
+- [Tailwind CSS 4](https://tailwindcss.com/) عبر `@tailwindcss/postcss`
+- [Framer Motion 12](https://www.framer.com/motion/)
+- `next-themes` 0.4.6
 
 ## التشغيل المحلي
 
@@ -59,7 +63,7 @@ npm install
 npm run dev
 ```
 
-افتح الرابط [http://localhost:3000](http://localhost:3000) في متصفحك لترى النتيجة.
+افتح [http://localhost:3000](http://localhost:3000) في المتصفح.
 
 ## النشر
-هذا المستودع متصل بـ Vercel للنشر المستمر. أي تغييرات يتم رفعها إلى الفرع `main` ستؤدي تلقائيًا إلى تشغيل عملية بناء وإنتاج جديدة.
+مسار النشر المقصود يستخدم الفرع `main` وإعدادات Next.js القياسية في Vercel. لا يحتوي المستودع على ملف `vercel.json` مخصص.
