@@ -19,10 +19,10 @@ export default function Contact() {
           <p className="text-sm font-medium text-neutral-500 uppercase tracking-widest mb-4">Work Email</p>
           <a 
             href="mailto:Adnan.Naous@outlook.com"
-            className="inline-flex items-center gap-3 text-2xl md:text-4xl font-bold text-[var(--foreground)] hover:text-neutral-500 transition-colors mb-16"
+            className="inline-flex items-center gap-2 whitespace-nowrap text-base min-[360px]:text-lg sm:gap-3 sm:text-2xl md:text-4xl font-bold text-[var(--foreground)] hover:text-neutral-500 transition-colors mb-16"
           >
             Adnan.Naous@outlook.com
-            <Send size={24} aria-hidden="true" className={language === "ar" ? "rotate-180" : ""} />
+            <Send size={24} aria-hidden="true" className={`h-5 w-5 sm:h-6 sm:w-6 ${language === "ar" ? "rotate-180" : ""}`} />
           </a>
 
           {/* Visual Coding Effect */}

@@ -14,6 +14,7 @@ const translations = {
     blog: "Blog",
     contact: "Contact",
     tools: "Tools",
+    githubTimeline: "GitHub Timeline",
     
     // Home Page
     heroTitle1: "Building the",
@@ -110,6 +111,7 @@ const translations = {
     blog: "المدونة",
     contact: "تواصل",
     tools: "الأدوات",
+    githubTimeline: "نشاط GitHub",
     
     heroTitle1: "نبني",
     heroTitleAccent: "مستقبل",
