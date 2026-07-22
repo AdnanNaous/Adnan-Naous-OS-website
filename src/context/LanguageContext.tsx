@@ -36,19 +36,6 @@ const translations = {
     // Portfolio Page
     portfolioTitle: "Selected Works",
     portfolioSub: "A showcase of my recent projects blending computer science, artificial intelligence, and interactive media.",
-    proj1Title: "Godot Engine Mechanics",
-    proj1Cat: "Game Dev",
-    proj1Desc: "Built core game mechanics, script structures, and logic flows. Completed a basic prototype as part of an intensive Godot training.",
-    proj2Title: "Personal OS Dashboard",
-    proj2Cat: "Web App",
-    proj2Desc: "A highly responsive React/Next.js dashboard featuring Pomodoro timers, an integrated command center, and localization contexts.",
-    proj3Title: "Medical Data Processor",
-    proj3Cat: "Data Science",
-    proj3Desc: "Applied problem-solving and structured logic derived from medical studies to process complex information under high pressure.",
-    proj4Title: "AI Integration Tools",
-    proj4Cat: "Artificial Intelligence",
-    proj4Desc: "Introductory AI models and search algorithms implemented as part of the B.Sc in Computer Science & Artificial Intelligence.",
-    
     // Services Page
     servicesTitle: "Services",
     servicesSub: "Leveraging a diverse background in technology and medical studies to deliver structured, high-quality solutions.",
@@ -64,9 +51,7 @@ const translations = {
     // About Page
     aboutTitle: "About Me",
     aboutBackground: "Background",
-    aboutBackgroundText1: "I am a dedicated Computer Science & AI student with a foundational background in medical studies. Known for a calm, level-headed approach to problem-solving and troubleshooting.",
-    aboutBackgroundText2: "My transition from Human Medicine at Ain Shams University to Computer Science has equipped me with a unique perspective on handling complex information under high pressure.",
-    aboutEdu: "Education & Certifications",
+    aboutEdu: "Education",
     
     // Testimonials
     testimonialsTitle: "Client Feedback",
@@ -130,19 +115,6 @@ const translations = {
     
     portfolioTitle: "أعمال مختارة",
     portfolioSub: "معرض لمشاريعي الأخيرة التي تمزج بين علوم الحاسوب، الذكاء الاصطناعي، والوسائط التفاعلية.",
-    proj1Title: "ميكانيكا محرك جودو",
-    proj1Cat: "تطوير الألعاب",
-    proj1Desc: "بناء آليات اللعبة الأساسية، هياكل النصوص البرمجية، وتدفقات المنطق. إكمال نموذج أولي أساسي كجزء من تدريب مكثف على جودو.",
-    proj2Title: "لوحة تحكم النظام الشخصي",
-    proj2Cat: "تطبيق ويب",
-    proj2Desc: "لوحة تحكم React/Next.js عالية الاستجابة تتميز بمؤقتات بومودورو، مركز أوامر متكامل، وسياقات الترجمة.",
-    proj3Title: "معالج البيانات الطبية",
-    proj3Cat: "علم البيانات",
-    proj3Desc: "تطبيق حل المشكلات والمنطق الهيكلي المستمد من الدراسات الطبية لمعالجة المعلومات المعقدة تحت الضغط العالي.",
-    proj4Title: "أدوات دمج الذكاء الاصطناعي",
-    proj4Cat: "الذكاء الاصطناعي",
-    proj4Desc: "نماذج ذكاء اصطناعي تمهيدية وخوارزميات بحث تم تنفيذها كجزء من بكالوريوس علوم الحاسوب والذكاء الاصطناعي.",
-    
     servicesTitle: "الخدمات",
     servicesSub: "استغلال خلفية متنوعة في التكنولوجيا والدراسات الطبية لتقديم حلول منظمة وعالية الجودة.",
     svc1Title: "هيكلة الواجهة الخلفية",
@@ -156,9 +128,7 @@ const translations = {
     
     aboutTitle: "نبذة عني",
     aboutBackground: "الخلفية",
-    aboutBackgroundText1: "أنا طالب متفانٍ في علوم الحاسوب والذكاء الاصطناعي بخلفية أساسية في الدراسات الطبية. معروف بنهج هادئ وعقلاني في حل المشكلات.",
-    aboutBackgroundText2: "انتقالي من الطب البشري في جامعة عين شمس إلى علوم الحاسوب زوّدني بمنظور فريد حول التعامل مع المعلومات المعقدة تحت الضغط.",
-    aboutEdu: "التعليم والشهادات",
+    aboutEdu: "التعليم",
     
     testimonialsTitle: "آراء العملاء",
     testimonialsSub: "لا تأخذ بكلامي فقط. إليك ما يقوله الزملاء والمدربون.",

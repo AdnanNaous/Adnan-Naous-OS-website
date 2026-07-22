@@ -2,32 +2,12 @@
 
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
+import { publicData } from "@/data/public";
 
 export default function Portfolio() {
   const { t, language } = useLanguage();
 
-  const projects = [
-    {
-      title: t("proj1Title"),
-      category: t("proj1Cat"),
-      description: t("proj1Desc")
-    },
-    {
-      title: t("proj2Title"),
-      category: t("proj2Cat"),
-      description: t("proj2Desc")
-    },
-    {
-      title: t("proj3Title"),
-      category: t("proj3Cat"),
-      description: t("proj3Desc")
-    },
-    {
-      title: t("proj4Title"),
-      category: t("proj4Cat"),
-      description: t("proj4Desc")
-    }
-  ];
+  const projects = [...publicData.projects].sort((a, b) => a.displayOrder - b.displayOrder);
 
   return (
     <main className="max-w-6xl mx-auto px-6 py-20 min-h-screen" dir={language === "ar" ? "rtl" : "ltr"}>
@@ -38,9 +18,9 @@ export default function Portfolio() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {projects.map((project, idx) => (
+          {projects.map((project) => (
             <motion.article
-              key={idx}
+              key={project.id}
               whileHover={{ y: -5 }}
               className="block p-8 rounded-2xl bg-black/[0.03] dark:bg-white/[0.03] backdrop-blur-md border border-[var(--border)] hover:border-black dark:hover:border-white transition-all shadow-sm"
             >
@@ -49,9 +29,9 @@ export default function Portfolio() {
                   {project.category}
                 </span>
               </div>
-              <h3 className="text-2xl font-semibold mb-3 text-[var(--foreground)]">{project.title}</h3>
+              <h3 className="text-2xl font-semibold mb-3 text-[var(--foreground)]">{project.name}</h3>
               <p className="text-neutral-500 dark:text-neutral-400 leading-relaxed">
-                {project.description}
+                {project.description[language]}
               </p>
             </motion.article>
           ))}

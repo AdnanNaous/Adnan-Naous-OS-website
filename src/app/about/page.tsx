@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
+import { publicData } from "@/data/public";
 
 export default function About() {
   const { t, language } = useLanguage();
@@ -15,26 +16,21 @@ export default function About() {
           <section>
             <h2 className="text-2xl font-semibold mb-6 text-[var(--foreground)]">{t("aboutBackground")}</h2>
             <div className="prose prose-neutral dark:prose-invert max-w-none text-neutral-600 dark:text-neutral-400 leading-relaxed text-lg">
-              <p>{t("aboutBackgroundText1")}</p>
-              <p className="mt-4">{t("aboutBackgroundText2")}</p>
+              <p>{publicData.profile.extendedBiography[language]}</p>
             </div>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold mb-6 text-[var(--foreground)]">{t("aboutEdu")}</h2>
             <div className="grid gap-6">
-              <motion.div whileHover={{ x: language === "ar" ? -5 : 5 }} className="p-6 rounded-2xl bg-black/[0.03] dark:bg-white/[0.03] backdrop-blur-md border border-[var(--border)] hover:border-black dark:hover:border-white transition-all shadow-sm">
-                <h3 className="font-bold text-lg mb-1">B.Sc. in Computer Science & AI</h3>
-                <p className="text-neutral-500 mb-2">Arab Open University, Jeddah (2025 - Present) • GPA: 3.43 / 4.00</p>
-              </motion.div>
-              <motion.div whileHover={{ x: language === "ar" ? -5 : 5 }} className="p-6 rounded-2xl bg-black/[0.03] dark:bg-white/[0.03] backdrop-blur-md border border-[var(--border)] hover:border-black dark:hover:border-white transition-all shadow-sm">
-                <h3 className="font-bold text-lg mb-1">Human Medicine Undergraduate</h3>
-                <p className="text-neutral-500 mb-2">Ain Shams University, Egypt (2023 - 2025)</p>
-              </motion.div>
-              <motion.div whileHover={{ x: language === "ar" ? -5 : 5 }} className="p-6 rounded-2xl bg-black/[0.03] dark:bg-white/[0.03] backdrop-blur-md border border-[var(--border)] hover:border-black dark:hover:border-white transition-all shadow-sm">
-                <h3 className="font-bold text-lg mb-1">Oxford Level 8 Certified (English)</h3>
-                <p className="text-neutral-500 mb-2">Oxford English Institute, Saudi Arabia (2023)</p>
-              </motion.div>
+              {publicData.education.map((entry) => (
+                <motion.div key={entry.id} whileHover={{ x: language === "ar" ? -5 : 5 }} className="p-6 rounded-2xl bg-black/[0.03] dark:bg-white/[0.03] backdrop-blur-md border border-[var(--border)] hover:border-black dark:hover:border-white transition-all shadow-sm">
+                  <h3 className="font-bold text-lg mb-1">{entry.program}</h3>
+                  <p className="text-neutral-500 mb-2">
+                    {entry.institution}, {entry.location} ({entry.startYear} - {entry.endYear ?? (language === "ar" ? "حتى الآن" : "Present")})
+                  </p>
+                </motion.div>
+              ))}
             </div>
           </section>
         </div>

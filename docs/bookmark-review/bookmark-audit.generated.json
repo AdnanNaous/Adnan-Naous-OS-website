@@ -1,0 +1,1374 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "fileName": "bookmarks_7_19_26.html",
+    "sha256": "9fd2126a00796300c512255bd1a73e963a58d85e32fe4b9e4bc68982b03bd84c"
+  },
+  "summary": {
+    "bookmarkCount": 171,
+    "folderCount": 32,
+    "leafFolderCount": 25,
+    "emptyFolderCount": 7,
+    "exactDuplicateUrlCount": 0,
+    "normalizedDuplicateUrlCount": 0,
+    "duplicateDomainCount": 3,
+    "queryParameterCount": 12,
+    "fragmentCount": 3,
+    "likelyLoginSpecificCount": 15,
+    "classificationCounts": {
+      "Featured Public": 18,
+      "Public Library": 15,
+      "Personal Only": 1,
+      "University Private": 3,
+      "Account-Specific": 5,
+      "Duplicate": 0,
+      "Broken or Unreachable": 0,
+      "Archive Candidate": 6,
+      "Requires Confirmation": 123
+    }
+  },
+  "folderLedger": [
+    {
+      "sourceId": "17c70ff483b961eb",
+      "bookmarkCount": 0
+    },
+    {
+      "sourceId": "9dfb538bae7d1698",
+      "bookmarkCount": 0
+    },
+    {
+      "sourceId": "a647982201e832ec",
+      "bookmarkCount": 6
+    },
+    {
+      "sourceId": "1453d294834f912f",
+      "bookmarkCount": 8
+    },
+    {
+      "sourceId": "bc042547f3b4de38",
+      "bookmarkCount": 3
+    },
+    {
+      "sourceId": "7d778e0a32329d6a",
+      "bookmarkCount": 3
+    },
+    {
+      "sourceId": "a985316a9e2741fb",
+      "bookmarkCount": 0
+    },
+    {
+      "sourceId": "bba6dd209d75a9cd",
+      "bookmarkCount": 10
+    },
+    {
+      "sourceId": "0d1e0c7e36dc8a39",
+      "bookmarkCount": 6
+    },
+    {
+      "sourceId": "8846ef3915e47d64",
+      "bookmarkCount": 6
+    },
+    {
+      "sourceId": "5e5e79c35c1d13c7",
+      "bookmarkCount": 8
+    },
+    {
+      "sourceId": "f52d2941e0b00f1f",
+      "bookmarkCount": 0
+    },
+    {
+      "sourceId": "80fe3ff9bd883ac9",
+      "bookmarkCount": 6
+    },
+    {
+      "sourceId": "4418b6436e4179f8",
+      "bookmarkCount": 3
+    },
+    {
+      "sourceId": "4e65fe9a768bf71f",
+      "bookmarkCount": 15
+    },
+    {
+      "sourceId": "4c8df5aa85766c2c",
+      "bookmarkCount": 13
+    },
+    {
+      "sourceId": "1103a7ff61fc2dac",
+      "bookmarkCount": 9
+    },
+    {
+      "sourceId": "108424ec63e38fea",
+      "bookmarkCount": 6
+    },
+    {
+      "sourceId": "c95426a6b4e4ef0d",
+      "bookmarkCount": 6
+    },
+    {
+      "sourceId": "fb93e39426ff206d",
+      "bookmarkCount": 7
+    },
+    {
+      "sourceId": "cba4b3033574aa34",
+      "bookmarkCount": 0
+    },
+    {
+      "sourceId": "59918c74ed2789ab",
+      "bookmarkCount": 8
+    },
+    {
+      "sourceId": "30c1412539ee60bd",
+      "bookmarkCount": 5
+    },
+    {
+      "sourceId": "3c2db2e43f3478d2",
+      "bookmarkCount": 7
+    },
+    {
+      "sourceId": "c4e8f0d2037be799",
+      "bookmarkCount": 4
+    },
+    {
+      "sourceId": "12e8608187e06d32",
+      "bookmarkCount": 4
+    },
+    {
+      "sourceId": "5ce3a09c52ff0554",
+      "bookmarkCount": 0
+    },
+    {
+      "sourceId": "b8774122b705bdab",
+      "bookmarkCount": 4
+    },
+    {
+      "sourceId": "9c0be529f4c244c5",
+      "bookmarkCount": 8
+    },
+    {
+      "sourceId": "4f47c259b37ad7ac",
+      "bookmarkCount": 5
+    },
+    {
+      "sourceId": "95029f0b4609dad7",
+      "bookmarkCount": 11
+    },
+    {
+      "sourceId": "cde94292893cb013",
+      "bookmarkCount": 0
+    }
+  ],
+  "duplicateDomainLedger": [
+    {
+      "sourceId": "067a3ff791863417",
+      "bookmarkCount": 2
+    },
+    {
+      "sourceId": "6cb9d6763ebdd7d6",
+      "bookmarkCount": 2
+    },
+    {
+      "sourceId": "ae1f45a5b387e18d",
+      "bookmarkCount": 2
+    }
+  ],
+  "entryLedger": [
+    {
+      "sourceId": "1a8f8c7aefdd3045",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "68484320a779a8c2",
+      "classification": "Personal Only",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": true
+    },
+    {
+      "sourceId": "580f435e598cee4c",
+      "classification": "Featured Public",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": true
+    },
+    {
+      "sourceId": "31d9e011b5a0eede",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "3310cc9a54e3b7f8",
+      "classification": "Account-Specific",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": true
+    },
+    {
+      "sourceId": "2c7f094789cf1247",
+      "classification": "Account-Specific",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": true
+    },
+    {
+      "sourceId": "f25a5b1255e5cc86",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "14830d0f42257f54",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "c24db30f88ee57e6",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "f09c21614e7f6aba",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "dbae2d0204aa489e",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "cb06d96dbe69adee",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "d4f11952021144ca",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "b6554c38d473b352",
+      "classification": "Account-Specific",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": true
+    },
+    {
+      "sourceId": "2e0b73a354725d74",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "3cbfab01310cfc3a",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "8cb88f3e0d644a68",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "fa140a417b2143c6",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "1d848781e27b6d86",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "f53e3e499182e3aa",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "cde7ac172aa649a7",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": true,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "063b35599c499f5a",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": true,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "146fa17c61d40722",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "8508cac8f2a115ce",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": true,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "fefdde7be4c033d6",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "209634334696d587",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "3174330a4ca47da9",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "7ea330ae999c9e2b",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "bd687578ef655f76",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "1227cc206e0bc32b",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "c34584c32a12aace",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "4f20775e8e683186",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": true,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "7ab5d44626d08f6a",
+      "classification": "Featured Public",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "b8dc840fe3423002",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "5be66eb7dc170710",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "50d2983119d15c52",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "10266bdfb6648734",
+      "classification": "Public Library",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "453cb49f45b2d3e3",
+      "classification": "Featured Public",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "c54944ac30ee3982",
+      "classification": "Featured Public",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "6dba8b525a6dbd9e",
+      "classification": "Featured Public",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "41531850c10dc1d1",
+      "classification": "Featured Public",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "143de3a8ef7c3cbd",
+      "classification": "Featured Public",
+      "hasQueryParameters": true,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "04829a55a37ffa6d",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "df15efd86edc5a16",
+      "classification": "Public Library",
+      "hasQueryParameters": true,
+      "hasFragment": false,
+      "likelyLoginSpecific": true
+    },
+    {
+      "sourceId": "28183d04283300cd",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "3f6a9355984fda9e",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "29281dafc9a7f1cd",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": true,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "95d21673a152eb06",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": true
+    },
+    {
+      "sourceId": "a4e498e8e587bd53",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "19049f3d18f5f89f",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "a483ddc6c52c097c",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": true,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "f2c6e52d3e5a794b",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": true,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "a3de915cfc62d5bb",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "28e74c8168d0b675",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "8b21b5ecc5d1566b",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "6cea21c7df7bddac",
+      "classification": "Account-Specific",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": true
+    },
+    {
+      "sourceId": "c78b030134866f5e",
+      "classification": "University Private",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": true
+    },
+    {
+      "sourceId": "3ae85500deae36d0",
+      "classification": "University Private",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": true
+    },
+    {
+      "sourceId": "f4f0808460558bd7",
+      "classification": "University Private",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": true
+    },
+    {
+      "sourceId": "c5fd64bab7269a6a",
+      "classification": "Public Library",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "30cb6617bf02278a",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": true,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "cb8339240f498875",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "d96a99cdd76a6be1",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "67e3f050ac5b01f3",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "b64bbbe7020fe31f",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "dc4f05de8d831d24",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "d272b2e53456595c",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "b2c996f0a11ad9f6",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "bdb0bdd9c47f5445",
+      "classification": "Public Library",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "aec2fe40b19b8b40",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "10722b3ea7e90c76",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "8a4e8234eea54d08",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": true,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "eefb2e5ec0262ec6",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "6e465a3b2c5c1876",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "1f50bc9f0cb68f90",
+      "classification": "Featured Public",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "cdcc078c18c1f965",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "a4a1401985018680",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "5a1eaf3f0282fee7",
+      "classification": "Featured Public",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "c25747b9cdaa0e4c",
+      "classification": "Featured Public",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "9abc7a31d2afe804",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "f68d57cb3c76caf0",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "122d47fc90e773f7",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "5115a79ad2d3dfca",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "ada890e72935c645",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "410bb6b480db2618",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "38abeee0476b887c",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "51f85349f43f9c61",
+      "classification": "Featured Public",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "dd8f53356fda57eb",
+      "classification": "Public Library",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "f26d1e404258262b",
+      "classification": "Featured Public",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "8b6821c2b0bb3ba0",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "26d6a069e77bbf76",
+      "classification": "Public Library",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "3b9c118116214aab",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "ddc6a11b6e0607cf",
+      "classification": "Public Library",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "055ae1f190585281",
+      "classification": "Public Library",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "608c25a1833b1a32",
+      "classification": "Featured Public",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "7aa56c980a99ef36",
+      "classification": "Public Library",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "897d5adb0f0c4253",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "1810893ac7665984",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "8d2be40df2178e00",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "a1fa1c2cb6989225",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "9c7a5920a5a8e9a9",
+      "classification": "Featured Public",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "44ad9766e989027f",
+      "classification": "Featured Public",
+      "hasQueryParameters": false,
+      "hasFragment": true,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "cb97b547d5271c2d",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "b0beb4fa8f0d9101",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": true
+    },
+    {
+      "sourceId": "85794320b9feb680",
+      "classification": "Public Library",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "b829fabaec241d96",
+      "classification": "Public Library",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": true
+    },
+    {
+      "sourceId": "3f0c63ab7bc41cd2",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "86492159b17c7cd5",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "6660b00bffdcb6e0",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "50cd69e00aea3c6c",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "eed6fbff91e9a36f",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "679b0e01427235e6",
+      "classification": "Featured Public",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "eb7997fa534a94dc",
+      "classification": "Featured Public",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "1879c62c7c6d9703",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "c63de36c1d30c2d1",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "cc6b0105b478bf8d",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "17f212791aafe935",
+      "classification": "Account-Specific",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": true
+    },
+    {
+      "sourceId": "69a14ee1def26900",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "20031b92cd952839",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "63a943a83a060afe",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "8ab55025540795d3",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "b24f8287e0bf5765",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "bc10e03be05ff5f6",
+      "classification": "Featured Public",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "873756fbe97a1384",
+      "classification": "Public Library",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "b173cfb087f27262",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "db36d0c208fe39b2",
+      "classification": "Public Library",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "8265d9e82514f5f9",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "e36b665adb2a064e",
+      "classification": "Public Library",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "e58568d4a5cf785e",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "d0c00583c2eb4114",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "9ad165d8753c279b",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "7f60406bde4dc62a",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "df6a5902d3a56c70",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": true,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "a688034194f8703b",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "b5caa85941f32e98",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "30be95962b560025",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "2c2dbf484324e076",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "763f1cc49413d145",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "2d38b6a33fbef4b0",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "2f48fa1a8923239d",
+      "classification": "Archive Candidate",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "2bce94e760d25bf7",
+      "classification": "Archive Candidate",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "5d861f1e3dcf65f3",
+      "classification": "Archive Candidate",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "199b0972007cb5ce",
+      "classification": "Archive Candidate",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "ff4853b476658f03",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": true,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "82170c29d5532d24",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "dba86ca91919ee7e",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "c321c7f2be84b70b",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "75f47bfed0353cd7",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "bca4f68506a0560e",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "cff60706febb57b8",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": true,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "93f4e40b081bd5b8",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "75bc90427c1730a3",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "f6860e5facdb69da",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "e3b527fa627a17be",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "be1605371496b957",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": true
+    },
+    {
+      "sourceId": "b12964d8c1b1053a",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "20e2a022d20c852e",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "14f4149752508bdf",
+      "classification": "Archive Candidate",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "b5c5d177a6948e0f",
+      "classification": "Archive Candidate",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "1727e54f1f364b60",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "82cbed81cbb179cd",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "4db8a5f5c3a5de07",
+      "classification": "Public Library",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "882fd7527ef0e2d8",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "fff32d7f0243cc7d",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "1ec78569855ff4ad",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "2cb9a3a19d62faef",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "904869b055cb83ce",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "f743c7a99435d199",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "f955f73bbfbcc887",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "41dcd361d42e7106",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    },
+    {
+      "sourceId": "958b3a5b4ab3c05b",
+      "classification": "Requires Confirmation",
+      "hasQueryParameters": false,
+      "hasFragment": false,
+      "likelyLoginSpecific": false
+    }
+  ],
+  "privacyNote": "The audit intentionally excludes bookmark titles, URLs, URL parameters, domains, and folder paths. Reconcile sourceId values only against the external source export."
+}

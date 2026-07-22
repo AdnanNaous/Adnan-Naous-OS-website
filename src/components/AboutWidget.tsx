@@ -1,10 +1,15 @@
 "use client";
 
 import { useLanguage } from "@/context/LanguageContext";
+import { publicData } from "@/data/public";
 import { User, GraduationCap, Code, HeartPulse, BrainCircuit } from "lucide-react";
 
 export function AboutWidget() {
   const { language } = useLanguage();
+  const currentEducation = publicData.education.find((entry) => entry.status === "in-progress")!;
+  const previousStudy = publicData.education.find((entry) => entry.status === "incomplete-study")!;
+  const english = publicData.languages.find((entry) => entry.id === "english")!;
+  const windowsSkill = publicData.skills.find((skill) => skill.id === "windows-administration")!;
 
   return (
     <div className="h-full w-full p-5 flex flex-col relative overflow-hidden group">
@@ -24,8 +29,8 @@ export function AboutWidget() {
               <GraduationCap size={16} />
             </div>
             <div>
-              <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">B.Sc. Computer Science & AI</p>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Arab Open University • GPA: 3.43/4.00</p>
+              <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">{currentEducation.program}</p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{currentEducation.institution}</p>
             </div>
           </div>
 
@@ -35,8 +40,8 @@ export function AboutWidget() {
               <BrainCircuit size={16} />
             </div>
             <div>
-              <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">Oxford Level 8 Certified</p>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Advanced professional English communication.</p>
+              <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">{english.name[language]}</p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{english.level}</p>
             </div>
           </div>
 
@@ -46,8 +51,8 @@ export function AboutWidget() {
               <Code size={16} />
             </div>
             <div>
-              <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">Godot Engine Developer</p>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Built mechanics, logic flow, and prototype games.</p>
+              <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">{windowsSkill.name}</p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{windowsSkill.description?.[language]}</p>
             </div>
           </div>
 
@@ -57,8 +62,8 @@ export function AboutWidget() {
               <HeartPulse size={16} />
             </div>
             <div>
-              <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">Undergrad in Human Medicine</p>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Completed 2 Years at Ain Shams University.</p>
+              <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">{previousStudy.program}</p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{previousStudy.description[language]}</p>
             </div>
           </div>
         </div>
