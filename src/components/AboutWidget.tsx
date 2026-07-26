@@ -41,7 +41,7 @@ export function AboutWidget() {
             </div>
             <div>
               <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">{english.name[language]}</p>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{english.level}</p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{english.level[language]}</p>
             </div>
           </div>
 

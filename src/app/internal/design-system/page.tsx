@@ -48,8 +48,9 @@ function SectionHeading({ number, title, id }: { number: string; title: string; 
 export default function DesignSystemPreviewPage() {
   return (
     <DesignSystemScope className={`${styles.preview} ds-atmosphere`}>
-      <Container className={styles.previewInner}>
-        <Stack style={{ "--ds-stack-gap": "var(--ds-space-7)" } as CSSProperties}>
+      <main>
+        <Container className={styles.previewInner}>
+          <Stack style={{ "--ds-stack-gap": "var(--ds-space-7)" } as CSSProperties}>
           <header className={styles.previewHeader}>
             <Stack className="ds-reading-width">
               <p className="ds-label">Step 3 · Internal preview</p>
@@ -220,8 +221,9 @@ export default function DesignSystemPreviewPage() {
             <p className="ds-metadata">Internal specimen · no production content</p>
             <p className="ds-body">The reference image is not imported, copied, or bundled. Existing production routes remain on their current visual system.</p>
           </footer>
-        </Stack>
-      </Container>
+          </Stack>
+        </Container>
+      </main>
     </DesignSystemScope>
   );
 }

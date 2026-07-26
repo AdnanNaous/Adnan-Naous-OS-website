@@ -4,7 +4,7 @@
 
 :root {
   --font-code: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  --font-interface: var(--font-code);
+  --font-interface: "Aptos", "Segoe UI Variable Text", "Segoe UI", Tahoma, Arial, sans-serif;
   --background: #ffffff;
   --foreground: #171717;
   --accent: #000000; /* Pure Black Accent */
@@ -46,7 +46,7 @@ select {
 }
 
 html:lang(ar) {
-  --font-interface: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", Tahoma, Arial, sans-serif;
+  --font-interface: Tahoma, Arial, sans-serif;
 }
 
 body {
@@ -75,9 +75,12 @@ select {
 }
 
 .font-sans,
-.font-serif,
-.font-mono {
+.font-serif {
   font-family: var(--font-interface);
+}
+
+.font-mono {
+  font-family: var(--font-code);
 }
 
 html:lang(ar) body,

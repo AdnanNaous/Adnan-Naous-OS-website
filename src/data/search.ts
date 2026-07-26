@@ -33,8 +33,8 @@ const languageRecords: SearchRecord[] = publicData.languages.map((language, inde
   id: `language-${language.id}`,
   type: "resume",
   title: language.name.en,
-  description: language.level,
-  keywords: ["language", language.level],
+  description: language.level.en,
+  keywords: ["language", language.level.en],
   category: "Languages",
   destination: "/about",
   visibility: "public",
@@ -62,23 +62,23 @@ const projectRecords: SearchRecord[] = publicData.projects.map((project) => ({
   description: project.description.en,
   keywords: [project.category, project.status, project.placement, ...project.technologies],
   category: "Projects",
-  destination: "/portfolio",
+  destination: `/portfolio#${project.id}`,
   visibility: "public",
   priority: project.featured ? 95 : 70,
   sourceId: project.id,
 }));
 
 const githubRecords: SearchRecord[] = publicData.github.repositories.map((repository) => ({
-  id: `github-${repository.repositoryName.toLowerCase()}`,
+  id: `github-${repository.id}`,
   type: "github",
-  title: repository.repositoryName,
+  title: repository.displayName,
   description: repository.description?.en ?? "Public GitHub learning repository.",
   keywords: [repository.category, ...repository.tags],
   category: "GitHub",
-  destination: `https://github.com/${repository.owner}/${repository.repositoryName}`,
+  destination: repository.repositoryUrl,
   visibility: "public",
   priority: repository.featured ? 90 : 60,
-  sourceId: repository.repositoryName,
+  sourceId: repository.id,
 }));
 
 const bookmarkRecords: SearchRecord[] = publicData.bookmarks.map((bookmark) => ({
@@ -92,6 +92,58 @@ const bookmarkRecords: SearchRecord[] = publicData.bookmarks.map((bookmark) => (
   visibility: "public",
   priority: bookmark.featured ? 85 : 55,
   sourceId: bookmark.id,
+}));
+
+const capabilityRecords: SearchRecord[] = publicData.capabilities.map((capability, index) => ({
+  id: `capability-${capability.id}`,
+  type: "section",
+  title: capability.title.en,
+  description: capability.description.en,
+  keywords: ["capability", "collaboration", ...capability.evidenceProjectIds],
+  category: "Capabilities",
+  destination: "/services",
+  visibility: "public",
+  priority: 78 - index,
+  sourceId: capability.id,
+}));
+
+const writingRecords: SearchRecord[] = publicData.writing.topics.map((topic, index) => ({
+  id: `writing-topic-${topic.id}`,
+  type: "section",
+  title: topic.title.en,
+  description: topic.description.en,
+  keywords: ["writing", "learning", "notes"],
+  category: "Writing",
+  destination: "/blog",
+  visibility: "public",
+  priority: 50 - index,
+  sourceId: topic.id,
+}));
+
+const credentialRecords: SearchRecord[] = publicData.credentials.map((credential) => ({
+  id: `credential-${credential.id}`,
+  type: "resume",
+  title: credential.title,
+  description: `${credential.credentialType} — ${credential.program}`,
+  keywords: [credential.issuer, credential.program, credential.featuredProject],
+  category: "Recognition",
+  destination: "/testimonials",
+  visibility: "public",
+  priority: 80,
+  sourceId: credential.id,
+}));
+
+const personalOSRecords: SearchRecord[] = publicData.personalOS.tools.map((tool, index) => ({
+  id: `personal-os-${tool.id}`,
+  type: "section",
+  title: tool.title.en,
+  description: tool.description.en,
+  keywords: ["personal os", tool.implementation, tool.status],
+  category: "Personal OS",
+  destination: "/tools",
+  visibility: "public",
+  priority: 68 - index,
+  sourceId: tool.id,
 }));
 
 const sectionRecords: SearchRecord[] = [
@@ -129,5 +181,9 @@ export const searchIndex = [
   ...projectRecords,
   ...githubRecords,
   ...bookmarkRecords,
+  ...capabilityRecords,
+  ...writingRecords,
+  ...credentialRecords,
+  ...personalOSRecords,
   ...sectionRecords,
 ] satisfies SearchRecord[];

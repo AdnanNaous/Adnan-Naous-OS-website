@@ -4,69 +4,18 @@ import { useDashboard } from "@/context/DashboardContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { Folder } from "lucide-react";
 import { motion } from "framer-motion";
-
-type Bookmark = { icon: string, link: string, name: string };
+import { publicData } from "@/data/public";
 
 const bookmarkClassName = "flex items-center gap-2 px-3 py-1.5 bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 rounded-lg text-sm text-[var(--foreground)] transition-colors shadow-sm";
 
-const categories: Record<string, Bookmark[]> = {
-  "Main AI": [
-    { icon: "✨", link: "https://gemini.google.com", name: "Gemini" },
-    { icon: "🧠", link: "https://claude.ai", name: "Claude" },
-    { icon: "🤖", link: "https://chatgpt.com", name: "ChatGPT" },
-    { icon: "🔍", link: "https://perplexity.ai", name: "Perplexity" },
-    { icon: "🐋", link: "https://deepseek.com", name: "DeepSeek" },
-    { icon: "🧩", link: "https://qwen.ai", name: "Qwen" },
-    { icon: "🌌", link: "https://grok.com", name: "Grok" },
-    { icon: "💠", link: "https://meta.ai", name: "Meta AI" },
-  ],
-  "Courses": [
-    { icon: "🎓", link: "#", name: "MOOC.fi" },
-    { icon: "📱", link: "#", name: "Huawei" },
-    { icon: "🏫", link: "#", name: "Tuwaiq" },
-    { icon: "🌐", link: "#", name: "Cisco" },
-    { icon: "☁️", link: "#", name: "ORACLE Training" },
-    { icon: "🍃", link: "#", name: "Spring Academy" },
-    { icon: "💻", link: "https://hackerrank.com", name: "HackerRank" },
-    { icon: "📚", link: "https://coursera.org", name: "Coursera" },
-    { icon: "🎯", link: "https://udemy.com", name: "Udemy" },
-    { icon: "🤓", link: "https://geeksforgeeks.org", name: "GeeksforGeeks" },
-  ],
-  "Study": [
-    { icon: "🚀", link: "https://jetbrains.com", name: "JetBrains" },
-    { icon: "📘", link: "https://hyperskill.org", name: "Hyperskill" },
-    { icon: "⚔️", link: "https://codewars.com", name: "Codewars" },
-    { icon: "💻", link: "https://exercism.org", name: "Exercism" },
-    { icon: "⛺", link: "https://datacamp.com", name: "DataCamp" },
-    { icon: "📱", link: "https://sololearn.com", name: "Sololearn" },
-    { icon: "🚀", link: "https://neetcode.io", name: "NeetCode" },
-    { icon: "💡", link: "https://leetcode.com", name: "LeetCode" },
-  ],
-  "Social Devs": [
-    { icon: "📰", link: "https://thehackernews.com", name: "The Hacker News" },
-    { icon: "💻", link: "https://stackoverflow.com", name: "Stack Overflow" },
-    { icon: "✍️", link: "https://hashnode.com", name: "Hashnode" },
-    { icon: "👩‍💻", link: "https://dev.to", name: "DEV TO" },
-    { icon: "🦞", link: "https://lobste.rs", name: "Lobsters" },
-  ],
-  "Design": [
-    { icon: "🎨", link: "https://figma.com", name: "Figma" },
-    { icon: "🖼️", link: "https://dribbble.com", name: "Dribbble" },
-  ],
-  "Utilities": [
-    { icon: "🐙", link: "https://github.com", name: "GitHub" },
-    { icon: "📝", link: "https://notion.so", name: "Notion" },
-  ]
-};
-
 export function BookmarksWidget() {
   const { isFocusMode } = useDashboard();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
-  const availableCategories = Object.keys(categories).filter(cat => {
-    if (isFocusMode && cat === "Social Devs") return false;
-    return true;
-  });
+  const visibleBookmarks = isFocusMode
+    ? publicData.bookmarks.filter((bookmark) => bookmark.featured)
+    : publicData.bookmarks;
+  const categories = [...new Set(visibleBookmarks.map((bookmark) => bookmark.category))];
 
   return (
     <div className="h-full w-full p-6 flex flex-col justify-start">
@@ -78,35 +27,28 @@ export function BookmarksWidget() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-4">
-        {availableCategories.map((cat) => (
-          <div key={cat} className="flex flex-col gap-3">
-            <span className="text-[11px] uppercase tracking-widest text-neutral-500 font-bold pl-1">{cat}</span>
+        {categories.map((category) => (
+          <div key={category} className="flex flex-col gap-3">
+            <span className="text-[11px] uppercase tracking-widest text-neutral-500 font-bold pl-1">{category}</span>
             <div className="flex flex-wrap gap-2">
-              {categories[cat].map((bm) => (
-                bm.link === "#" ? (
-                  <span
-                    key={bm.name}
-                    aria-disabled="true"
-                    className={`${bookmarkClassName} cursor-not-allowed opacity-60`}
-                  >
-                    <span className="text-base leading-none" aria-hidden="true">{bm.icon}</span>
-                    <span className="font-medium">{bm.name}</span>
-                  </span>
-                ) : (
+              {visibleBookmarks.filter((bookmark) => bookmark.category === category).map((bookmark) => (
                   <motion.a
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
-                    key={bm.name}
-                    href={bm.link}
+                    key={bookmark.id}
+                    href={bookmark.canonicalUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`${bookmarkClassName} hover:bg-neutral-200 dark:hover:bg-white/10`}
+                    title={
+                      language === "ar" && "ar" in bookmark.description && typeof bookmark.description.ar === "string"
+                        ? bookmark.description.ar
+                        : bookmark.description.en
+                    }
                   >
-                    <span className="text-base leading-none" aria-hidden="true">{bm.icon}</span>
-                    <span className="font-medium">{bm.name}</span>
+                    <span className="font-medium">{bookmark.name}</span>
                     <span className="sr-only"> ({t("opensInNewTab")})</span>
                   </motion.a>
-                )
               ))}
             </div>
           </div>

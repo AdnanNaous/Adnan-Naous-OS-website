@@ -206,21 +206,21 @@ export const profile = {
       reviewNote: "Current production asset; it is not a portrait.",
     },
     {
-      id: "supplied-portrait-candidate",
-      publicPath: null,
+      id: "approved-portrait",
+      publicPath: "/images/profile/adnan-naous-portrait.webp",
       kind: "portrait",
       alt: {
         en: "Portrait of Adnan Naous",
         ar: "صورة شخصية لعدنان نعوس",
       },
-      verification: "user-provided",
-      visibility: "hidden-pending-review",
+      verification: "user-confirmed",
+      visibility: "public",
       usageRestrictions: [
         "Preserve the real facial appearance.",
         "Do not beautify, reconstruct, face-swap, repaint, or modify facial geometry.",
         "Future use may crop, mask, remove the background, color-grade, adjust lighting or shadow, and position responsively.",
       ],
-      reviewNote: "Ownership and public-use permission were approved. The external source image has not been copied into the repository in this phase.",
+      reviewNote: "Approved for public use on the Step 4 production homepage. The repository copy preserves identity and contains no embedded EXIF, ICC, XMP, or IPTC metadata.",
     },
     {
       id: "bronze-concept-reference",
