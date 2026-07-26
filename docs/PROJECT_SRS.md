@@ -1,125 +1,193 @@
-# Software Requirements Specification (SRS) & AI Development Contract
-## Adnan Naous - Personal OS & Portfolio
+# Software Requirements Specification & AI Development Contract
+## Adnan Naous Portfolio & Personal OS
 
-### 1. Project Overview
-This document records the verified architecture, current implementation status, and development requirements for the Adnan Naous Personal OS & Portfolio. Current-status statements describe the codebase audited on July 18, 2026; requirements describe the direction future changes should preserve unless a redesign is explicitly approved.
+### 1. Purpose
 
-The application combines a public portfolio with a Personal OS dashboard. The portfolio landing experience is served at `/`, while the productivity dashboard is served at `/tools`.
+This document records the verified v1.0 architecture and the constraints future work must preserve unless a later user-approved specification replaces them.
 
-### 2. Framework & Versions
-- **Core Framework:** Next.js 16.2.10 (App Router)
-- **UI Library:** React and React DOM 19.2.4
-- **Language:** TypeScript (^5.x)
-- **Styling:** Tailwind CSS (^4.x) via `@tailwindcss/postcss`
+The product is a bilingual public portfolio centered on evidence-based project work. Its distinguishing feature is the Personal OS at `/tools`. The homepage uses an original optical AI Core as an atmospheric visual; no semantic content depends on WebGL.
 
-### 3. Dependencies
-Key production dependencies currently include:
-- `framer-motion` (^12.42.2) for animations and UI interactions.
-- `next-themes` (^0.4.6) for dark/light theme management.
-- `lucide-react` (^1.24.0) and `react-icons` (^5.7.0) for iconography.
-- `react-github-calendar` (^5.0.6) for the GitHub activity tracker.
-- `clsx` (^2.1.1) and `tailwind-merge` (^3.6.0) for class-name composition.
+### 2. Verified Stack
 
-### 4. Folder Structure & Architecture
-The application source uses the Next.js `src` directory structure:
+- Next.js 16.2.10 with the App Router
+- React and React DOM 19.2.4
+- TypeScript 5
+- Tailwind CSS 4 through `@tailwindcss/postcss`
+- Framer Motion 12.42.x
+- Three.js 0.185.1
+- React Three Fiber 9.6.1
+- `next-themes` 0.4.6
+- `react-github-calendar` 5.0.6
+- Lucide React and React Icons
+
+Three.js and React Three Fiber are approved only for the route-local homepage AI Core. They must not enter non-home route bundles without a separately approved requirement.
+
+### 3. Route Architecture
 
 ```text
-/
-├── docs/                 # Project documentation, including this SRS
-├── public/               # Static assets
-└── src/
-    ├── app/              # App Router pages, root layout, and global styles
-    ├── components/       # Reusable UI components and dashboard widgets
-    └── context/          # React Context providers for global client state
+src/app/layout.tsx
+├── ThemeProvider
+├── LanguageProvider
+├── shared document shell and skip link
+├── (site)/layout.tsx
+│   ├── production design system
+│   ├── ProductionNavigation
+│   ├── SiteFooter
+│   ├── page.tsx                  → /
+│   ├── about/page.tsx            → /about
+│   ├── portfolio/page.tsx        → /portfolio
+│   ├── services/page.tsx         → /services
+│   ├── blog/page.tsx             → /blog
+│   ├── testimonials/page.tsx     → /testimonials
+│   ├── contact/page.tsx          → /contact
+│   └── tools/
+│       ├── layout.tsx            → DashboardProvider boundary
+│       └── page.tsx              → /tools
+└── internal/design-system/       → noindex internal specimen
 ```
 
-The root layout provides `ThemeProvider`, `LanguageProvider`, and `DashboardProvider`, and renders the shared navigation. Dashboard state is currently client-side and in memory.
+Route groups do not change public URLs. The root layout remains a Server Component. Theme and language providers are instantiated once. Dashboard state is scoped to `/tools`.
 
-### 5. Application Routes
-The following routes are implemented within `src/app/`:
-- `/`: Public portfolio landing page and hero experience.
-- `/about`: Background, education, and certifications.
-- `/blog`: Static microblog-style updates.
-- `/contact`: Contact email and terminal-style presentation.
-- `/portfolio`: Project showcase.
-- `/services`: Services overview.
-- `/testimonials`: Testimonials grid.
-- `/tools`: Personal OS dashboard containing the active productivity widgets.
+### 4. Public Routes and Truthful Semantics
 
-### 6. Components
+- `/`: portfolio homepage with verified identity, approved biography, exactly three primary project references, AI Core, verified credential context, and opportunity actions.
+- `/about`: approved personal story, current Computer Science and Artificial Intelligence study, previous incomplete medical study, current learning, and working principles. GPA, nationality, and unverified education claims are not public.
+- `/portfolio`: exactly three primary evidence-based case studies:
+  - Adnan Naous OS Website
+  - Adnan Naous Journey
+  - Ultimate Windows Maintenance
+- `/services`: Capabilities & Collaboration, not an unsupported commercial service menu.
+- `/blog`: Writing architecture with an intentional empty state until genuine articles exist.
+- `/testimonials`: Recognition with verified credential context and no fabricated endorsements.
+- `/contact`: public email and social links; no form backend, storage, or guaranteed response time.
+- `/tools`: functioning Personal OS with focus timer, command center, public GitHub activity, and approved resource library.
 
-#### Active shared components
-- `Navbar.tsx`: Global navigation, language control, theme control, and mobile menu.
+No fake metrics, testimonials, services, posts, client outcomes, backend behavior, or project completion claims are permitted.
 
-#### Active Personal OS components
-The following components are rendered by `/tools`:
-- `CommandCenter.tsx`: Search and prefix-command interface scoped to `/tools`. It is not currently a global command palette.
-- `Pomodoro.tsx`: Focus/break timer, task field, session count, and lo-fi control.
-- `GitHubTracker.tsx`: GitHub contribution calendar.
-- `BookmarksWidget.tsx`: Categorized bookmark directory with focus-mode filtering.
-- `SpotlightCard.tsx`: Reusable interactive card wrapper used by the dashboard.
+### 5. Public Data Boundary
 
-#### Present but currently unused components
-These files exist in `src/components/` but are not imported into a rendered route:
-- `SearchWidget.tsx`
-- `LearningWidget.tsx`
-- `MetricsWidget.tsx`
-- `AboutWidget.tsx`
+`src/data/public.ts` is the only approved client-safe factual projection. `src/data/search.ts` derives future static search records from it.
 
-Unused components should not be described as active features until they are connected to a route.
+The public boundary must exclude:
 
-### 7. Localization and RTL
+- full legal name
+- GPA
+- nationality
+- precise address
+- unverified Oxford claims
+- private university records
+- private bookmarks and raw bookmark exports
+- account, workspace, dashboard, session, or portal URLs
+- credentials, tokens, API keys, and local filesystem paths
+- unsupported project placeholders and metrics
 
-#### Current implementation
-- Localization uses React Context via `src/context/LanguageContext.tsx`.
-- English (`en`, LTR) and Arabic (`ar`, RTL) are supported.
-- The context provides `t(key)` and updates the document `lang` and `dir` attributes on the client.
-- Route content and layout direction are substantially localized, but coverage is not complete. Some component labels, content blocks, bookmark categories, and terminal text remain hardcoded in English.
-- RTL support is substantial but has not been verified as complete across every component and direction-sensitive style.
-- Language preference is held in React state, defaults to English, and is not currently persisted across reloads.
+Runtime Client Components must not import review or private data modules. `scripts/content/validate-public-data.mjs` enforces the boundary and the three-project portfolio requirement.
 
-#### Requirement
-New user-facing content should provide English and Arabic translations, and affected layouts should be reviewed in both LTR and RTL. Documentation must not claim complete localization or seamless RTL until coverage and behavior have been verified across the entire application.
+### 6. Localization and RTL
 
-### 8. Theme and Visual System
+- Public pages provide English and Arabic content.
+- `LanguageProvider` controls the active language and updates document `lang` and `dir`.
+- English uses LTR; Arabic uses RTL.
+- Product, repository, and platform names remain accurate rather than being improperly translated.
+- Arabic content must not inherit forced Latin letter spacing.
+- Exactly one localized page tree is rendered at a time.
+- Language preference defaults to English on reload and is not currently persisted.
 
-#### Intended direction
-The visual identity is grayscale-led and uses restrained glassmorphism, neutral surfaces, subtle borders, and backdrop blur. Future work should preserve this identity unless an explicit redesign is approved.
+Any new user-facing factual content must be added to the approved data boundary in both languages where appropriate and tested in LTR and RTL.
 
-#### Current implementation
-- `next-themes` applies class-based light/dark themes. Dark is the default, and system-theme detection is disabled.
-- CSS variables define the principal foreground, background, border, and navigation colors.
-- Most active surfaces use neutral colors and glass effects.
-- The implementation is not exclusively grayscale. Confirmed accent-color deviations include:
-  - Red, yellow, green, blue, and purple terminal styling on `/contact`.
-  - Green active-state styling on the Pomodoro lo-fi control.
-  - Colored GitHub contribution palettes in `GitHubTracker.tsx`.
-  - Additional blue, green, orange, and purple styles in currently unused widgets.
-- The home profile image applies grayscale/contrast/brightness filters only in dark mode. The blog avatar applies grayscale and contrast filters in both themes.
+### 7. Theme and Design System
 
-These deviations are documented current behavior, not a new requirement to expand the accent-color palette.
+- The public site uses one optical black-and-white design system in `src/styles/design-system.css`.
+- Dark is the default; light mode is supported through `next-themes`.
+- Bronze and spectral colors are restrained edge or reflection accents rather than dominant surfaces.
+- Shared optical glass materials must remain readable without `backdrop-filter`.
+- Reduced transparency and forced-colors fallbacks are required.
+- The internal design-system specimen uses the same tokens but remains isolated from public navigation and indexing.
 
-### 9. Scripts and Quality Baseline
-The package scripts currently available are:
-- `npm run dev`: Start the Next.js development server.
-- `npm run build`: Create a production build.
-- `npm run start`: Serve a production build.
-- `npm run lint`: Run ESLint.
+### 8. AI Core
 
-No automated test script is currently defined in `package.json`.
+The homepage AI Core:
 
-At the start of the July 18, 2026 alignment work:
-- TypeScript validation passed with `npx tsc --noEmit --incremental false`.
-- ESLint produced 6 errors and 7 warnings with `npm run lint`.
-- The confirmed ESLint errors included unescaped JSX quotation marks and state updates reported inside React effects. Warnings included unused imports/variables and unoptimized `<img>` elements.
-- This is the pre-fix baseline; Phase 1 is intended to resolve these findings without suppressing rules.
+- is dynamically loaded only on `/`
+- keeps semantic content outside Canvas
+- has CSS/SVG loading, WebGL-unavailable, and error fallbacks
+- handles WebGL context loss
+- caps device pixel ratio
+- reduces mobile geometry and rendering work
+- pauses when the document is hidden
+- pauses or simplifies outside the viewport
+- respects reduced motion
+- does not block navigation, text, or keyboard interaction
 
-### 10. Deployment & Source Control
-- **GitHub origin:** `https://github.com/AdnanNaous/Adnan-Naous-OS-website.git`
-- **Production branch:** `main`
-- **Vercel configuration:** No custom `vercel.json` is present; the repository is compatible with Vercel's standard Next.js behavior.
+At v1.0 its measured visual stage is approximately 312 px at 390 px viewport width, 624 px at 1440 px, and 720 px at 1920 px and above.
 
-The project documentation identifies GitHub-to-Vercel deployment as the intended production flow. The external Vercel integration itself cannot be verified from the local repository alone.
+### 9. Accessibility
 
----
-*Documentation aligned with audited commit `1344761ad81509ad0934fb5aed6d4768c7389156` on July 18, 2026.*
+Public routes must preserve:
+
+- one page-level `h1`
+- one `main` landmark
+- semantic navigation and footer
+- skip-to-content link
+- keyboard-operable navigation, More menu, and mobile menu
+- Escape handling and focus restoration
+- visible focus indicators
+- meaningful link labels
+- safe external-link semantics
+- meaningful image alt text or decorative empty-alt treatment
+- reduced-motion, reduced-transparency, forced-colors, and WebGL fallbacks
+- no horizontal document overflow at supported responsive widths
+
+### 10. SEO and Discovery
+
+- The verified production origin is `https://adnannaous.vercel.app`.
+- Every public route has a unique factual title, description, and canonical URL.
+- Open Graph and Twitter metadata use the generated `/opengraph-image`.
+- `/robots.txt` allows public crawling and excludes `/internal/`.
+- `/sitemap.xml` contains the eight public routes and excludes the internal specimen.
+- The internal design-system route is `noindex, nofollow`.
+- Site-level WebSite/Person JSON-LD contains only the approved display name, production URL, and public social profiles.
+- Language alternates are not emitted while English and Arabic share the same client-selected URLs; fabricated locale URLs are prohibited.
+
+### 11. Personal OS
+
+`CommandCenter`, `Pomodoro`, `GitHubTracker`, and `BookmarksWidget` are active only through `/tools`.
+
+- Command Center is a local launcher, not a system shell or global command palette.
+- Focus timer state is browser-session state.
+- GitHub activity depends on the disclosed public third-party activity source and stores no token in public data.
+- Resource Library exposes only 19 approved public links, including 12 featured resources.
+- Private bookmarks and university portals are excluded.
+
+### 12. Scripts and Quality Gates
+
+Package scripts:
+
+- `npm run dev`
+- `npm run build`
+- `npm run start`
+- `npm run lint`
+
+There is no automated unit or integration test script in `package.json`.
+
+Release validation includes:
+
+```text
+npm run lint
+npx tsc --noEmit --incremental false
+npm run build
+node scripts/content/validate-public-data.mjs
+git diff --check
+```
+
+Browser QA must cover all public routes, the internal specimen, responsive widths, both themes, both languages, RTL, navigation menus, WebGL failure and context loss, reduced motion, reduced transparency, the focus timer, and Command Center Escape behavior.
+
+### 13. Deployment and Release
+
+- GitHub origin: `https://github.com/AdnanNaous/Adnan-Naous-OS-website.git`
+- Production branch: `main`
+- Deployment: existing GitHub-to-Vercel integration
+- No custom `vercel.json`
+- Production release tags use annotated semantic versions after the production deployment is verified.
+
+Never force-push, rewrite published history, expose secrets, or modify Vercel project/domain/environment settings without explicit approval.
