@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Evidence-based learning workflow</title>
+  <desc id="desc">A five-stage workflow from original input or source through authorship separation, accuracy review, durable documentation, and evidence-based progress.</desc>
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#24262b"/>
+      <stop offset="1" stop-color="#08090b"/>
+    </linearGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#eee"/>
+      <stop offset=".5" stop-color="#9dd9d8"/>
+      <stop offset="1" stop-color="#b7a7de"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="720" rx="44" fill="#050607"/>
+  <text x="80" y="100" fill="#f4f4f5" font-family="Menlo,Consolas,monospace" font-size="26">LEARNING THAT KEEPS ITS EVIDENCE</text>
+  <text x="80" y="135" fill="#9699a1" font-family="Menlo,Consolas,monospace" font-size="14">authorship and confidence remain visible at every stage</text>
+  <path d="M140 350H1060" stroke="url(#line)" stroke-width="3" opacity=".55"/>
+  <g font-family="Menlo,Consolas,monospace" text-anchor="middle">
+    <g transform="translate(140 350)">
+      <circle r="68" fill="url(#panel)" stroke="#d9dadd" stroke-opacity=".5"/>
+      <text y="-6" fill="#fff" font-size="15">ORIGINAL INPUT</text><text y="22" fill="#989ba3" font-size="11">or source</text>
+    </g>
+    <g transform="translate(370 350)">
+      <circle r="68" fill="url(#panel)" stroke="#c5d9d8" stroke-opacity=".48"/>
+      <text y="-6" fill="#fff" font-size="15">SEPARATE</text><text y="22" fill="#989ba3" font-size="11">authorship</text>
+    </g>
+    <g transform="translate(600 350)">
+      <circle r="78" fill="url(#panel)" stroke="#a9d9da" stroke-opacity=".6"/>
+      <text y="-6" fill="#fff" font-size="15">REVIEW</text><text y="22" fill="#989ba3" font-size="11">accuracy + gaps</text>
+    </g>
+    <g transform="translate(830 350)">
+      <circle r="68" fill="url(#panel)" stroke="#c5bbdd" stroke-opacity=".48"/>
+      <text y="-6" fill="#fff" font-size="15">DOCUMENT</text><text y="22" fill="#989ba3" font-size="11">durably</text>
+    </g>
+    <g transform="translate(1060 350)">
+      <circle r="68" fill="url(#panel)" stroke="#d9dadd" stroke-opacity=".5"/>
+      <text y="-6" fill="#fff" font-size="15">PROGRESS</text><text y="22" fill="#989ba3" font-size="11">with evidence</text>
+    </g>
+  </g>
+  <g fill="#8f929a" font-family="Menlo,Consolas,monospace" font-size="12">
+    <text x="80" y="615">uncertainty is retained</text>
+    <text x="455" y="615">AI may structure and review</text>
+    <text x="880" y="615">mastery is never inferred</text>
+  </g>
+</svg>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Adnan Naous Journey repository structure</title>
+  <desc id="desc">A public-safe repository tree showing the main learning, evidence, template, and progress areas present in the project.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#111519"/>
+      <stop offset="1" stop-color="#07090b"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#e9f3f5" stop-opacity=".5"/>
+      <stop offset=".48" stop-color="#99dfe7" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#c5adff" stop-opacity=".24"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="720" rx="44" fill="url(#bg)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="43" fill="none" stroke="url(#edge)" stroke-width="2"/>
+  <g font-family="Consolas, Menlo, monospace">
+    <text x="72" y="86" fill="#f3f6f7" font-size="26" font-weight="700">Adnan-Naous-Journey/</text>
+    <text x="72" y="118" fill="#8d989f" font-size="15">CURRENT PUBLIC REPOSITORY STRUCTURE</text>
+    <path d="M90 160v468" stroke="#536068" stroke-opacity=".52"/>
+    <g font-size="20" fill="#dbe2e5">
+      <text x="122" y="190">├── learning/</text>
+      <text x="122" y="250">├── projects/</text>
+      <text x="122" y="310">├── challenges/</text>
+      <text x="122" y="370">├── notes/</text>
+      <text x="122" y="430">├── progress/</text>
+      <text x="122" y="490">├── resources/</text>
+      <text x="122" y="550">├── templates/</text>
+      <text x="122" y="610">└── archive/</text>
+    </g>
+    <g font-size="15" fill="#89959c">
+      <text x="410" y="190">structured subject records and verified learning entries</text>
+      <text x="410" y="250">project work kept separate from general notes</text>
+      <text x="410" y="310">practice and challenge evidence</text>
+      <text x="410" y="370">durable notes with explicit source boundaries</text>
+      <text x="410" y="430">dated progress records</text>
+      <text x="410" y="490">reviewed public learning resources</text>
+      <text x="410" y="550">repeatable entry, project, challenge, and review formats</text>
+      <text x="410" y="610">superseded material retained outside the active path</text>
+    </g>
+    <g fill="#b6c2c8" font-size="14">
+      <rect x="410" y="636" width="650" height="1" fill="#445058"/>
+      <text x="410" y="670">README.md  ·  CONTRIBUTING.md  ·  AGENTS.md  ·  CHANGELOG.md</text>
+    </g>
+  </g>
+</svg>

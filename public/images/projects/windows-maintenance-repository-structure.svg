@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Ultimate Windows Maintenance repository structure</title>
+  <desc id="desc">A public-safe repository map showing the PowerShell entry point, configuration, and focused maintenance modules present in the project.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#111519"/>
+      <stop offset="1" stop-color="#07090b"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#f2f7f8" stop-opacity=".48"/>
+      <stop offset=".5" stop-color="#b8dfe6" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#efd6a8" stop-opacity=".2"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="720" rx="44" fill="url(#bg)"/>
+  <rect x="1" y="1" width="1198" height="718" rx="43" fill="none" stroke="url(#edge)" stroke-width="2"/>
+  <g font-family="Consolas, Menlo, monospace">
+    <text x="72" y="86" fill="#f3f6f7" font-size="26" font-weight="700">Ultimate-Windows-Maintenance/</text>
+    <text x="72" y="118" fill="#8d989f" font-size="15">CURRENT PUBLIC POWERSHELL STRUCTURE</text>
+    <g transform="translate(72 164)">
+      <rect width="1056" height="104" rx="20" fill="#171c20" stroke="#66747c" stroke-opacity=".55"/>
+      <text x="30" y="43" fill="#f1f4f5" font-size="20">Start-Maintenance.ps1</text>
+      <text x="30" y="73" fill="#909ba2" font-size="15">orchestrates configuration, safety checks, selected modules, and reporting</text>
+      <text x="830" y="57" fill="#d5dee2" font-size="17">Config.json</text>
+    </g>
+    <path d="M600 268v42M196 310h808" stroke="#5b6870" stroke-opacity=".58"/>
+    <g font-size="17" text-anchor="middle">
+      <g transform="translate(94 326)"><rect width="196" height="82" rx="16" fill="#12171a" stroke="#3f4b52"/><text x="98" y="36" fill="#e3e9eb">Health.psm1</text><text x="98" y="61" fill="#819097" font-size="13">diagnostics</text></g>
+      <g transform="translate(298 326)"><rect width="196" height="82" rx="16" fill="#12171a" stroke="#3f4b52"/><text x="98" y="36" fill="#e3e9eb">Cleanup.psm1</text><text x="98" y="61" fill="#819097" font-size="13">selected cleanup</text></g>
+      <g transform="translate(502 326)"><rect width="196" height="82" rx="16" fill="#12171a" stroke="#3f4b52"/><text x="98" y="36" fill="#e3e9eb">Repair.psm1</text><text x="98" y="61" fill="#819097" font-size="13">supported repair</text></g>
+      <g transform="translate(706 326)"><rect width="196" height="82" rx="16" fill="#12171a" stroke="#3f4b52"/><text x="98" y="36" fill="#e3e9eb">Update.psm1</text><text x="98" y="61" fill="#819097" font-size="13">update workflow</text></g>
+      <g transform="translate(910 326)"><rect width="196" height="82" rx="16" fill="#12171a" stroke="#3f4b52"/><text x="98" y="36" fill="#e3e9eb">Security.psm1</text><text x="98" y="61" fill="#819097" font-size="13">security checks</text></g>
+      <g transform="translate(196 444)"><rect width="196" height="82" rx="16" fill="#12171a" stroke="#3f4b52"/><text x="98" y="36" fill="#e3e9eb">Drivers.psm1</text><text x="98" y="61" fill="#819097" font-size="13">driver checks</text></g>
+      <g transform="translate(400 444)"><rect width="196" height="82" rx="16" fill="#12171a" stroke="#3f4b52"/><text x="98" y="36" fill="#e3e9eb">Helpers.psm1</text><text x="98" y="61" fill="#819097" font-size="13">shared helpers</text></g>
+      <g transform="translate(604 444)"><rect width="196" height="82" rx="16" fill="#12171a" stroke="#3f4b52"/><text x="98" y="36" fill="#e3e9eb">GHelper.psm1</text><text x="98" y="61" fill="#819097" font-size="13">device-specific helper</text></g>
+      <g transform="translate(808 444)"><rect width="196" height="82" rx="16" fill="#12171a" stroke="#3f4b52"/><text x="98" y="36" fill="#e3e9eb">Report.psm1</text><text x="98" y="61" fill="#819097" font-size="13">JSON, text, HTML</text></g>
+    </g>
+    <path d="M600 526v38" stroke="#5b6870" stroke-opacity=".58"/>
+    <rect x="258" y="564" width="684" height="82" rx="18" fill="#151a1e" stroke="#8c9ba3" stroke-opacity=".48"/>
+    <text x="600" y="598" fill="#edf2f3" font-size="18" text-anchor="middle">inspectable local reports</text>
+    <text x="600" y="626" fill="#8d989f" font-size="14" text-anchor="middle">No portfolio upload · no guaranteed performance result</text>
+  </g>
+</svg>

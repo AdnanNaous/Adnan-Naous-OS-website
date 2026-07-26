@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Windows maintenance safety flow</title>
+  <desc id="desc">A system flow from configuration and an optional restore checkpoint through diagnostics and selected maintenance modules to local reports.</desc>
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#202329"/>
+      <stop offset="1" stop-color="#07080a"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#f5f5f6" stop-opacity=".7"/>
+      <stop offset=".55" stop-color="#9bd8db" stop-opacity=".38"/>
+      <stop offset="1" stop-color="#d0b9a0" stop-opacity=".2"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="720" rx="44" fill="#050607"/>
+  <g fill="none" stroke="url(#edge)" stroke-width="2" opacity=".62">
+    <path d="M250 225H390M550 225H690M850 225H990M770 300V430M445 430v-60M600 430v-60M755 430v-60"/>
+  </g>
+  <g font-family="Menlo,Consolas,monospace" text-anchor="middle">
+    <g><rect x="90" y="160" width="160" height="130" rx="24" fill="url(#panel)" stroke="url(#edge)"/><text x="170" y="216" fill="#fff" font-size="17">CONFIG</text><text x="170" y="246" fill="#999ca4" font-size="12">selected tasks</text></g>
+    <g><rect x="390" y="160" width="160" height="130" rx="24" fill="url(#panel)" stroke="url(#edge)"/><text x="470" y="207" fill="#fff" font-size="17">SAFETY</text><text x="470" y="236" fill="#999ca4" font-size="12">restore point</text><text x="470" y="258" fill="#999ca4" font-size="12">unless skipped</text></g>
+    <g><rect x="690" y="160" width="160" height="130" rx="24" fill="url(#panel)" stroke="url(#edge)"/><text x="770" y="216" fill="#fff" font-size="17">DIAGNOSE</text><text x="770" y="246" fill="#999ca4" font-size="12">health + events</text></g>
+    <g><rect x="990" y="160" width="120" height="130" rx="24" fill="url(#panel)" stroke="url(#edge)"/><text x="1050" y="216" fill="#fff" font-size="17">RUN</text><text x="1050" y="246" fill="#999ca4" font-size="12">modules</text></g>
+    <g>
+      <rect x="260" y="430" width="680" height="145" rx="30" fill="url(#panel)" stroke="url(#edge)"/>
+      <text x="350" y="490" fill="#e8e9eb" font-size="14">CLEANUP</text>
+      <text x="500" y="490" fill="#e8e9eb" font-size="14">SFC / DISM</text>
+      <text x="650" y="490" fill="#e8e9eb" font-size="14">UPDATES</text>
+      <text x="800" y="490" fill="#e8e9eb" font-size="14">SECURITY</text>
+      <text x="600" y="535" fill="#989ba3" font-size="12">individual operations may take time or fail partially</text>
+    </g>
+    <g>
+      <rect x="460" y="620" width="280" height="58" rx="18" fill="url(#panel)" stroke="url(#edge)"/>
+      <text x="600" y="655" fill="#f5f5f6" font-size="15">LOCAL JSON · TXT · HTML REPORTS</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Adnan Naous OS Website architecture</title>
+  <desc id="desc">A diagram connecting the shared site shell and typed public data to server routes, homepage interaction, and route-isolated Personal OS tools.</desc>
+  <defs>
+    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#202226"/>
+      <stop offset="1" stop-color="#090a0c"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#f5f6f8" stop-opacity=".7"/>
+      <stop offset=".48" stop-color="#8fd9dc" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#b79ee8" stop-opacity=".18"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="720" rx="44" fill="#050607"/>
+  <g fill="none" stroke="url(#edge)" stroke-width="2" opacity=".65">
+    <path d="M600 176v82M600 348v72M385 310H270v110M815 310h115v110"/>
+  </g>
+  <g font-family="Menlo,Consolas,monospace" text-anchor="middle">
+    <g>
+      <rect x="410" y="70" width="380" height="106" rx="28" fill="url(#surface)" stroke="url(#edge)"/>
+      <text x="600" y="116" fill="#f7f7f8" font-size="21">SHARED SITE SHELL</text>
+      <text x="600" y="145" fill="#9da0a8" font-size="13">navigation · theme · language · footer</text>
+    </g>
+    <g>
+      <rect x="410" y="258" width="380" height="90" rx="24" fill="url(#surface)" stroke="url(#edge)"/>
+      <text x="600" y="298" fill="#f7f7f8" font-size="20">TYPED PUBLIC DATA</text>
+      <text x="600" y="326" fill="#9da0a8" font-size="13">validated client-safe factual boundary</text>
+    </g>
+    <g>
+      <rect x="95" y="420" width="350" height="180" rx="30" fill="url(#surface)" stroke="url(#edge)"/>
+      <text x="270" y="468" fill="#f7f7f8" font-size="18">SERVER-RENDERED ROUTES</text>
+      <text x="270" y="504" fill="#9da0a8" font-size="13">About · Portfolio · Writing</text>
+      <text x="270" y="531" fill="#9da0a8" font-size="13">Capabilities · Recognition · Contact</text>
+      <text x="270" y="568" fill="#d8d9dc" font-size="12">semantic content first</text>
+    </g>
+    <g>
+      <rect x="425" y="420" width="350" height="180" rx="30" fill="url(#surface)" stroke="url(#edge)"/>
+      <text x="600" y="468" fill="#f7f7f8" font-size="18">HOMEPAGE ISLAND</text>
+      <text x="600" y="504" fill="#9da0a8" font-size="13">AI Core · local WebGL chunk</text>
+      <text x="600" y="531" fill="#9da0a8" font-size="13">static fallback · reduced motion</text>
+      <text x="600" y="568" fill="#d8d9dc" font-size="12">atmosphere never owns meaning</text>
+    </g>
+    <g>
+      <rect x="755" y="420" width="350" height="180" rx="30" fill="url(#surface)" stroke="url(#edge)"/>
+      <text x="930" y="468" fill="#f7f7f8" font-size="18">PERSONAL OS BOUNDARY</text>
+      <text x="930" y="504" fill="#9da0a8" font-size="13">timer · commands · activity</text>
+      <text x="930" y="531" fill="#9da0a8" font-size="13">approved public resources</text>
+      <text x="930" y="568" fill="#d8d9dc" font-size="12">route-scoped dashboard state</text>
+    </g>
+  </g>
+</svg>
