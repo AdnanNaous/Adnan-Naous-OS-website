@@ -1,0 +1,128 @@
+.stage {
+  position: relative;
+  inline-size: clamp(17rem, 31vw, 24rem);
+  aspect-ratio: 1;
+  overflow: visible;
+  color: var(--ds-ink);
+  background:
+    radial-gradient(circle at 38% 29%, color-mix(in srgb, var(--ds-glass-reflection) 22%, transparent), transparent 18%),
+    radial-gradient(circle at 44% 38%, color-mix(in srgb, var(--ds-ink) 11%, transparent), transparent 36%),
+    radial-gradient(circle, color-mix(in srgb, var(--ds-spectral-cyan) 5%, transparent), transparent 68%);
+  border-color: color-mix(in srgb, var(--ds-glass-edge-side) 42%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-glass-edge-top) 74%, transparent),
+    inset 0 -4px 12px color-mix(in srgb, var(--ds-glass-edge-bottom) 48%, transparent),
+    0 48px 110px rgba(0, 0, 0, 0.28),
+    0 0 84px color-mix(in srgb, var(--ds-spectral-cyan) 5%, transparent);
+}
+
+.stage::after {
+  opacity: 0.34;
+}
+
+.canvas,
+.fallback {
+  position: absolute;
+  inset: -24%;
+}
+
+.canvas {
+  transition: opacity 560ms var(--ds-ease-standard);
+}
+
+.canvas canvas {
+  display: block;
+  inline-size: 100% !important;
+  block-size: 100% !important;
+}
+
+.fallback {
+  display: grid;
+  place-items: center;
+}
+
+.fallbackSvg {
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 28px 42px rgba(0, 0, 0, 0.18));
+}
+
+.fallbackGlow {
+  position: absolute;
+  inset: 30%;
+  z-index: -1;
+  background: color-mix(in srgb, var(--ds-spectral-cyan) 8%, transparent);
+  border-radius: 50%;
+  filter: blur(32px);
+}
+
+.edgeLight {
+  position: absolute;
+  inset: 4%;
+  border: 1px solid color-mix(in srgb, var(--ds-spectral-violet) 10%, transparent);
+  border-radius: 50%;
+  pointer-events: none;
+  mask-image: linear-gradient(132deg, #000 0 24%, transparent 48% 74%, #000);
+}
+
+.edgeLight::after {
+  position: absolute;
+  inset: 8%;
+  border: 1px solid color-mix(in srgb, var(--ds-spectral-cyan) 9%, transparent);
+  border-radius: inherit;
+  content: "";
+  transform: rotate(37deg);
+  mask-image: linear-gradient(168deg, transparent 0 34%, #000 46% 61%, transparent 74%);
+}
+
+@media (max-width: 48rem) {
+  .stage {
+    inline-size: min(80vw, 21.5rem);
+  }
+
+  .canvas,
+  .fallback {
+    inset: -16%;
+  }
+}
+
+@media (min-width: 48.01rem) and (max-width: 79.99rem) {
+  .stage {
+    inline-size: clamp(28rem, 48vw, 36rem);
+  }
+}
+
+@media (min-width: 80rem) {
+  .stage {
+    inline-size: clamp(39rem, 42vw, 45rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas,
+  .stage::before,
+  .stage::after {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .stage {
+    background: var(--ds-surface-elevated);
+    box-shadow: var(--ds-shadow-md);
+  }
+}
+
+@media (forced-colors: active) {
+  .stage {
+    border: 1px solid CanvasText;
+    background: Canvas;
+  }
+
+  .edgeLight,
+  .fallbackGlow {
+    display: none;
+  }
+}
