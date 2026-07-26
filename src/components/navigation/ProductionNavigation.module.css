@@ -1,0 +1,408 @@
+.header {
+  position: fixed;
+  inset-block-start: max(0.85rem, env(safe-area-inset-top));
+  inset-inline: 0;
+  z-index: 60;
+  padding-inline: var(--ds-page-gutter);
+  pointer-events: none;
+}
+
+.nav {
+  display: grid;
+  grid-template-columns: minmax(9.5rem, 1fr) auto minmax(9.5rem, 1fr);
+  align-items: center;
+  gap: 0.9rem;
+  inline-size: min(100%, 84rem);
+  min-block-size: 3.7rem;
+  margin-inline: auto;
+  padding: 0.36rem 0.46rem 0.36rem 0.58rem;
+  border-radius: 999px;
+  pointer-events: auto;
+}
+
+.brand,
+.link,
+.activeLink,
+.githubLink,
+.controlButton,
+.mobileLink,
+.mobileActiveLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  min-block-size: 2.7rem;
+  gap: 0.72rem;
+  border-radius: 999px;
+}
+
+.brandMark {
+  display: grid;
+  inline-size: 2.38rem;
+  block-size: 2.38rem;
+  place-items: center;
+  color: var(--ds-accent-ink);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.26), transparent 48%),
+    var(--ds-accent);
+  border: 1px solid color-mix(in srgb, var(--ds-glass-edge-top) 52%, var(--ds-accent));
+  border-radius: 50%;
+  font-family: var(--ds-font-mono);
+  font-size: 0.66rem;
+  font-weight: 780;
+  letter-spacing: 0.07em;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.35),
+    0 7px 18px rgba(0, 0, 0, 0.18);
+}
+
+.brandName {
+  font-size: 0.84rem;
+  font-weight: 720;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.desktopLinks {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.08rem;
+  padding: 0.2rem;
+  background: color-mix(in srgb, var(--ds-canvas) 24%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ds-border) 60%, transparent);
+  border-radius: 999px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.16);
+}
+
+.more {
+  position: relative;
+}
+
+.more .link,
+.more .activeLink {
+  gap: 0.25rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.moreMenu {
+  position: absolute;
+  inset-block-start: calc(100% + 0.7rem);
+  inset-inline-end: 0;
+  display: grid;
+  min-inline-size: 12rem;
+  gap: 0.2rem;
+  padding: 0.45rem;
+  border-radius: 1rem;
+}
+
+.moreMenu a {
+  min-block-size: 2.7rem;
+  padding: 0.75rem 0.85rem;
+  color: var(--ds-ink-muted);
+  border-radius: 0.72rem;
+  font-size: 0.75rem;
+  text-decoration: none;
+}
+
+.moreMenu a:hover,
+.moreMenu a[aria-current="page"] {
+  color: var(--ds-ink);
+  background: var(--ds-glass-subtle-fill);
+}
+
+.link,
+.activeLink {
+  position: relative;
+  display: inline-flex;
+  min-block-size: 2.5rem;
+  align-items: center;
+  padding-inline: 0.7rem;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 650;
+  white-space: nowrap;
+  transition:
+    color var(--ds-duration-fast) var(--ds-ease-standard),
+    background var(--ds-duration-fast) var(--ds-ease-standard),
+    box-shadow var(--ds-duration-fast) var(--ds-ease-standard),
+    transform var(--ds-duration-fast) var(--ds-ease-standard);
+}
+
+.link {
+  color: var(--ds-ink-muted);
+}
+
+.link:hover {
+  color: var(--ds-ink);
+  background: color-mix(in srgb, var(--ds-glass-subtle-fill) 82%, transparent);
+  transform: translateY(-1px);
+}
+
+.activeLink {
+  color: var(--ds-ink);
+  background:
+    linear-gradient(to bottom, color-mix(in srgb, var(--ds-glass-reflection) 24%, transparent), transparent),
+    color-mix(in srgb, var(--ds-glass-subtle-fill) 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ds-glass-edge-side) 46%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-glass-edge-top) 48%, transparent),
+    0 7px 18px rgba(0, 0, 0, 0.16);
+}
+
+.activeDot {
+  position: absolute;
+  inset-inline: 50%;
+  inset-block-end: 0.24rem;
+  inline-size: 0.19rem;
+  block-size: 0.19rem;
+  background: var(--ds-warm);
+  border-radius: 50%;
+  box-shadow: 0 0 9px color-mix(in srgb, var(--ds-warm) 56%, transparent);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 0.38rem;
+}
+
+.githubLink,
+.controlButton {
+  display: inline-flex;
+  min-block-size: 2.52rem;
+  align-items: center;
+  justify-content: center;
+  color: var(--ds-ink-muted);
+  background:
+    linear-gradient(to bottom, color-mix(in srgb, var(--ds-glass-reflection) 15%, transparent), transparent),
+    color-mix(in srgb, var(--ds-glass-subtle-fill) 38%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ds-glass-edge-side) 42%, transparent);
+  border-radius: 999px;
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-glass-edge-top) 38%, transparent),
+    inset 0 -1px 1px color-mix(in srgb, var(--ds-glass-edge-bottom) 34%, transparent);
+  cursor: pointer;
+  transition:
+    color var(--ds-duration-fast) var(--ds-ease-standard),
+    background var(--ds-duration-fast) var(--ds-ease-standard),
+    border-color var(--ds-duration-fast) var(--ds-ease-standard),
+    transform var(--ds-duration-fast) var(--ds-ease-standard);
+}
+
+.githubLink {
+  padding-inline: 0.82rem;
+  font-size: 0.7rem;
+  font-weight: 690;
+}
+
+.controlButton {
+  min-inline-size: 2.52rem;
+  gap: 0.32rem;
+  padding-inline: 0.67rem;
+}
+
+.githubLink:hover,
+.controlButton:hover {
+  color: var(--ds-ink);
+  background: color-mix(in srgb, var(--ds-accent-soft) 78%, var(--ds-glass-subtle-fill));
+  border-color: var(--ds-glass-edge-side);
+  transform: translateY(-1px);
+}
+
+.controlText {
+  font-family: var(--ds-font-mono);
+  font-size: 0.64rem;
+  font-weight: 730;
+}
+
+.menuButton {
+  display: none;
+}
+
+.mobileOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: calc(max(0.85rem, env(safe-area-inset-top)) + 4.45rem) var(--ds-page-gutter) max(1rem, env(safe-area-inset-bottom));
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--ds-spectral-cyan) 7%, transparent), transparent 22rem),
+    color-mix(in srgb, var(--ds-canvas) 62%, transparent);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  pointer-events: auto;
+}
+
+.mobilePanel {
+  display: grid;
+  inline-size: min(100%, 33rem);
+  max-block-size: calc(100dvh - 6.7rem);
+  padding: 0.68rem;
+  overflow-y: auto;
+  border-radius: 1.5rem;
+}
+
+.mobileLink,
+.mobileActiveLink {
+  display: flex;
+  min-block-size: 3.15rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-inline: 1rem;
+  border: 1px solid transparent;
+  border-radius: 1rem;
+  font-size: 0.91rem;
+  font-weight: 680;
+}
+
+.mobileLink {
+  color: var(--ds-ink-muted);
+}
+
+.mobileLink:hover,
+.mobileActiveLink {
+  color: var(--ds-ink);
+  background:
+    linear-gradient(to bottom, color-mix(in srgb, var(--ds-glass-reflection) 16%, transparent), transparent),
+    color-mix(in srgb, var(--ds-glass-subtle-fill) 64%, transparent);
+  border-color: color-mix(in srgb, var(--ds-glass-edge-side) 34%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-glass-edge-top) 34%, transparent);
+}
+
+.mobileIndex {
+  color: var(--ds-ink-subtle);
+  font-family: var(--ds-font-mono);
+  font-size: 0.6rem;
+}
+
+.mobileUtilities {
+  display: none;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.46rem;
+  margin-block-start: 0.7rem;
+  padding-block-start: 0.72rem;
+  border-block-start: 1px solid color-mix(in srgb, var(--ds-glass-edge-side) 38%, transparent);
+}
+
+.mobileUtility {
+  display: inline-flex;
+  min-block-size: 3rem;
+  min-inline-size: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 0.36rem;
+  padding-inline: 0.5rem;
+  color: var(--ds-ink-muted);
+  border-radius: 0.92rem;
+  font: inherit;
+  font-size: 0.66rem;
+  font-weight: 680;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mobileUtility:hover {
+  color: var(--ds-ink);
+}
+
+[dir="rtl"] .brandName {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+@media (max-width: 81.99rem) {
+  .nav {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .desktopLinks,
+  .githubLink {
+    display: none;
+  }
+
+  .controls > .controlButton:not(.menuButton) {
+    display: none;
+  }
+
+  .menuButton,
+  .mobileUtilities {
+    display: inline-flex;
+  }
+
+  .mobileUtilities {
+    display: grid;
+  }
+}
+
+@media (max-width: 32rem) {
+  .header {
+    padding-inline: 0.72rem;
+  }
+
+  .nav {
+    min-block-size: 3.55rem;
+    padding: 0.3rem 0.34rem 0.3rem 0.76rem;
+  }
+
+  .brandName {
+    font-size: 0.69rem;
+    letter-spacing: 0.14em;
+  }
+
+  .brandMark {
+    display: none;
+  }
+
+  .controlButton {
+    min-inline-size: 2.55rem;
+    min-block-size: 2.55rem;
+    padding-inline: 0.6rem;
+  }
+
+  .controlText {
+    display: none;
+  }
+
+  .mobilePanel {
+    padding: 0.58rem;
+    border-radius: 1.3rem;
+  }
+
+  .mobileUtility {
+    flex-direction: column;
+    gap: 0.22rem;
+    min-block-size: 3.45rem;
+    font-size: 0.58rem;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .mobileOverlay {
+    background: color-mix(in srgb, var(--ds-canvas) 92%, transparent);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .nav,
+  .mobilePanel,
+  .githubLink,
+  .controlButton,
+  .mobileLink,
+  .mobileActiveLink {
+    border-color: CanvasText;
+  }
+}

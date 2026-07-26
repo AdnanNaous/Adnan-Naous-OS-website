@@ -1,0 +1,58 @@
+.shell {
+  position: relative;
+  min-block-size: 100svh;
+  overflow-x: clip;
+  isolation: isolate;
+  color: var(--ds-ink);
+  background:
+    radial-gradient(circle at 50% -12%, color-mix(in srgb, var(--ds-spectral-violet) 8%, transparent), transparent 34rem),
+    linear-gradient(160deg, var(--ds-canvas-raised), var(--ds-canvas) 56%);
+}
+
+.ambientLight,
+.spectralMist {
+  position: fixed;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.ambientLight {
+  inset: -20% -10% auto;
+  block-size: min(64rem, 78vh);
+  background:
+    radial-gradient(circle at 22% 30%, color-mix(in srgb, var(--ds-spectral-cyan) 7%, transparent), transparent 24%),
+    radial-gradient(circle at 76% 20%, color-mix(in srgb, var(--ds-spectral-gold) 5%, transparent), transparent 22%);
+  filter: blur(28px);
+  opacity: 0.72;
+}
+
+.spectralMist {
+  inset: auto -20% -26% 28%;
+  block-size: 60vh;
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--ds-spectral-violet) 6%, transparent), transparent 68%);
+  filter: blur(42px);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  min-block-size: 100svh;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .ambientLight,
+  .spectralMist {
+    display: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .shell {
+    background: Canvas;
+  }
+
+  .ambientLight,
+  .spectralMist {
+    display: none;
+  }
+}
