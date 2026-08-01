@@ -8,6 +8,7 @@ import {
   SITE_NAME,
   SITE_URL,
 } from "@/lib/seo";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -55,6 +56,7 @@ export default function RootLayout({
             <div className="min-h-screen">{children}</div>
           </LanguageProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
