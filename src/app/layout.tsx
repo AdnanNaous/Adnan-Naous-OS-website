@@ -1,63 +1,25 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
+import { cookies } from "next/headers";
 import "./globals.css";
-import { LanguageProvider } from "@/context/LanguageContext";
-import { ThemeProvider } from "next-themes";
-import {
-  DEFAULT_DESCRIPTION,
-  DEFAULT_TITLE,
-  SITE_NAME,
-  SITE_URL,
-} from "@/lib/seo";
-import { Analytics } from "@vercel/analytics/next";
+import "./hardware.css";
+import "./evolution.css";
+import "./signal.css";
+import "./cinematic.css";
 
+const thmanyah = localFont({ src: [
+  { path: "../fonts/thmanyahsans-Regular.otf", weight: "400" },
+  { path: "../fonts/thmanyahsans-Medium.otf", weight: "500 600" },
+  { path: "../fonts/thmanyahsans-Bold.otf", weight: "700 900" },
+], variable: "--font-thmanyah", display: "swap" });
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: DEFAULT_TITLE,
-    template: "%s | Adnan Naous",
-  },
-  description: DEFAULT_DESCRIPTION,
-  openGraph: {
-    type: "website",
-    siteName: SITE_NAME,
-    title: DEFAULT_TITLE,
-    description: DEFAULT_DESCRIPTION,
-    url: "/",
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: "Adnan Naous Portfolio and Personal OS",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: DEFAULT_TITLE,
-    description: DEFAULT_DESCRIPTION,
-    images: ["/opengraph-image"],
-  },
+  metadataBase: new URL("https://adnannaous.vercel.app"),
+  title: "Adnan Naous — Software & curiosity",
+  description: "Computer Science & AI student. Explore my projects, background, and get in touch.",
+  openGraph: { title: "Adnan Naous", description: "Software, experiments, and the next idea.", type: "website" },
+  twitter: { card: "summary", creator: "@vc_351" },
 };
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="antialiased bg-[var(--background)] text-[var(--foreground)]">
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          <LanguageProvider>
-            <a href="#main-content" className="skip-link">
-              Skip to main content
-            </a>
-            <div className="min-h-screen">{children}</div>
-          </LanguageProvider>
-        </ThemeProvider>
-        <Analytics />
-      </body>
-    </html>
-  );
+export default async function Layout({children}: {children: React.ReactNode}) {
+  const ar = (await cookies()).get("portfolio-language")?.value === "ar";
+  return <html lang={ar ? "ar" : "en"} dir={ar ? "rtl" : "ltr"} className={thmanyah.variable}><body>{children}</body></html>;
 }
