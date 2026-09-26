@@ -1,12 +1,12 @@
 # Adnan Naous — Portfolio
 
-A bilingual portfolio for Adnan Naous, built with Next.js, React, TypeScript, and Three.js. The site uses one self-hosted Thmanyah Sans family for English and Arabic, supports RTL, and keeps the work, background, CV, and contact links accessible as real HTML.
+A bilingual portfolio built with Next.js, React, TypeScript, and Three.js. It uses the self-hosted Thmanyah Sans family throughout and supports both English and Arabic layouts.
 
-The hero is an original layered alien landscape. Its scenery moves with pointer and scroll input; the ivory tree bends gently through a WebGL vertex shader and has an image fallback. The scene pauses when out of view, and reduced-motion users get a still composition. Section headings use restrained signal-fracture motion, while the navigation marker identifies the section in view.
+The continuous background is an original, procedural WebGL scene: machined rings, a glass core, architectural columns, light shafts, and particles respond to pointer and scroll input. No game art, stock photograph, or pre-rendered backdrop is used. Text and links remain HTML, so the projects, CV, and contact action work independently of the scene. If WebGL is unavailable, a dark gradient remains. Reduced-motion preferences are respected.
 
-The two images in `public/art/` were made specifically for this portfolio. Marathon and Apple design references informed the direction; their game art, icons, UI, and branded assets are not included. No personal photographs are used.
+The navigation, project list, and contact section share an editorial layout rather than cards. The main contact action opens an email draft directly; project details expand inline.
 
-## Local development
+## Development
 
 Requires Node.js and pnpm.
 
@@ -15,6 +15,6 @@ pnpm install
 pnpm dev
 ```
 
-For a production check, run `pnpm build`, `pnpm lint`, then `pnpm start`. With the local server running, `pnpm test:browser` checks the primary interactions. `node scripts/ratios.mjs` checks ten viewport sizes in both languages. Set `BASE_URL` to test a different deployment.
+Run `pnpm build`, `pnpm lint`, and `pnpm start` for a production check. With the local server running, `pnpm test:browser` covers core interactions, and `node scripts/ratios.mjs` checks desktop and mobile widths in both languages. Set `BASE_URL` to test another deployment.
 
-Deployment: push the repository to GitHub and deploy the linked project on Vercel. The public site is [adnannaous.vercel.app](https://adnannaous.vercel.app/).
+The public site is [adnannaous.vercel.app](https://adnannaous.vercel.app/).

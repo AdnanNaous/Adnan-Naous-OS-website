@@ -2,10 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { cookies } from "next/headers";
 import "./globals.css";
-import "./hardware.css";
-import "./evolution.css";
-import "./signal.css";
-import "./cinematic.css";
 
 const thmanyah = localFont({ src: [
   { path: "../fonts/thmanyahsans-Regular.otf", weight: "400" },

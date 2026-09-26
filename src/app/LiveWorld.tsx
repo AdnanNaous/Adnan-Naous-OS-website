@@ -1,0 +1,243 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+
+/** A continuous, original WebGL environment. No backdrop image or game asset. */
+export default function LiveWorld() {
+  const mount = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const host = mount.current;
+    if (!host) return;
+    let disposed = false;
+    let cleanup = () => {};
+    const announceReady = () => window.dispatchEvent(new Event("portfolio-scene-ready"));
+
+    import("three").then((THREE) => {
+      if (disposed) return;
+      let renderer: InstanceType<typeof THREE.WebGLRenderer>;
+      try {
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
+      } catch {
+        host.dataset.fallback = "true";
+        announceReady();
+        return;
+      }
+
+      const media = matchMedia("(prefers-reduced-motion: reduce)");
+      renderer.setPixelRatio(Math.min(devicePixelRatio, innerWidth < 700 ? 1.45 : 1.8));
+      renderer.setClearColor(0x08090b);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.3;
+      host.appendChild(renderer.domElement);
+
+      const scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x08090b, 0.025);
+      const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 110);
+      camera.position.set(0, 1.0, 18);
+      camera.lookAt(0, 0, 0);
+      scene.add(new THREE.AmbientLight(0x9ea5b0, 0.64));
+      const key = new THREE.DirectionalLight(0xffffff, 3.1);
+      key.position.set(-5, 9, 9);
+      scene.add(key);
+      const rim = new THREE.DirectionalLight(0xc2cad7, 3.8);
+      rim.position.set(7, 3, -6);
+      scene.add(rim);
+      const lower = new THREE.PointLight(0xf2f3f5, 30, 19, 2);
+      lower.position.set(3, -4, 4);
+      scene.add(lower);
+
+      const world = new THREE.Group();
+      scene.add(world);
+      const steel = new THREE.MeshPhysicalMaterial({ color: 0x555b63, metalness: 0.87, roughness: 0.25, clearcoat: 0.72, clearcoatRoughness: 0.17 });
+      const graphite = new THREE.MeshStandardMaterial({ color: 0x15191d, metalness: 0.75, roughness: 0.4 });
+      const bright = new THREE.MeshStandardMaterial({ color: 0xd4d7d9, metalness: 0.64, roughness: 0.27, emissive: 0x5a6065, emissiveIntensity: 0.24 });
+      const glass = new THREE.MeshPhysicalMaterial({ color: 0x84919d, metalness: 0.16, roughness: 0.1, transparent: true, opacity: 0.42, transmission: 0.26, thickness: 0.8, clearcoat: 1, clearcoatRoughness: 0.08, side: THREE.DoubleSide });
+      const resources: Array<{ dispose: () => void }> = [steel, graphite, bright, glass];
+
+      // The core is built as one architectural object: an inner spine, glass shell,
+      // concentric machined bands, and hinged radial vanes.
+      const spineGeometry = new THREE.CylinderGeometry(0.31, 0.58, 6.8, 7);
+      const spine = new THREE.Mesh(spineGeometry, steel);
+      spine.rotation.z = -0.1;
+      world.add(spine);
+      resources.push(spineGeometry);
+      const shellGeometry = new THREE.CylinderGeometry(0.7, 0.8, 5.45, 8, 1, true);
+      const shell = new THREE.Mesh(shellGeometry, glass);
+      shell.rotation.z = -0.1;
+      world.add(shell);
+      resources.push(shellGeometry);
+      const slitGeometry = new THREE.BoxGeometry(0.075, 5.8, 0.075);
+      const slit = new THREE.Mesh(slitGeometry, bright);
+      slit.position.set(-0.19, 0.08, 0.49);
+      slit.rotation.z = -0.1;
+      world.add(slit);
+      resources.push(slitGeometry);
+
+      const rings: InstanceType<typeof THREE.Mesh>[] = [];
+      for (const [index, radius, tube, z] of [[0, 3.15, 0.075, 0], [1, 2.48, 0.045, 0.55], [2, 3.65, 0.025, -0.65]] as const) {
+        const geometry = new THREE.TorusGeometry(radius, tube, 10, 112);
+        const ring = new THREE.Mesh(geometry, index === 1 ? bright : steel);
+        ring.rotation.set(0.22 + index * 0.31, -0.58 + index * 0.18, -0.26 + index * 0.22);
+        ring.position.z = z;
+        world.add(ring);
+        rings.push(ring);
+        resources.push(geometry);
+      }
+
+      const vaneGeometry = new THREE.BoxGeometry(0.14, 0.68, 0.28);
+      const vanes = new THREE.InstancedMesh(vaneGeometry, graphite, 64);
+      const dummy = new THREE.Object3D();
+      for (let i = 0; i < 64; i++) {
+        const angle = i / 64 * Math.PI * 2;
+        const radius = 3.45 + Math.sin(i * 4.3) * 0.06;
+        dummy.position.set(Math.sin(angle) * radius, Math.cos(angle) * radius, Math.sin(i * 1.9) * 0.12 - 0.12);
+        dummy.rotation.set(0.12, 0.22, -angle);
+        dummy.scale.set(1, 0.75 + (i % 5) * 0.16, 1);
+        dummy.updateMatrix();
+        vanes.setMatrixAt(i, dummy.matrix);
+      }
+      vanes.instanceMatrix.needsUpdate = true;
+      world.add(vanes);
+      resources.push(vaneGeometry);
+
+      const architecture = new THREE.Group();
+      scene.add(architecture);
+      const wallGeometry = new THREE.BoxGeometry(0.22, 12, 1.2);
+      const wall = new THREE.InstancedMesh(wallGeometry, graphite, 26);
+      for (let i = 0; i < 26; i++) {
+        const side = i % 2 ? -1 : 1;
+        const depth = Math.floor(i / 2);
+        dummy.position.set(side * (7.8 + depth * 0.37), -0.9, -4.5 - depth * 1.45);
+        dummy.rotation.set(0, side * 0.18, 0);
+        dummy.scale.set(1, 1 + (depth % 3) * 0.25, 1);
+        dummy.updateMatrix();
+        wall.setMatrixAt(i, dummy.matrix);
+      }
+      wall.instanceMatrix.needsUpdate = true;
+      architecture.add(wall);
+      resources.push(wallGeometry);
+
+      const floorGeometry = new THREE.PlaneGeometry(160, 160);
+      const floor = new THREE.Mesh(floorGeometry, new THREE.MeshStandardMaterial({ color: 0x101216, metalness: 0.48, roughness: 0.55 }));
+      floor.rotation.x = -Math.PI / 2;
+      floor.position.y = -5.1;
+      scene.add(floor);
+      resources.push(floorGeometry, floor.material);
+      const grid = new THREE.GridHelper(150, 72, 0x626871, 0x2e3338);
+      grid.position.y = -5.07;
+      (grid.material as InstanceType<typeof THREE.Material>).transparent = true;
+      (grid.material as InstanceType<typeof THREE.Material>).opacity = 0.13;
+      scene.add(grid);
+      resources.push(grid.geometry, grid.material as InstanceType<typeof THREE.Material>);
+
+      // White volumetric shafts are actual translucent geometry, not a photo overlay.
+      const beamMaterial = new THREE.ShaderMaterial({
+        transparent: true, depthWrite: false, side: THREE.DoubleSide,
+        uniforms: { uOpacity: { value: 0.12 } },
+        vertexShader: "varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}",
+        fragmentShader: "varying vec2 vUv;uniform float uOpacity;void main(){float width=pow(max(0.0,1.0-abs(vUv.x-.5)*2.0),2.0);float fade=smoothstep(0.0,.35,vUv.y)*(1.0-smoothstep(.75,1.0,vUv.y));gl_FragColor=vec4(vec3(.82,.86,.9),width*fade*uOpacity);}",
+      });
+      resources.push(beamMaterial);
+      const beams = new THREE.Group();
+      for (let i = 0; i < 5; i++) {
+        const geometry = new THREE.PlaneGeometry(5.4 + i * 0.4, 18);
+        const beam = new THREE.Mesh(geometry, beamMaterial);
+        beam.position.set((i - 2) * 2.15, 2.2, -6.6 - i * 0.55);
+        beam.rotation.z = -0.19 + i * 0.095;
+        beam.rotation.y = i * 0.18;
+        beams.add(beam);
+        resources.push(geometry);
+      }
+      scene.add(beams);
+
+      const dustCount = innerWidth < 700 ? 110 : 190;
+      const positions = new Float32Array(dustCount * 3);
+      for (let i = 0; i < dustCount; i++) {
+        positions[i * 3] = (Math.random() - 0.5) * 20;
+        positions[i * 3 + 1] = (Math.random() - 0.5) * 11;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 18;
+      }
+      const dustGeometry = new THREE.BufferGeometry();
+      dustGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+      const dustMaterial = new THREE.PointsMaterial({ color: 0xd0d4d8, size: 0.032, transparent: true, opacity: 0.68, sizeAttenuation: true });
+      const dust = new THREE.Points(dustGeometry, dustMaterial);
+      scene.add(dust);
+      resources.push(dustGeometry, dustMaterial);
+
+      let frame = 0, lastFrame = 0, targetX = 0, targetY = 0, scrollProgress = 0;
+      let pointerX = 0, pointerY = 0;
+      const resize = () => {
+        const width = host.clientWidth, height = host.clientHeight;
+        if (!width || !height) return;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height, false);
+        renderer.setPixelRatio(Math.min(devicePixelRatio, width < 700 ? 1.45 : 1.8));
+      };
+      const onPointer = (event: PointerEvent) => {
+        if (event.pointerType !== "mouse") return;
+        pointerX = event.clientX / innerWidth - 0.5;
+        pointerY = event.clientY / innerHeight - 0.5;
+      };
+      const onScroll = () => {
+        scrollProgress = Math.min(1, scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight));
+      };
+      const draw = (time: number) => {
+        if (document.hidden) return;
+        if (time - lastFrame > 25 || media.matches) {
+          const mobile = innerWidth < 700;
+          const side = document.documentElement.dir === "rtl" ? -1 : 1;
+          targetX = mobile ? 0 : side * (3.3 - scrollProgress * 1.5);
+          targetY = mobile ? -2.3 + scrollProgress * 1.8 : 0.1 + scrollProgress * 0.9;
+          world.position.x += (targetX + pointerX * (mobile ? 0 : 0.7) - world.position.x) * 0.035;
+          world.position.y += (targetY - pointerY * 0.38 - world.position.y) * 0.035;
+          const targetScale = mobile ? 0.74 : 1.02;
+          world.scale.setScalar(targetScale);
+          const tick = media.matches ? 0 : time * 0.00012;
+          world.rotation.y += ((scrollProgress * 0.58 + pointerX * 0.22 + Math.sin(tick) * 0.07) - world.rotation.y) * 0.025;
+          world.rotation.z += ((scrollProgress * -0.18 + pointerY * 0.08) - world.rotation.z) * 0.03;
+          rings[0].rotation.z = -0.26 + tick * 0.24;
+          rings[1].rotation.z = -0.04 - tick * 0.34;
+          rings[2].rotation.z = 0.18 + tick * 0.13;
+          dust.rotation.y = tick * 0.05;
+          beams.rotation.z = Math.sin(tick * 0.55) * 0.012;
+          renderer.render(scene, camera);
+          lastFrame = time;
+        }
+        if (!media.matches) frame = requestAnimationFrame(draw);
+      };
+      const onVisibility = () => { cancelAnimationFrame(frame); if (!document.hidden) frame = requestAnimationFrame(draw); };
+      const observer = new ResizeObserver(resize);
+      observer.observe(host);
+      addEventListener("pointermove", onPointer, { passive: true });
+      addEventListener("scroll", onScroll, { passive: true });
+      document.addEventListener("visibilitychange", onVisibility);
+      const contextLost = (event: Event) => { event.preventDefault(); cancelAnimationFrame(frame); host.dataset.fallback = "true"; };
+      renderer.domElement.addEventListener("webglcontextlost", contextLost);
+      resize();
+      onScroll();
+      renderer.render(scene, camera);
+      host.dataset.ready = "true";
+      announceReady();
+      frame = requestAnimationFrame(draw);
+
+      cleanup = () => {
+        cancelAnimationFrame(frame);
+        observer.disconnect();
+        removeEventListener("pointermove", onPointer);
+        removeEventListener("scroll", onScroll);
+        document.removeEventListener("visibilitychange", onVisibility);
+        renderer.domElement.removeEventListener("webglcontextlost", contextLost);
+        resources.forEach(resource => resource.dispose());
+        renderer.dispose();
+        renderer.domElement.remove();
+      };
+    }).catch(() => { host.dataset.fallback = "true"; announceReady(); });
+
+    return () => { disposed = true; cleanup(); };
+  }, []);
+
+  return <div className="live-world" ref={mount} aria-hidden="true" />;
+}

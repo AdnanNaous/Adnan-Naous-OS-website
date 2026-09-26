@@ -32,7 +32,6 @@ export const socials = [
   }
 ];
 export const certificate = { documentPath: "/documents/certificates/kanz-ai-hackathon-2026.pdf" };
-export const journeyUrl = "https://github.com/AdnanNaous/Adnan-Naous-Journey";
 
 type Localized = Record<Language, string>;
 export type PortfolioProject = {
@@ -122,31 +121,15 @@ export const projects: PortfolioProject[] = [
 
 export const copy = {
   en: {
-    intro: "I’m a Computer Science and AI student at Arab Open University.",
-    viewWork: "See my work", email: "Email me",
-    explore: "Project details", journey: "Learning notes", journeyText: "My experiments and progress on GitHub.",
-    educationLabel: "Education", focusLabel: "What I’m working on", nextLabel: "What I’m looking for",
-    educationNow: "Computer Science and AI", educationSchool: "Arab Open University",
     focus: "I’m building a Windows maintenance toolkit and this site, and practising Java alongside them. They give me something concrete to learn from and improve.",
     nextStep: "I’m looking for an internship or junior role in software or AI. I’d also be glad to contribute to a project where I can keep learning.",
     biography: "I’m Adnan, a Computer Science and AI student at Arab Open University.",
     background: "Before moving into computing, I studied Human Medicine at Ain Shams University for two years. These projects are how I practise what I’m learning now.",
-    recognition: "Kanz AI Hackathon · Workshop completion, 2026", certificate: "View certificate",
-    availability: "Hiring for an internship or junior role?", availabilitySecond: "Have a project I could help with? I’d like to hear from you.",
-    source: "See the code",
   },
   ar: {
-    intro: "أنا طالب علوم حاسوب وذكاء اصطناعي في الجامعة العربية المفتوحة.",
-    viewWork: "شاهد أعمالي", email: "راسلني",
-    explore: "تفاصيل المشروع", journey: "ملاحظات التعلّم", journeyText: "تجاربي وما أتعلمه على GitHub.",
-    educationLabel: "الدراسة", focusLabel: "ما أعمل عليه الآن", nextLabel: "ما أبحث عنه",
-    educationNow: "علوم الحاسوب والذكاء الاصطناعي", educationSchool: "الجامعة العربية المفتوحة",
     focus: "أعمل على أداة لصيانة Windows وهذا الموقع، وأتدرّب على Java إلى جانبهما. أتعلم من هذه المشاريع وأعود لتحسينها كلما اكتسبت مهارة جديدة.",
     nextStep: "أبحث عن تدريب أو وظيفة للمبتدئين، خصوصًا في البرمجة أو الذكاء الاصطناعي. ويسعدني أيضًا أن أساهم في مشروع أتعلم منه.",
     biography: "أنا عدنان، طالب علوم حاسوب وذكاء اصطناعي في الجامعة العربية المفتوحة.",
     background: "قبل الانتقال إلى الحوسبة، درست الطب البشري سنتين في جامعة عين شمس. أطبّق الآن ما أتعلمه في مشاريعي البرمجية.",
-    recognition: "هاكاثون كنز للذكاء الاصطناعي · إتمام ورشة تدريبية، 2026", certificate: "عرض الشهادة",
-    availability: "إذا لديك فرصة تدريب أو عمل للمبتدئين،", availabilitySecond: "أو مشروع يمكنني المساهمة فيه، يسعدني أن تراسلني.",
-    source: "شاهد الكود",
   },
 } as const;

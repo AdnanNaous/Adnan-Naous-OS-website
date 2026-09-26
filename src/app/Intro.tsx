@@ -9,38 +9,39 @@ export default function Intro({ ar }: { ar: boolean }) {
     const el = root.current;
     if (!el) return;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      el.dataset.visible = "skip";
+      el.dataset.state = "skip";
       return;
     }
 
-    let cancelled = false;
-    let closeTimer: ReturnType<typeof setTimeout>;
-    el.dataset.visible = "true";
     const start = performance.now();
-    const image = new Image();
-    image.src = "/art/ivory-tree.webp";
-    const ready = Promise.allSettled([document.fonts.ready, image.decode()]);
-    const finish = () => {
-      if (cancelled) return;
-      el.dataset.visible = "done";
+    let sceneReady = document.querySelector(".live-world")?.getAttribute("data-ready") === "true";
+    let fontReady = false;
+    let closed = false;
+    let closeTimer: ReturnType<typeof setTimeout>;
+    const complete = () => {
+      if (closed || !sceneReady || !fontReady) return;
+      closeTimer = setTimeout(() => {
+        if (!closed) el.dataset.state = "done";
+      }, Math.max(0, 1600 - (performance.now() - start)));
     };
-    const failSafe = setTimeout(finish, 6500);
-    ready.then(() => {
-      if (cancelled) return;
-      closeTimer = setTimeout(finish, Math.max(0, 2600 - (performance.now() - start)));
-    });
-    return () => { cancelled = true; clearTimeout(closeTimer); clearTimeout(failSafe); };
+    const onSceneReady = () => { sceneReady = true; complete(); };
+    addEventListener("portfolio-scene-ready", onSceneReady);
+    document.fonts.ready.then(() => { fontReady = true; complete(); });
+    const failSafe = setTimeout(() => { if (!closed) el.dataset.state = "done"; }, 4500);
+    return () => {
+      closed = true;
+      removeEventListener("portfolio-scene-ready", onSceneReady);
+      clearTimeout(closeTimer);
+      clearTimeout(failSafe);
+    };
   }, []);
 
-  return <div className="intro signal-intro" ref={root} aria-hidden="true">
-    <div className="intro-shutter"/>
+  return <div className="intro" data-state="loading" ref={root} aria-hidden="true">
     <div className="intro-center">
-      <span className="intro-overline">AN / FIELD NOTES · 2026</span>
-      <div className="intro-orbit"><i/><i/><i/><b/></div>
-      <span className="intro-word">{ar ? "إشارة جديدة" : "A new signal"}</span>
-      <div className="intro-line"/>
-      <span className="intro-loading">{ar ? "تحميل المشهد والمواد" : "LOADING SCENE & MATERIALS"}</span>
-      <span className="intro-footnote">{ar ? "استعد للاستكشاف" : "PREPARE TO EXPLORE"}</span>
+      <span className="intro-index">AN / 2026</span>
+      <strong className="intro-title">{ar ? "شيء جديد قيد التكوين" : "Something is taking shape."}</strong>
+      <div className="intro-rule" />
+      <span className="intro-note">{ar ? "تهيئة المشهد" : "INITIALIZING SCENE"}</span>
     </div>
   </div>;
 }
