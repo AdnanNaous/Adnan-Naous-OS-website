@@ -175,14 +175,15 @@ export default function LiveWorld() {
         camera.updateProjectionMatrix();
         renderer.setSize(width, height, false);
         renderer.setPixelRatio(Math.min(devicePixelRatio, width < 700 ? 1.45 : 1.8));
+        if (media.matches) renderer.render(scene, camera);
       };
       const onPointer = (event: PointerEvent) => {
-        if (event.pointerType !== "mouse") return;
+        if (media.matches || event.pointerType !== "mouse") return;
         pointerX = event.clientX / innerWidth - 0.5;
         pointerY = event.clientY / innerHeight - 0.5;
       };
       const onScroll = () => {
-        scrollProgress = Math.min(1, scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight));
+        scrollProgress = media.matches ? 0 : Math.min(1, scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight));
       };
       const draw = (time: number) => {
         if (document.hidden) return;
@@ -191,8 +192,9 @@ export default function LiveWorld() {
           const side = document.documentElement.dir === "rtl" ? -1 : 1;
           targetX = mobile ? 0 : side * (3.3 - scrollProgress * 1.5);
           targetY = mobile ? -2.3 + scrollProgress * 1.8 : 0.1 + scrollProgress * 0.9;
-          world.position.x += (targetX + pointerX * (mobile ? 0 : 0.7) - world.position.x) * 0.035;
-          world.position.y += (targetY - pointerY * 0.38 - world.position.y) * 0.035;
+          const ease = media.matches ? 1 : 0.035;
+          world.position.x += (targetX + pointerX * (mobile ? 0 : 0.7) - world.position.x) * ease;
+          world.position.y += (targetY - pointerY * 0.38 - world.position.y) * ease;
           const targetScale = mobile ? 0.74 : 1.02;
           world.scale.setScalar(targetScale);
           const tick = media.matches ? 0 : time * 0.00012;

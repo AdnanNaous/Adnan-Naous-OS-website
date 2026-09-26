@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import LiveWorld from "./LiveWorld";
+import TechField from "./TechField";
 import Intro from "./Intro";
-import { certificate, contact, copy, projects, socials, type Language } from "@/data/portfolio";
+import { contact, copy, projects, socials, type Language } from "@/data/portfolio";
 
 const destinations = ["home", "work", "now", "about", "contact"] as const;
 
@@ -72,6 +73,7 @@ export default function Portfolio({ initialLanguage }: { initialLanguage: Langua
   return <>
     <LiveWorld />
     <div className="world-shade" aria-hidden="true" />
+    <TechField />
     <Intro ar={ar} />
     <a className="skip-link" href="#main">{text("Skip to content", "انتقل إلى المحتوى")}</a>
     <header className={`site-nav${navHidden ? " nav-hidden" : ""}`}>
@@ -92,15 +94,15 @@ export default function Portfolio({ initialLanguage }: { initialLanguage: Langua
           <p className="hero-statement">{text("I build to learn. I keep what works.", "أبني لأتعلّم، وأحسّن ما ينجح.")}</p>
           <p className="hero-intro">{text("I study Computer Science and AI at Arab Open University. These are the projects I’m learning from now.", "أدرس علوم الحاسوب والذكاء الاصطناعي في الجامعة العربية المفتوحة. هذه المشاريع التي أتعلم منها الآن.")}</p>
           <div className="action-row">
-            <a className="glass-action" href="#work"><span>{text("Explore work", "استكشف الأعمال")}</span><span className="action-tail" aria-hidden="true">01—03</span></a>
-            <a className="glass-action glass-action-quiet" href={contact.href}><span>{text("Write an email", "اكتب رسالة")}</span><span className="action-tail" aria-hidden="true">↗</span></a>
+            <a className="command-action" href="#work"><span>{text("Explore work", "استكشف الأعمال")}</span><span className="action-tail" aria-hidden="true">0{projects.length} / WORK</span></a>
+            <a className="command-action command-action-quiet" href={contact.href}><span>{text("Write an email", "اكتب رسالة")}</span><span className="action-tail" aria-hidden="true">↗</span></a>
           </div>
         </div>
         <div className="hero-coordinate" aria-hidden="true"><span>AN / 2026</span></div>
       </section>
 
       <section id="work" className="content-section work-section" aria-labelledby="work-title">
-        <div className="section-head reveal"><p className="section-index">02 / {text("SELECTED WORK", "أعمال مختارة")}</p><h2 id="work-title" className="section-title glitch" data-label={text("Built, tested, revised.", "أبني، أجرّب، وأحسّن.")}>{text("Built, tested, revised.", "أبني، أجرّب، وأحسّن.")}</h2><p className="section-lead">{text("Two projects in progress.", "مشروعان قيد التطوير.")}</p></div>
+        <div className="section-head reveal"><p className="section-index">02 / {text("SELECTED WORK", "أعمال مختارة")}</p><h2 id="work-title" className="section-title glitch" data-label={text("Built, tested, revised.", "أبني، أجرّب، وأحسّن.")}>{text("Built, tested, revised.", "أبني، أجرّب، وأحسّن.")}</h2><p className="section-lead">{text("Two projects in progress.", "مشروعان قيد التطوير.")}</p><div className="work-scan" aria-hidden="true"><span/></div></div>
         <div className="project-list">
           {projects.map((project, index) => <article className="project-entry reveal" key={project.slug}>
             <button className="project-trigger" type="button" aria-expanded={expanded === index} aria-controls={`project-detail-${index}`} onClick={() => setExpanded(expanded === index ? null : index)}>
@@ -117,27 +119,27 @@ export default function Portfolio({ initialLanguage }: { initialLanguage: Langua
       </section>
 
       <section id="now" className="content-section now-section" aria-labelledby="now-title">
-        <div className="section-head reveal"><p className="section-index">03 / {text("RIGHT NOW", "حاليًا")}</p><h2 id="now-title" className="section-title glitch" data-label={text("In progress.", "قيد التعلّم.")}>{text("In progress.", "قيد التعلّم.")}</h2><p className="section-lead">{text("What I’m spending time on outside these projects.", "ما أشغل وقتي به إلى جانب مشاريعي.")}</p></div>
+        <div className="section-head reveal"><p className="section-index">03 / {text("RIGHT NOW", "حاليًا")}</p><h2 id="now-title" className="section-title glitch" data-label={text("On my desk.", "ما أعمل عليه الآن.")}>{text("On my desk.", "ما أعمل عليه الآن.")}</h2><p className="section-lead">{text("Coursework, Java practice, and two projects in progress.", "دراستي، وتدريبي على Java، ومشروعان أعمل عليهما.")}</p></div>
         <div className="now-list">
-          <div className="now-item reveal"><span>01</span><h3>{text("University", "الجامعة")}</h3><p>{text("Computer Science and AI coursework at Arab Open University.", "دراسة علوم الحاسوب والذكاء الاصطناعي في الجامعة العربية المفتوحة.")}</p></div>
-          <div className="now-item reveal"><span>02</span><h3>Java</h3><p>{text("Practising the fundamentals and writing small programs until they make sense.", "أتدرّب على الأساسيات وأكتب برامج صغيرة حتى أفهمها جيدًا.")}</p></div>
-          <div className="now-item reveal"><span>03</span><h3>{text("AI experiments", "تجارب الذكاء الاصطناعي")}</h3><p>{text("Reading, testing ideas, and learning where the tools are useful.", "أقرأ وأجرّب الأفكار وأتعلّم أين تفيد هذه الأدوات فعلًا.")}</p></div>
+          <div className="now-item now-item-feature reveal"><span>01 / {text("FOUNDATION", "الأساس")}</span><h3>{text("University", "الجامعة")}</h3><p>{text("Computer Science and AI coursework at Arab Open University.", "أدرس علوم الحاسوب والذكاء الاصطناعي في الجامعة العربية المفتوحة.")}</p></div>
+          <div className="now-item reveal"><span>02 / {text("PRACTICE", "تدريب")}</span><h3>Java</h3><p>{text("Small programs, written and rewritten until the fundamentals click.", "أكتب برامج صغيرة وأعود لتحسينها حتى أفهم الأساسيات جيدًا.")}</p></div>
+          <div className="now-item reveal"><span>03 / {text("EXPLORATION", "استكشاف")}</span><h3>{text("AI experiments", "تجارب الذكاء الاصطناعي")}</h3><p>{text("Reading, testing ideas, and finding where the tools actually help.", "أقرأ وأختبر الأفكار لأعرف أين تفيد هذه الأدوات فعلًا.")}</p></div>
         </div>
       </section>
 
       <section id="about" className="content-section about-section" aria-labelledby="about-title">
-        <div className="section-head reveal"><p className="section-index">04 / {text("BACKGROUND", "نبذة عني")}</p><h2 id="about-title" className="section-title glitch" data-label={text("The path so far.", "رحلتي حتى الآن.")}>{text("The path so far.", "رحلتي حتى الآن.")}</h2></div>
-        <div className="about-layout">
-          <p className="about-lead reveal">{t.biography}</p>
-          <div className="about-body reveal"><p>{t.background}</p><p>{t.focus}</p><p>{t.nextStep}</p><div className="about-actions"><a className="glass-action glass-action-quiet" href="/documents/adnan-naous-cv.pdf" target="_blank" rel="noreferrer"><span>{text("View my CV", "عرض السيرة الذاتية")}</span><span className="action-tail">PDF</span></a><a className="text-link" href={certificate.documentPath} target="_blank" rel="noreferrer">{text("Workshop certificate", "شهادة الورشة")}</a></div></div>
-        </div>
+        <div className="section-head reveal"><p className="section-index">04 / {text("BACKGROUND", "نبذة عني")}</p><h2 id="about-title" className="section-title glitch" data-label={text("How I got here.", "كيف وصلت إلى هنا.")}>{text("How I got here.", "كيف وصلت إلى هنا.")}</h2></div>
+        <div className="story-line">{t.story.map((beat, index) => <div className="story-beat reveal" key={index}><span className="story-marker">0{index + 1} / {[
+          text("BEFORE", "البداية"), text("NOW", "الآن"), text("NEXT", "الخطوة التالية")
+        ][index]}</span><p>{beat}</p></div>)}</div>
+        <div className="about-actions reveal"><a className="command-action command-action-quiet" href="/documents/adnan-naous-cv.pdf" target="_blank" rel="noreferrer"><span>{text("View my CV", "عرض السيرة الذاتية")}</span><span className="action-tail">PDF</span></a></div>
       </section>
 
       <section id="contact" className="content-section contact-section" aria-labelledby="contact-title">
-        <div className="contact-content reveal"><p className="section-index">05 / {text("CONTACT", "تواصل")}</p><h2 id="contact-title" className="section-title glitch" data-label={text("Let’s talk.", "خلّينا نحكي.")}>{text("Let’s talk.", "خلّينا نحكي.")}</h2><p>{text("An internship, a junior role, or a project? Send me an email.", "عندك تدريب أو فرصة للمبتدئين أو مشروع؟ راسلني.")}</p><a className="glass-action glass-action-large" href={contact.href}><span>{text("Write an email", "اكتب رسالة")}</span><span className="action-tail" aria-hidden="true">↗</span></a><div className="social-line">{socials.map(social => <a key={social.id} href={social.url} target="_blank" rel="noreferrer">{social.label}</a>)}</div></div>
+        <div className="contact-content reveal"><p className="section-index">05 / {text("CONTACT", "تواصل")}</p><h2 id="contact-title" className="section-title glitch" data-label={text("Let’s talk.", "خلّينا نحكي.")}>{text("Let’s talk.", "خلّينا نحكي.")}</h2><a className="contact-action" href={contact.href}><span>{text("Write an email", "اكتب رسالة")}</span><span aria-hidden="true">↗</span></a><div className="social-line">{socials.map((social, index) => <a key={social.id} href={social.url} target="_blank" rel="noreferrer"><span className="social-number">0{index + 1}</span><span className="social-name">{social.label}<small>{social.handle}</small></span><span aria-hidden="true">↗</span></a>)}</div></div>
       </section>
     </main>
 
-    <footer className="site-footer"><span>© {new Date().getFullYear()} Adnan Naous</span><a href="#home">{text("Back to top", "إلى البداية")}</a></footer>
+    <footer className="site-footer"><span>© {new Date().getFullYear()} Adnan Naous</span><a href="https://github.com/AdnanNaous/Adnan-Naous-OS-website" target="_blank" rel="noreferrer">{text("Site source", "كود الموقع")} ↗</a><a href="#home">{text("Back to top", "إلى البداية")} ↑</a></footer>
   </>;
 }

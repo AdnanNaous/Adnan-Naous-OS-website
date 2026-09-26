@@ -18,7 +18,7 @@ try {
       const layout = await page.evaluate(() => ({
         overflow: document.documentElement.scrollWidth - innerWidth,
         nav: [...document.querySelectorAll(".site-nav nav a")].every(element => element.getBoundingClientRect().width > 15),
-        cta: [...document.querySelectorAll(".glass-action")].every(element => element.getBoundingClientRect().width > 100),
+        cta: [...document.querySelectorAll(".command-action,.contact-action")].every(element => element.getBoundingClientRect().width > 100),
         font: getComputedStyle(document.body).fontFamily,
       }));
       if (layout.overflow > 1 || !layout.nav || !layout.cta || !layout.font.includes("thmanyah")) failures.push({ language, width, height, layout });

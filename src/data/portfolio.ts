@@ -31,7 +31,6 @@ export const socials = [
     "url": "https://x.com/vc_351"
   }
 ];
-export const certificate = { documentPath: "/documents/certificates/kanz-ai-hackathon-2026.pdf" };
 
 type Localized = Record<Language, string>;
 export type PortfolioProject = {
@@ -121,15 +120,17 @@ export const projects: PortfolioProject[] = [
 
 export const copy = {
   en: {
-    focus: "I’m building a Windows maintenance toolkit and this site, and practising Java alongside them. They give me something concrete to learn from and improve.",
-    nextStep: "I’m looking for an internship or junior role in software or AI. I’d also be glad to contribute to a project where I can keep learning.",
-    biography: "I’m Adnan, a Computer Science and AI student at Arab Open University.",
-    background: "Before moving into computing, I studied Human Medicine at Ain Shams University for two years. These projects are how I practise what I’m learning now.",
+    story: [
+      "I studied Human Medicine at Ain Shams University for two years. Then I changed course.",
+      "Today I study Computer Science and AI at Arab Open University. I’m learning the fundamentals and putting them to work as I go.",
+      "Outside class, I’m building a Windows maintenance toolkit and this site, and practising Java. I’m looking for an internship or junior role where I can contribute and keep learning.",
+    ],
   },
   ar: {
-    focus: "أعمل على أداة لصيانة Windows وهذا الموقع، وأتدرّب على Java إلى جانبهما. أتعلم من هذه المشاريع وأعود لتحسينها كلما اكتسبت مهارة جديدة.",
-    nextStep: "أبحث عن تدريب أو وظيفة للمبتدئين، خصوصًا في البرمجة أو الذكاء الاصطناعي. ويسعدني أيضًا أن أساهم في مشروع أتعلم منه.",
-    biography: "أنا عدنان، طالب علوم حاسوب وذكاء اصطناعي في الجامعة العربية المفتوحة.",
-    background: "قبل الانتقال إلى الحوسبة، درست الطب البشري سنتين في جامعة عين شمس. أطبّق الآن ما أتعلمه في مشاريعي البرمجية.",
+    story: [
+      "درستُ الطب البشري سنتين في جامعة عين شمس، ثم غيّرت مساري.",
+      "أدرس اليوم علوم الحاسوب والذكاء الاصطناعي في الجامعة العربية المفتوحة. أتعلم الأساسيات وأحاول تطبيقها أولًا بأول.",
+      "خارج الدراسة، أعمل على أداة لصيانة Windows وهذا الموقع، وأتدرّب على Java. أبحث عن تدريب أو وظيفة للمبتدئين أساهم فيها وأواصل التعلّم.",
+    ],
   },
 } as const;
