@@ -96,7 +96,7 @@ export default function Portfolio({ initialLanguage }: { initialLanguage: Langua
       <section id="home" className="hero-section" aria-labelledby="hero-title">
         <div className="hero-content reveal">
           <p className="section-index">01 / {text("SOFTWARE · LEARNING · CURIOSITY", "برمجة · تعلّم · فضول")}</p>
-          <h1 id="hero-title" className="hero-title glitch" data-label={text("Adnan\nNaous.", "عدنان\nنعوس.")}>{text("Adnan", "عدنان")}<br/>{text("Naous.", "نعوس.")}</h1>
+          <h1 id="hero-title" className="hero-title"><span className="hero-name-line">{text("Adnan", "عدنان")}</span><span className="hero-name-line">{text("Naous.", "نعوس.")}</span></h1>
           <p className="hero-statement">{text("I build to learn. I keep what works.", "أبني لأتعلّم، وأحسّن ما ينجح.")}</p>
           <p className="hero-intro">{text("I study Computer Science and AI at Arab Open University. These are the projects I’m learning from now.", "أدرس علوم الحاسوب والذكاء الاصطناعي في الجامعة العربية المفتوحة. هذه المشاريع التي أتعلم منها الآن.")}</p>
           <div className="hero-terminal" aria-label={text("Welcome message", "رسالة ترحيب")}>

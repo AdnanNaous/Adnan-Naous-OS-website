@@ -1,0 +1,182 @@
+/* Chapter revisions: open layouts, complete-word motion, and a stable RTL rhythm. */
+.hero-section{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-height:100svh;padding:130px 0 55px}
+.hero-content{flex:none}
+.hero-title{overflow:visible;line-height:.91}
+.hero-name-line{display:block;white-space:nowrap}
+.hero-content.in-view .hero-name-line{animation:hero-resolve .8s steps(10,end) both}
+.hero-content.in-view .hero-name-line+ .hero-name-line{animation-delay:.15s}
+@keyframes hero-resolve{from{opacity:.15;clip-path:inset(0 100% 0 0);transform:translateY(10px)}to{opacity:1;clip-path:inset(0 0 0 0);transform:none}}
+[dir=rtl] .hero-content.in-view .hero-name-line{animation-name:hero-resolve-rtl}
+@keyframes hero-resolve-rtl{from{opacity:.15;clip-path:inset(0 0 0 100%);transform:translateY(10px)}to{opacity:1;clip-path:inset(0 0 0 0);transform:none}}
+.hero-coordinate{position:relative;inset:auto;bottom:auto;width:100%;margin-top:28px;padding-top:13px}
+[dir=rtl] .hero-title{line-height:1.12}
+.work-section,.now-section,.codex-section,.about-section{padding-top:88px;padding-bottom:90px}
+.work-section .section-head,.now-section .section-head,.codex-section .codex-top,.about-section .section-head{margin-bottom:38px}
+[dir=rtl] .now-section .section-title,[dir=rtl] .codex-section .section-title,[dir=rtl] .about-section .section-title{font-size:clamp(43px,5vw,68px);line-height:1.33}
+
+/* Work: the command assembles two open dossiers. There is no second reveal gate. */
+.work-section .section-head{max-width:1050px;margin-bottom:42px}
+.work-section .section-title{line-height:1.1}
+.work-compiler{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:26px;align-items:end;margin:0 0 28px;padding:25px 0;border-top:1px solid #ffffff8a;border-bottom:1px solid #ffffff38;background:none;font-family:inherit}
+.work-command{display:grid;gap:7px;min-width:0;font:500 12px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:0;text-align:left;unicode-bidi:isolate}
+.work-command-kicker{margin-bottom:5px;color:#b8b8b8;font-size:10px;letter-spacing:.17em}
+.work-command code{display:block;max-width:100%;overflow-wrap:anywhere;color:#ddd;font:inherit}
+.command-prefix{display:inline-block;width:27px;color:#fff}
+.work-compiler.is-running .work-command code{animation:work-write .65s steps(20,end) both}
+.work-compiler.is-running .work-command code:nth-of-type(2){animation-delay:.25s}
+.work-compiler.is-running .work-command code:nth-of-type(3){animation-delay:.5s}
+@keyframes work-write{from{opacity:.25;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
+.work-compile-control{display:grid;justify-items:end;gap:12px;min-width:160px}
+.work-compile-control>span{font-size:12px;color:#c8c8c8;line-height:1.5}
+.work-compile-control .script-button{min-width:160px}
+.work-section .project-list{overflow:visible}
+.work-section .project-entry{opacity:1;border-bottom:1px solid #ffffff47}
+.work-section .project-trigger{grid-template-columns:minmax(145px,.45fr) minmax(0,1fr) 170px auto;gap:20px;padding:45px 0;align-items:center}
+.work-section .project-trigger:hover{padding-inline:10px}
+.work-section .project-main strong{font-size:clamp(32px,3.3vw,50px);line-height:1.18}
+.project-schematic{width:170px;height:90px;overflow:visible;opacity:.85}
+.project-schematic path{fill:none;stroke:#e3e3e3;stroke-width:1.2;stroke-dasharray:320;stroke-dashoffset:320;animation:blueprint-draw 1.35s ease .1s forwards}
+.project-entry:nth-child(2) .project-schematic path{animation-delay:.3s}
+.project-schematic circle{fill:#e6e6e6;opacity:0;animation:blueprint-point .25s steps(1,end) .95s forwards}
+@keyframes blueprint-draw{to{stroke-dashoffset:0}}
+@keyframes blueprint-point{to{opacity:1}}
+.project-verb{border:0;min-width:75px;text-align:end}
+[dir=rtl] .work-section .section-title{font-size:clamp(45px,5.2vw,70px);line-height:1.34;text-wrap:pretty}
+[dir=rtl] .work-section .project-main strong{letter-spacing:0;line-height:1.36}
+[dir=rtl] .work-compile-control>span,[dir=rtl] .work-compile-control .script-button{font-family:var(--font-thmanyah),sans-serif;letter-spacing:0}
+
+/* Now: a root and six connected learning nodes, without cards. */
+.now-section .section-head{margin-bottom:60px}
+.now-section .skill-tree{display:block;max-width:1160px;margin:0 auto;border:0;background:none}
+.now-section .skill-root{position:relative;display:grid;justify-items:center;gap:8px;width:min(480px,100%);min-height:0;margin:auto;padding:36px 20px 20px;border:0;clip-path:none;background:none;text-align:center}
+.now-section .skill-root:before{content:none}
+.skill-root-orbit{position:absolute;top:0;left:50%;width:96px;height:96px;border:1px solid #ffffff9a;border-radius:50%;transform:translateX(-50%);box-shadow:0 0 0 8px #ffffff0a,inset 0 0 0 9px #ffffff0c}
+.skill-root-orbit:before{content:"";position:absolute;inset:31px;border:1px solid #fff;border-radius:50%;background:radial-gradient(circle,#d3d3d3 0 2px,transparent 3px)}
+.skill-root-label{position:relative;margin-top:98px;color:#aaa;font:600 10px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em}
+.skill-root strong{font-size:clamp(25px,3.4vw,43px);font-weight:600;line-height:1.25}
+.skill-root small{color:#bcbcbc;font-size:12px}
+.now-section .activity-status{max-width:360px;margin:17px auto 0;text-align:start}
+.now-section .activity-bars{height:16px}
+.skill-paths{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5%;margin-top:95px}
+.skill-paths:before{content:"";position:absolute;top:-52px;left:16.66%;right:16.66%;height:1px;background:#ffffff73;transform:scaleX(0);transition:transform .9s ease .2s}
+.skill-tree.in-view .skill-paths:before{transform:scaleX(1)}
+.skill-path{position:relative;text-align:center}
+.skill-path:before{content:"";position:absolute;top:-52px;left:50%;width:1px;height:45px;background:#ffffff8c;transform:scaleY(0);transform-origin:top;transition:transform .65s ease .65s}
+.skill-tree.in-view .skill-path:before{transform:scaleY(1)}
+.skill-path-label{color:#bbb;font:600 10px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.15em}
+.skill-nodes{display:flex;justify-content:center;gap:16px;margin-top:27px}
+.skill-node{display:grid;justify-items:center;align-content:start;gap:16px;min-width:0;width:48%;padding:0;background:none;border:0;color:#bbb;text-align:center;opacity:.5;transform:translateY(20px);transition:opacity .45s,transform .55s,color .35s}
+.skill-tree.in-view .skill-node{opacity:1;transform:none}
+.skill-tree.in-view .skill-node:nth-child(2){transition-delay:.28s}
+.skill-node:hover,.skill-node.is-selected{color:#fff}
+.skill-node-ring{position:relative;display:grid;place-items:center;width:clamp(76px,8vw,118px);height:clamp(76px,8vw,118px);border:1px solid #ffffff72;border-radius:50%;background:radial-gradient(circle at 50% 45%,#343434,#101010 65%,#070707);box-shadow:0 0 0 7px #ffffff09,inset 0 0 0 10px #ffffff09;transition:border-color .3s,box-shadow .3s,transform .3s}
+.skill-node-ring:before{content:"";position:absolute;inset:11px;border:1px dashed #ffffff75;border-radius:50%}
+.skill-node-ring span{font:700 22px/1 ui-monospace,SFMono-Regular,Consolas,monospace}
+.skill-node:hover .skill-node-ring,.skill-node.is-selected .skill-node-ring{border-color:#fff;box-shadow:0 0 0 8px #ffffff17,0 0 24px #ffffff3b,inset 0 0 0 10px #ffffff0d;transform:scale(1.04)}
+.skill-node strong{max-width:150px;font-size:clamp(13px,1.35vw,17px);font-weight:600;line-height:1.35}
+.skill-readout{display:grid;grid-template-columns:180px 1fr;gap:25px;align-items:baseline;max-width:780px;margin:75px auto 0;padding-top:18px;border-top:1px solid #ffffff70}
+.skill-readout span{font:600 10px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.12em;color:#aaa}
+.skill-readout p{font-size:clamp(19px,2.2vw,29px);line-height:1.4}
+[dir=rtl] .skill-root-label,[dir=rtl] .skill-path-label,[dir=rtl] .skill-readout span{font-family:var(--font-thmanyah),sans-serif;letter-spacing:0}
+
+/* Codex: an open manuscript with chapter selectors, not a spreadsheet. */
+.codex-section .codex-console{border:0;box-shadow:none;background:none;overflow:visible}
+.codex-section .codex-console:after{content:none}
+.codex-section .codex-console-head{padding:0 0 16px;border-bottom:1px solid #ffffff79}
+.codex-section .codex-console-body{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:6%;min-height:390px;padding-top:40px}
+.codex-section .codex-menu{display:grid;align-content:start;gap:13px;border:0}
+.codex-section .codex-menu li{border:0;padding:0}
+.codex-section .codex-menu button{display:grid;grid-template-columns:1fr;padding:18px 22px;border:0;border-inline-start:2px solid #ffffff2b;background:linear-gradient(90deg,#ffffff05,transparent);color:#b4b4b4}
+.codex-section .codex-menu button:hover,.codex-section .codex-menu button.is-selected{padding-inline-start:22px;background:linear-gradient(90deg,#ffffff24,#ffffff06 70%,transparent);border-inline-start-color:#f1f1f1;color:#fff}
+.codex-section .codex-menu button strong{font-size:clamp(17px,1.6vw,22px);font-weight:500;line-height:1.4}
+.codex-section .codex-detail{place-content:center;min-height:350px;padding:10px 0 20px 6%;border-inline-start:1px solid #ffffff31;animation:chapter-in .45s ease both}
+@keyframes chapter-in{from{opacity:.2;transform:translateY(12px)}to{opacity:1;transform:none}}
+.codex-section .codex-detail-copy{gap:22px}
+.codex-section .codex-detail-copy strong{font-size:clamp(34px,3.5vw,52px);line-height:1.28}
+.codex-section .codex-detail-copy p{font-size:clamp(16px,1.7vw,21px);line-height:1.5}
+[dir=rtl] .codex-section .codex-menu button{background:linear-gradient(270deg,#ffffff05,transparent)}
+[dir=rtl] .codex-section .codex-menu button:hover,[dir=rtl] .codex-section .codex-menu button.is-selected{background:linear-gradient(270deg,#ffffff24,#ffffff06 70%,transparent)}
+[dir=rtl] .codex-section .codex-detail-copy strong{font-size:clamp(31px,3vw,46px);line-height:1.5}
+
+/* A four-beat CV-backed story, carried by a pixel beacon. */
+.story-track{height:300svh}
+.story-stage{top:12svh;height:74svh;min-height:450px}
+.story-orbit{top:15%}
+.story-beacon{width:9px;height:9px;background:#fff;box-shadow:-9px 0 #fff,9px 0 #fff,0 -9px #fff,0 9px #fff,0 0 13px #fff;transform:translate(-50%,-50%);font-size:0;image-rendering:pixelated;animation:pixel-pulse 1.2s steps(2,end) infinite}
+@keyframes pixel-pulse{50%{opacity:.55;box-shadow:-9px 0 #fff,9px 0 #fff,0 -9px #fff,0 9px #fff,0 0 5px #fff}}
+.story-panel{padding-inline:clamp(28px,8vw,120px);padding-block:15px}
+.story-panel p{max-width:1000px;font-size:clamp(30px,3.2vw,47px);line-height:1.37;letter-spacing:-.02em;text-wrap:pretty}
+.story-count{position:absolute;bottom:20px;inset-inline-end:25px;color:#ccc;font:600 11px/1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.15em}
+[dir=rtl] .story-panel p{font-size:clamp(27px,2.9vw,42px);line-height:1.58;letter-spacing:0}
+
+/* The paused transmission occupies exactly the action's slot. */
+.contact-section{background:#08080899}
+.contact-section{padding-top:90px;padding-bottom:85px}
+.contact-content .section-title{font-size:clamp(60px,7vw,102px);line-height:1.12}
+[dir=rtl] .contact-content .section-title{font-size:clamp(55px,6.4vw,88px);line-height:1.3}
+.contact-transmission{background:#0b0b0be8}
+.transmission-slot{position:relative;padding:20px;min-height:145px}
+.contact-section .contact-action,.contact-section .contact-recall{position:relative;inset:auto;display:flex;align-items:center;justify-content:space-between;gap:20px;width:100%;min-height:104px;margin:0;padding:20px 25px;border:1px solid #ffffffba;background:linear-gradient(105deg,#242424,#101010 65%,#292929);clip-path:polygon(0 0,calc(100% - 15px) 0,100% 15px,100% 100%,15px 100%,0 calc(100% - 15px));color:#f5f5f5;text-align:start;font:800 clamp(24px,3vw,42px)/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.025em;transition:background .25s,transform .25s}
+.contact-section .contact-action:hover,.contact-section .contact-recall:hover{padding-inline:25px;background:linear-gradient(105deg,#353535,#181818 65%,#333);color:#fff;transform:translateY(-3px)}
+.contact-section .contact-action .contact-glitch{color:#f5f5f5;letter-spacing:.025em}
+.contact-section .contact-action .contact-glitch:after{color:#fff}
+.contact-section .contact-action span:last-child{font-size:38px}
+.contact-section .contact-recall{border-style:dashed;background:#131313;color:#d6d6d6;font-size:clamp(18px,2.5vw,30px)}
+[dir=rtl] .contact-section .contact-action,[dir=rtl] .contact-section .contact-recall,[dir=rtl] .contact-section .contact-action .contact-glitch{font-family:var(--font-thmanyah),sans-serif!important;letter-spacing:0;line-height:1.4}
+[dir=rtl] .contact-section .contact-action .contact-glitch:after{content:none}
+
+@media(max-width:900px){
+  .work-section .project-trigger{grid-template-columns:100px minmax(0,1fr) 110px auto;gap:13px}
+  .project-schematic{width:110px;height:70px}
+  .skill-paths{gap:1%}
+  .codex-section .codex-console-body{gap:4%}
+}
+@media(max-width:700px){
+  .hero-section{justify-content:flex-start;padding:130px 0 55px}
+  .hero-title{line-height:.96}
+  .hero-coordinate{bottom:auto;margin-top:28px}
+  .work-section,.now-section,.codex-section,.about-section{padding-top:72px;padding-bottom:72px}
+  .contact-section{padding-top:75px;padding-bottom:70px}
+  .work-section .section-head{margin-bottom:30px}
+  .work-compiler{grid-template-columns:1fr;gap:17px;padding:18px 0}
+  .work-compile-control{display:flex;justify-content:space-between;justify-items:stretch;align-items:center;gap:10px;min-width:0}
+  .work-compile-control .script-button{min-width:130px}
+  .work-section .project-trigger{grid-template-columns:minmax(0,1fr) auto;gap:15px;padding:35px 0}
+  .work-section .project-number{grid-column:1/-1}
+  .work-section .project-main{grid-column:1}
+  .work-section .project-schematic{grid-column:2;grid-row:2;width:85px;height:70px}
+  .work-section .project-verb{grid-column:1/-1;text-align:start}
+  [dir=rtl] .work-section .section-title{font-size:clamp(39px,9vw,52px);line-height:1.35}
+  .now-section .section-head{margin-bottom:45px}
+  .skill-paths{grid-template-columns:1fr;gap:58px;margin-top:65px}
+  .skill-paths:before{left:50%;right:auto;top:-42px;width:1px;height:calc(100% + 25px);transform:scaleY(0);transform-origin:top}
+  .skill-tree.in-view .skill-paths:before{transform:scaleY(1)}
+  .skill-path:before{content:none}
+  .skill-path{padding:0 12px;background:#090909e8}
+  .skill-nodes{gap:15px}
+  .skill-node-ring{width:82px;height:82px}
+  .skill-readout{grid-template-columns:1fr;gap:12px;margin-top:55px}
+  .codex-section .codex-console-body{display:block;padding-top:20px;min-height:0}
+  .codex-section .codex-menu{gap:7px}
+  .codex-section .codex-menu button{padding:13px 16px}
+  .codex-section .codex-menu button:hover,.codex-section .codex-menu button.is-selected{padding-inline-start:16px}
+  .codex-section .codex-menu button strong{font-size:17px}
+  .codex-section .codex-detail{min-height:0;margin-top:25px;padding:25px 0 0;border-inline-start:0;border-top:1px solid #ffffff48}
+  .codex-section .codex-detail-copy strong{font-size:clamp(30px,8vw,39px)}
+  .story-track{height:260svh}
+  .story-stage{top:12svh;height:74svh;min-height:450px}
+  .story-panel{padding-inline:16px}
+  .story-panel p{font-size:clamp(24px,6vw,32px);line-height:1.42}
+  [dir=rtl] .story-panel p{font-size:clamp(24px,6vw,31px);line-height:1.6}
+  .story-beacon{width:6px;height:6px;box-shadow:-6px 0 #fff,6px 0 #fff,0 -6px #fff,0 6px #fff}
+  .contact-section .contact-action,.contact-section .contact-recall{min-height:85px;padding:15px;font-size:clamp(19px,5vw,26px)}
+  .contact-section .contact-action:hover,.contact-section .contact-recall:hover{padding-inline:15px}
+  .transmission-slot{padding:12px;min-height:109px}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-content.in-view .hero-name-line,.work-compiler.is-running .work-command code,.project-schematic path,.project-schematic circle,.story-beacon,.codex-section .codex-detail{animation:none;clip-path:none;opacity:1;transform:none}
+  .project-schematic path{stroke-dashoffset:0}
+  .skill-paths:before,.skill-path:before,.skill-node{transform:none;opacity:1;transition:none}
+  .story-track{height:auto}
+  .story-stage{position:relative;top:auto;height:auto;min-height:0}
+}

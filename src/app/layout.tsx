@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import { cookies } from "next/headers";
 import "./globals.css";
 import "./experience.css";
+import "./revision.css";
+import "./intro-retro.css";
 
 const thmanyah = localFont({ src: [
   { path: "../fonts/thmanyahsans-Regular.otf", weight: "400" },

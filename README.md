@@ -16,17 +16,19 @@ This is my working portfolio: projects I am building, what I am learning now, th
 
 | Channel | What you will find |
 | --- | --- |
-| **Work** | Run the build log, then open the Windows toolkit and website records. |
-| **Now** | A skill tree for university coursework, Java practice, and AI experiments. The 70% energy bar is a visual status, not a measured productivity score. |
-| **Codex** | Select one of three long-term objectives: learn deeply, make useful software, contribute to a team. |
-| **About** | Follow the beacon through three chapters, from medicine to computing and what comes next. |
-| **Contact** | Open a mail draft through the final transmission, or use the always-available email link. |
+| **Work** | Replay a code-style build trace, then open two project dossiers. |
+| **Now** | Explore six CV-grounded learning nodes across foundations, systems, and building. The 70% energy bar is a visual status, not a measured productivity score. |
+| **Codex** | Select one of three long-term chapters: learn deeply, make useful software, contribute to a team. |
+| **About** | Follow a pixel beacon through four chapters grounded in my CV, from medicine to computing and the work ahead. |
+| **Contact** | Open a mail draft through the final transmission, recall its paused action, or use the always-available email link. |
 
 ## 03 / Built from code
 
 Next.js, React, TypeScript, and Three.js power the site. The strictly grayscale world is procedural WebGL: machined rings, glass, fasteners, energy traces, light, and particles. The model slowly spins while pointer and scroll movement change its view. On capable desktop screens it casts real-time shadows; smaller screens use a lighter rendering path. The mathematical notation reflects real scroll values. All essential content remains readable HTML. There are no game assets or stock backgrounds.
 
 The interface supports Arabic and English, keyboard navigation, reduced motion, narrow screens, and a fallback when WebGL is unavailable. Thmanyah Sans is self-hosted.
+
+A short monochrome CRT introduction opens the visit. It closes on a fixed timer rather than waiting for WebGL or fonts, and can be skipped with its button or Escape.
 
 ## 04 / Run locally
 

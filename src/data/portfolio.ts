@@ -121,16 +121,18 @@ export const projects: PortfolioProject[] = [
 export const copy = {
   en: {
     story: [
-      "I spent two years studying Human Medicine at Ain Shams. That chapter gave way to a new direction.",
-      "I moved into Computer Science and AI at Arab Open University, building my foundation through study and practice.",
-      "I learn by making things: a Windows toolkit, this website, and Java programs. I hope to contribute in an internship or junior role.",
+      "I began at Ain Shams University’s Faculty of Medicine in 2023. After about a year and a half, I chose a new direction.",
+      "In 2025, I moved into Computer Science and Artificial Intelligence at Arab Open University in Jeddah. I started building a new foundation, one concept at a time.",
+      "At an AI training hackathon, I built and presented Adnan OS: a student productivity project recognized as an AI Showcase Featured Project.",
+      "From medicine to computing, the thread is curiosity put into practice. I built this bilingual portfolio and I’m looking for a place to contribute, learn, and grow through real work.",
     ],
   },
   ar: {
     story: [
-      "درستُ الطب البشري في جامعة عين شمس لعامين، ثم بدأت فصلًا جديدًا في مساري.",
-      "انتقلتُ إلى علوم الحاسوب والذكاء الاصطناعي في الجامعة العربية المفتوحة، وأبني أساسًا قويًا بالدراسة والتطبيق.",
-      "أتعلّم بالبناء: أعمل على أداة لـWindows وهذا الموقع، وأتدرّب على Java. وآمل أن أساهم في تدريب أو دور للمبتدئين.",
+      "بدأتُ دراستي في كلية الطب بجامعة عين شمس عام 2023. وبعد نحو عام ونصف، اخترتُ اتجاهًا جديدًا.",
+      "في عام 2025، انتقلتُ إلى علوم الحاسوب والذكاء الاصطناعي في الجامعة العربية المفتوحة بجدة. بدأتُ أبني أساسًا جديدًا، مفهومًا بعد آخر.",
+      "في هاكاثون تدريبي للذكاء الاصطناعي، بنيتُ وقدّمتُ Adnan OS: مشروعًا لإنتاجية الطالب اختير ضمن المشاريع المميّزة في معرض الذكاء الاصطناعي.",
+      "من الطب إلى الحوسبة، يجمع الطريق فضولٌ أحوّله إلى عمل. بنيتُ هذا الموقع ثنائي اللغة، وأبحث عن فرصة أساهم فيها وأتعلّم وأنمو بعمل حقيقي.",
     ],
   },
 } as const;
