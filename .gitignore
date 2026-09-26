@@ -36,16 +36,12 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local Codex continuity and review notes
+.codex/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 
-# Temporary files and test infrastructure
+# local agent state
 .agents/
-test*.log
-verify*.js
-challenge_test.js
-test.css
-test.txt
-TEST_INFRA.md
-TEST_READY.md
