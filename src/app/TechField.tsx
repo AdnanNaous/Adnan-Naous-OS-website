@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 export default function TechField() {
   const root = useRef<HTMLDivElement>(null);
   const phase = useRef<HTMLOutputElement>(null);
+  const vector = useRef<HTMLOutputElement>(null);
 
   useEffect(() => {
     const host = root.current;
@@ -18,6 +19,7 @@ export default function TechField() {
       frame = requestAnimationFrame(() => {
         const progress = Math.min(1, scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight));
         display.textContent = progress.toFixed(3);
+        if (vector.current) vector.current.textContent = Math.sin(progress * Math.PI * 2).toFixed(3);
         host.style.setProperty("--tech-travel", `${reduced ? 0 : Math.round(progress * -95)}px`);
         host.style.setProperty("--tech-turn", `${reduced ? 0 : Math.round(progress * 22)}deg`);
       });
@@ -42,5 +44,6 @@ export default function TechField() {
     </svg>
     <div className="tech-script tech-script-a"><span>AN / ORBITAL STUDY</span><code>r = 3.15<br/>x = r · cos θ<br/>y = r · sin θ</code></div>
     <div className="tech-script tech-script-b"><span>SCROLL PHASE</span><code>φ = <output ref={phase}>0.000</output><br/>Δscene = f(φ)</code></div>
+    <div className="tech-script tech-script-c"><span>VECTOR / LIVE</span><code>v(φ) = sin(2πφ)<br/>v = <output ref={vector}>0.000</output><br/>∂signal / ∂time</code></div>
   </div>;
 }

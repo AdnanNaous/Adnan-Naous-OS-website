@@ -12,6 +12,12 @@ try {
   await page.locator(".intro").waitFor({ state: "hidden" });
   assert.equal(await page.locator("h1").count(), 1);
   assert.equal(await page.locator(".live-world canvas").count(), 1);
+  assert.equal(await page.locator("#home .command-action").count(), 0);
+  assert(await page.locator(".hero-terminal").isVisible());
+  await page.locator(".terminal-secret").click();
+  assert(await page.locator(".terminal-reveal").isVisible());
+  assert.equal(await page.locator(".timeline-rail a").count(), 6);
+  assert.equal(await page.locator("#codex").count(), 1);
   assert.equal(await page.locator("a[href*='kanz-ai']").count(), 0);
   assert.equal(await page.locator(".site-nav").evaluate(element => getComputedStyle(element).backdropFilter), "none");
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
@@ -19,12 +25,24 @@ try {
   await page.locator("#now").scrollIntoViewIfNeeded();
   await page.waitForTimeout(200);
   assert.notEqual(await page.locator(".tech-script-b output").textContent(), phaseAtTop);
+  assert(await page.locator(".activity-bars i").count() === 12);
+  await page.locator("#about").scrollIntoViewIfNeeded();
+  await page.waitForTimeout(300);
+  assert.equal(await page.locator(".story-panel.is-active").count(), 1);
+  await page.evaluate(() => { const track = document.querySelector(".story-track"); const top = track.getBoundingClientRect().top + scrollY; scrollTo({ top: top + (track.offsetHeight - innerHeight) * 0.5, behavior: "instant" }); });
+  await page.waitForTimeout(150);
+  assert((await page.locator(".story-panel.is-active").textContent()).includes("Computer Science"));
+  await page.evaluate(() => { const track = document.querySelector(".story-track"); const top = track.getBoundingClientRect().top + scrollY; scrollTo({ top: top + (track.offsetHeight - innerHeight) * 0.9, behavior: "instant" }); });
+  await page.waitForTimeout(150);
+  assert((await page.locator(".story-panel.is-active").textContent()).includes("useful software"));
   await page.locator(".project-trigger").first().click();
   assert.equal(await page.locator(".project-trigger").first().getAttribute("aria-expanded"), "true");
   assert(await page.locator(".project-detail").first().isVisible());
   await page.locator(".project-trigger").first().click();
   assert.equal(await page.locator(".project-trigger").first().getAttribute("aria-expanded"), "false");
   assert.equal(await page.locator(".contact-section .contact-action").getAttribute("href"), "mailto:Adnan.Naous@outlook.com");
+  assert(await page.locator(".contact-glitch").isVisible());
+  assert((await page.locator(".site-footer").textContent()).includes("All rights reserved"));
   assert.equal((await page.request.get(new URL("/documents/adnan-naous-cv.pdf", page.url()).href)).status(), 200);
   await page.evaluate(() => scrollTo(0, 0));
   await page.waitForTimeout(750);
@@ -35,7 +53,7 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
   assert.deepEqual(errors, []);
-  console.log("PASS: intro, live scene, project details, contact/CV, Arabic persistence, mobile width, no page errors.");
+  console.log("PASS: intro, live scene, terminal, timeline, Codex, story, projects, contact/CV, Arabic, mobile, no page errors.");
 } finally {
   await browser.close();
 }

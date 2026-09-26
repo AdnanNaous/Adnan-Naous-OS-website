@@ -121,16 +121,16 @@ export const projects: PortfolioProject[] = [
 export const copy = {
   en: {
     story: [
-      "I studied Human Medicine at Ain Shams University for two years. Then I changed course.",
-      "Today I study Computer Science and AI at Arab Open University. I’m learning the fundamentals and putting them to work as I go.",
-      "Outside class, I’m building a Windows maintenance toolkit and this site, and practising Java. I’m looking for an internship or junior role where I can contribute and keep learning.",
+      "Medicine at Ain Shams came first. Then I changed course.",
+      "Now: Computer Science and AI at Arab Open University.",
+      "I learn by building useful software.",
     ],
   },
   ar: {
     story: [
-      "درستُ الطب البشري سنتين في جامعة عين شمس، ثم غيّرت مساري.",
-      "أدرس اليوم علوم الحاسوب والذكاء الاصطناعي في الجامعة العربية المفتوحة. أتعلم الأساسيات وأحاول تطبيقها أولًا بأول.",
-      "خارج الدراسة، أعمل على أداة لصيانة Windows وهذا الموقع، وأتدرّب على Java. أبحث عن تدريب أو وظيفة للمبتدئين أساهم فيها وأواصل التعلّم.",
+      "بدأت بدراسة الطب في جامعة عين شمس، ثم غيّرت مساري.",
+      "الآن أدرس علوم الحاسوب والذكاء الاصطناعي في الجامعة العربية المفتوحة.",
+      "أتعلّم ببناء برامج مفيدة.",
     ],
   },
 } as const;

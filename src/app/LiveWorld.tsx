@@ -86,6 +86,36 @@ export default function LiveWorld() {
         resources.push(geometry);
       }
 
+      // Brushed fasteners and travelling white energy traces add scale cues
+      // without introducing a second palette or a separate visual object.
+      const boltGeometry = new THREE.CylinderGeometry(0.045, 0.045, 0.025, 6);
+      const bolts = new THREE.InstancedMesh(boltGeometry, bright, 32);
+      const boltDummy = new THREE.Object3D();
+      for (let i = 0; i < 32; i++) {
+        const angle = i / 32 * Math.PI * 2;
+        boltDummy.position.set(Math.cos(angle) * 3.13, Math.sin(angle) * 3.13, 0.13);
+        boltDummy.rotation.set(Math.PI / 2, 0, angle);
+        boltDummy.updateMatrix();
+        bolts.setMatrixAt(i, boltDummy.matrix);
+      }
+      bolts.instanceMatrix.needsUpdate = true;
+      world.add(bolts);
+      resources.push(boltGeometry);
+
+      const energy: InstanceType<typeof THREE.Mesh>[] = [];
+      const energyMaterials: InstanceType<typeof THREE.MeshBasicMaterial>[] = [];
+      for (let i = 0; i < 4; i++) {
+        const geometry = new THREE.TorusGeometry(3.17 + i * 0.12, 0.012, 6, 40, 0.52 + i * 0.2);
+        const material = new THREE.MeshBasicMaterial({ color: 0xf2f4f5, transparent: true, opacity: 0.25, depthWrite: false });
+        const trace = new THREE.Mesh(geometry, material);
+        trace.position.z = 0.17 + i * 0.03;
+        trace.rotation.z = i * 1.7;
+        world.add(trace);
+        energy.push(trace);
+        energyMaterials.push(material);
+        resources.push(geometry, material);
+      }
+
       const vaneGeometry = new THREE.BoxGeometry(0.14, 0.68, 0.28);
       const vanes = new THREE.InstancedMesh(vaneGeometry, graphite, 64);
       const dummy = new THREE.Object3D();
@@ -203,6 +233,10 @@ export default function LiveWorld() {
           rings[0].rotation.z = -0.26 + tick * 0.24;
           rings[1].rotation.z = -0.04 - tick * 0.34;
           rings[2].rotation.z = 0.18 + tick * 0.13;
+          energy.forEach((trace, index) => {
+            trace.rotation.z = index * 1.7 + tick * (index % 2 ? -0.22 : 0.3);
+            energyMaterials[index].opacity = media.matches ? 0.32 : 0.16 + (Math.sin(tick * 4 + index * 1.9) + 1) * 0.15;
+          });
           dust.rotation.y = tick * 0.05;
           beams.rotation.z = Math.sin(tick * 0.55) * 0.012;
           renderer.render(scene, camera);
