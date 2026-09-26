@@ -1,0 +1,148 @@
+/* A single grayscale instrument panel, with a different action in each chapter. */
+.site-nav.nav-scrolled{background:#080808bd;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid #ffffff12}
+.site-nav.nav-hidden:focus-within{transform:none;opacity:1;pointer-events:auto}
+.timeline-rail a.is-current .timeline-label{opacity:.75;transform:none}
+
+.hero-terminal{margin-top:20px;font-variant-ligatures:none;letter-spacing:.055em;border-color:#ffffff70}
+.terminal-head{font-size:10px;letter-spacing:.18em}
+.hero-terminal>p{font-size:clamp(14px,1.35vw,17px)}
+.terminal-secret{font-size:11px;letter-spacing:.15em}
+.hero-terminal .terminal-reveal{display:flex;gap:22px;flex-wrap:wrap;padding:14px 0 16px;font-size:11px}
+.terminal-reveal a{color:#e7e7e7;border-bottom:1px solid #ffffff80;padding-bottom:3px}
+.terminal-reveal a:hover{color:#fff;border-color:#fff}
+[dir=rtl] .hero-terminal>p,[dir=rtl] .terminal-secret{font-family:var(--font-thmanyah),sans-serif;letter-spacing:0}
+
+.intro{transition:opacity .55s ease,visibility .55s}
+.intro[data-state=done] .intro-center{filter:none;transform:translate3d(0,-12px,0);opacity:0;transition:opacity .4s,transform .4s}
+
+/* Work behaves like a project index being assembled, not a second list of cards. */
+.work-section{min-height:0}
+.work-section .section-head{margin-bottom:38px}
+.work-compiler{display:grid;grid-template-columns:1fr auto;gap:0 20px;align-items:center;padding:15px 0;border-top:1px solid #ffffff8a;border-bottom:1px solid #ffffff38;margin-bottom:10px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.compiler-prompt{font-size:12px;letter-spacing:.08em;color:#bcbcbc}.compiler-prompt code{font:inherit;color:#fff}
+.compiler-output{grid-column:1/-1;display:flex;justify-content:space-between;gap:20px;margin-top:14px;border-top:1px dashed #ffffff37;padding-top:10px;color:#a9a9a9;font-size:11px;letter-spacing:.1em}
+.compiler-caret{color:#fff;animation:terminal-blink 1s steps(1,end) infinite}
+.script-button{min-width:108px;min-height:46px;padding:9px 14px;border:1px solid #f1f1f1;background:#ededed;color:#080808;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;font-weight:800;letter-spacing:.08em;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));transition:background .25s,transform .25s}
+.script-button:hover{background:#fff;transform:translateY(-2px)}
+.work-section .project-list{border-top:0}
+.work-section .project-trigger{padding:28px 0}
+.work-section .project-main strong{font-size:clamp(27px,3vw,43px)}
+.work-section .project-verb{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:11px;letter-spacing:.08em}
+.work-phase-0 .project-entry,.work-phase-1 .project-entry{opacity:.32}
+.work-phase-2 .project-entry.in-view{animation:project-build-in .7s steps(12,end) both}
+.work-phase-2 .project-entry:nth-child(2).in-view{animation-delay:.13s}
+@keyframes project-build-in{from{clip-path:inset(0 100% 0 0);opacity:.4}to{clip-path:inset(0 0 0 0);opacity:1}}
+[dir=rtl] .work-phase-2 .project-entry.in-view{animation-name:project-build-in-rtl}
+@keyframes project-build-in-rtl{from{clip-path:inset(0 0 0 100%);opacity:.4}to{clip-path:inset(0 0 0 0);opacity:1}}
+
+/* A real hierarchy: foundation, circuit, then two practice branches. */
+.now-section{min-height:0}
+.skill-tree{display:grid;grid-template-columns:1fr 1fr;gap:0 10%;border-top:0;max-width:1080px;margin:0 auto;position:relative}
+.skill-tree .now-item{position:relative;display:block;grid-row:auto;grid-column:auto;border:0;padding:0;min-width:0}
+.skill-tree .now-item>span{display:block;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:10px;letter-spacing:.14em;color:#aaa;margin-bottom:13px}
+.skill-tree .skill-root{grid-column:1/-1;width:min(660px,100%);min-height:0;margin:0 auto;text-align:center;padding:30px 24px 26px;border:1px solid #ffffff75;background:#080808d9;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))}
+.skill-root:before,.skill-branch:before{content:"";display:block;width:13px;height:13px;background:#f2f2f2;transform:rotate(45deg);margin:0 auto 18px;box-shadow:0 0 0 5px #ffffff22}
+.skill-root .now-feature-center{padding:0}
+.skill-tree .skill-root h3{margin:0 0 12px;font-size:clamp(42px,5.3vw,72px)}
+.skill-tree .skill-root p{max-width:500px;margin:0 auto;font-size:16px;line-height:1.55}
+.activity-status{max-width:500px;margin:28px auto 0;gap:9px;text-align:start}
+.activity-title{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:10px;letter-spacing:.16em}
+.activity-title span{color:#d4d4d4}.activity-title strong{font-size:15px;color:#fff}
+.activity-bars{display:grid;grid-template-columns:repeat(10,1fr);height:22px;gap:4px}
+.activity-bars i{background:#252525;border:1px solid #777;opacity:1;animation:none;transform:none}
+.activity-bars i.is-filled{background:#ececec;border-color:#fff;opacity:.38;box-shadow:inset 0 -4px #9b9b9b;transition:opacity .45s,box-shadow .45s}
+.skill-tree.in-view .activity-bars i.is-filled{opacity:1;box-shadow:inset 0 -4px #bdbdbd}
+.skill-tree.in-view .activity-bars i:nth-child(2){transition-delay:.1s}.skill-tree.in-view .activity-bars i:nth-child(3){transition-delay:.2s}.skill-tree.in-view .activity-bars i:nth-child(4){transition-delay:.3s}.skill-tree.in-view .activity-bars i:nth-child(5){transition-delay:.4s}.skill-tree.in-view .activity-bars i:nth-child(6){transition-delay:.5s}.skill-tree.in-view .activity-bars i:nth-child(7){transition-delay:.6s}
+.activity-status small{font-size:11px;color:#aaa}
+.skill-branches{grid-column:1/-1;height:82px;position:relative;display:grid;grid-template-columns:1fr 1fr;gap:10%}
+.skill-branches:before{content:"";position:absolute;top:0;left:25%;right:25%;height:42px;border:1px solid #ffffff76;border-top:0}
+.skill-branches:after{content:"";position:absolute;top:0;left:50%;height:42px;width:1px;background:#ffffff9c}
+.skill-branches span{display:block;width:2px;height:28px;background:#fff;justify-self:center;margin-top:42px;box-shadow:0 0 12px #ffffff81;transform:scaleY(0);transform-origin:top;transition:transform .75s var(--ease) .55s}
+.skill-tree.in-view .skill-branches span{transform:scaleY(1)}
+.skill-tree .skill-branch{padding:24px 18px 0;border-top:1px solid #ffffff66;text-align:center;transition:transform .5s var(--ease),border-color .4s}
+.skill-tree .skill-branch:hover{transform:translateY(-5px);border-color:#fff}
+.skill-tree .skill-branch h3{font-size:clamp(25px,3vw,40px);margin-bottom:10px}
+.skill-tree .skill-branch p{max-width:380px;margin:auto;color:#c6c6c6;font-size:14px}
+
+/* Codex is a selectable long-range objective screen, not another project list. */
+.codex-section{min-height:0}
+.codex-top{max-width:850px}
+.codex-console{position:relative;overflow:hidden;background:#070707f0;border:1px solid #b1b1b1}
+.codex-console:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.2;background:repeating-linear-gradient(0deg,transparent 0 4px,#ffffff08 5px 6px)}
+.codex-console-head{padding:14px 18px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:10px;letter-spacing:.17em;border-bottom:1px solid #ffffff6b}
+.codex-console-body{display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);min-height:440px}
+.codex-console .codex-menu{margin:0;padding:0;list-style:none;border-inline-end:1px solid #ffffff5c}
+.codex-console .codex-menu li{display:block;padding:0;border-bottom:1px solid #ffffff3a}
+.codex-menu button{display:grid;grid-template-columns:1fr auto;gap:9px 14px;width:100%;padding:23px 18px;text-align:start;background:transparent;border:0;color:#c6c6c6;transition:background .3s,color .3s,padding .3s}
+.codex-menu button:hover,.codex-menu button.is-selected{background:#e9e9e9;color:#080808;padding-inline-start:26px}
+.codex-menu button>span{grid-column:1/-1;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:10px;letter-spacing:.12em}
+.codex-menu button strong{font-family:var(--font-thmanyah),sans-serif;font-size:clamp(16px,1.65vw,23px);font-weight:600;line-height:1.35}
+.codex-menu button small{font-size:17px;align-self:center}
+.codex-detail{display:grid;place-content:center;gap:30px;padding:35px clamp(25px,5vw,70px);animation:codex-resolve .55s steps(8,end) both}
+@keyframes codex-resolve{from{opacity:.1;transform:translateY(8px);filter:contrast(2)}to{opacity:1;transform:none;filter:none}}
+.codex-sigil{position:relative;width:92px;height:92px;border:1px solid #ffffff85;display:grid;place-items:center;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:27px;font-weight:800;letter-spacing:-.1em;box-shadow:inset 0 0 0 8px #ffffff0e}
+.codex-sigil:before,.codex-sigil:after{content:"";position:absolute;width:14px;height:14px;background:#f4f4f4}.codex-sigil:before{top:-7px;left:-7px}.codex-sigil:after{bottom:-7px;right:-7px}
+.codex-detail-copy{display:grid;gap:15px}.codex-status{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#bebebe;font-size:10px;letter-spacing:.16em}.codex-detail-copy strong{font-family:var(--font-thmanyah),sans-serif;font-size:clamp(26px,3vw,43px);line-height:1.23;letter-spacing:-.03em}.codex-detail-copy p{font-family:var(--font-thmanyah),sans-serif;color:#c5c5c5;font-size:16px}.codex-detail-copy small{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#a8a8a8;font-size:10px;letter-spacing:.09em}
+[dir=rtl] .codex-detail-copy strong{letter-spacing:0}
+
+/* The beacon follows the same scroll phase as each biography chapter. */
+.story-track{height:210svh}
+.story-stage{top:12svh;height:74svh;min-height:430px;--beacon-position:8%;--story-fill:0%}
+.story-orbit{position:absolute;inset-inline:7%;top:15%;height:1px;background:#ffffff3b;z-index:2}
+.story-beacon{position:absolute;inset-inline-start:var(--beacon-position);top:50%;font-size:35px;color:#fff;line-height:1;transform:translate(-50%,-50%);text-shadow:0 0 10px #fff,0 0 32px #ffffff8c;transition:inset-inline-start .12s linear;animation:beacon-breathe 2.5s ease-in-out infinite alternate}
+@keyframes beacon-breathe{to{opacity:.6;text-shadow:0 0 5px #fff,0 0 16px #ffffff70}}
+.story-progress span{width:var(--story-fill);transition:none}
+.story-panel{padding:40px clamp(35px,10vw,140px) 0}
+.story-panel p{font-size:clamp(29px,3.7vw,52px);line-height:1.28;max-width:940px;letter-spacing:-.025em}
+.story-marker{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.12em}
+.story-controls{position:absolute;bottom:22px;inset-inline-end:25px;display:flex;align-items:center;gap:12px;z-index:3;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:11px;color:#d9d9d9}
+.story-controls button{width:38px;height:38px;background:#121212;color:#fff;border:1px solid #ffffff8c}.story-controls button:hover:not(:disabled){background:#eee;color:#080808}.story-controls button:disabled{opacity:.35;cursor:default}
+.about-actions{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.cv-command{min-width:270px;min-height:65px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:15px;letter-spacing:.04em}
+.cv-note{color:#aaa;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:11px}
+
+/* A final transmission is strong enough to invite a click, yet email remains stable. */
+.contact-section{background:#080808a3}
+.contact-content{max-width:950px}
+.contact-transmission{position:relative;margin:54px auto 0;border:1px solid #d5d5d5;text-align:start;background:#080808da;overflow:hidden}
+.contact-transmission:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.2;background:repeating-linear-gradient(90deg,transparent 0 20px,#ffffff24 21px 22px)}
+.transmission-head,.transmission-foot{position:relative;display:flex;justify-content:space-between;gap:20px;padding:12px 20px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:10px;letter-spacing:.09em;color:#c8c8c8}
+.transmission-head{border-bottom:1px solid #ffffff60}.transmission-foot{border-top:1px solid #ffffff60;align-items:center;flex-wrap:wrap}
+.transmission-foot a{color:#f3f3f3;border-bottom:1px solid #ffffff8c;padding-bottom:3px;overflow-wrap:anywhere}
+.contact-action{position:relative;width:calc(100% - 40px);min-height:105px;margin:20px;padding:20px 25px;background:#ededed;color:#080808;border:0;font-size:clamp(24px,3.2vw,44px);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-weight:800;letter-spacing:.04em;clip-path:polygon(0 0,calc(100% - 15px) 0,100% 15px,100% 100%,15px 100%,0 calc(100% - 15px));transition:transform .3s var(--ease),background .3s,clip-path .7s steps(14,end),opacity .5s}
+.contact-action:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 0 48%,#ffffff8c 50%,transparent 52%);opacity:0;transform:translateX(-100%);pointer-events:none}
+.contact-action:hover{background:#fff;color:#080808;transform:translateY(-4px)}.contact-action:hover:after{opacity:1;transform:translateX(100%);transition:transform .65s ease}
+.contact-action .contact-glitch{color:#080808;text-shadow:none;font-size:inherit}
+.contact-action .contact-glitch:after{text-shadow:2px 0 #777,-2px 0 #111;color:#111}
+.contact-action.is-lost{clip-path:inset(0 100% 0 0);opacity:0;visibility:hidden;pointer-events:none;transition:clip-path .7s steps(14,end),opacity .5s,visibility 0s .7s}
+.contact-recall{position:absolute;inset:20px 20px auto;min-height:105px;width:calc(100% - 40px);padding:20px;background:#111;color:#fff;border:1px dashed #ffffffb5;text-align:center;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:clamp(16px,2vw,24px);letter-spacing:.07em}
+.contact-recall:hover{background:#252525}
+.social-line{margin-top:65px}
+
+.site-footer{display:grid;grid-template-columns:1fr 1.3fr 1fr;align-items:center;gap:20px;min-height:82px;padding:16px 0 18px;text-align:start}
+.site-footer>div:first-child{display:grid;gap:4px}.site-footer strong{font-size:14px}.site-footer small{font-size:10px;color:#aaa}.site-footer p{text-align:center;color:#e3e3e3;font-size:13px;line-height:1.4}.footer-actions{display:flex;gap:20px;justify-content:flex-end;font-size:11px;white-space:nowrap}
+
+@media(max-width:900px){
+  .codex-console-body{grid-template-columns:1fr}.codex-console .codex-menu{border-inline-end:0;border-bottom:1px solid #ffffff5c}.codex-menu button{padding:16px}.codex-detail{min-height:320px;grid-template-columns:auto 1fr;align-items:center;gap:22px;padding:28px}.codex-sigil{width:70px;height:70px;font-size:20px}
+  .story-panel p{font-size:clamp(28px,4.8vw,44px)}
+}
+@media(max-width:700px){
+  .site-nav.nav-scrolled{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  .hero-terminal{margin-top:16px}.terminal-head{font-size:8px}.hero-terminal>p{font-size:14px}.terminal-secret{font-size:10px}
+  .work-compiler{grid-template-columns:1fr auto;gap:6px}.compiler-prompt{font-size:9px;overflow-wrap:anywhere}.compiler-prompt code{display:block}.script-button{min-width:83px;min-height:44px;font-size:10px;padding:8px}.compiler-output{font-size:9px}
+  .work-section .project-trigger{padding:25px 0}.work-section .project-main strong{font-size:27px}.work-section .project-verb{font-size:9px}
+  .skill-tree{grid-template-columns:1fr;gap:0}.skill-tree .skill-root{grid-column:1;width:100%;padding:26px 18px}.skill-tree .skill-root h3{font-size:clamp(43px,12vw,65px)}.skill-tree .skill-root p{font-size:14px}.activity-status{margin-top:22px}.activity-bars{height:19px}
+  .skill-branches{grid-column:1;display:block;height:48px}.skill-branches:before{inset-inline-start:50%;left:auto;right:auto;width:1px;height:48px;border:0;background:#ffffffa3}.skill-branches:after,.skill-branches span{display:none}
+  .skill-tree .skill-branch{padding:22px 10px 26px;border-top:1px solid #ffffff77}.skill-tree .skill-branch+ .skill-branch{border-top:1px solid #ffffff77}.skill-tree .skill-branch:before{width:9px;height:9px}
+  .codex-console-body{display:block}.codex-menu button{padding:15px 13px}.codex-menu button strong{font-size:17px}.codex-detail{display:grid;grid-template-columns:1fr;min-height:0;gap:15px;padding:25px 18px}.codex-sigil{width:58px;height:58px;font-size:18px}.codex-detail-copy strong{font-size:27px}.codex-detail-copy p{font-size:14px}
+  .story-track{height:180svh}.story-stage{top:12svh;height:72svh;min-height:390px}.story-panel{padding:30px 20px 0}.story-panel p{font-size:clamp(24px,6.8vw,36px);line-height:1.32}.story-orbit{top:12%}.story-beacon{font-size:28px}.story-controls{bottom:12px;inset-inline-end:13px}.cv-command{min-width:250px}
+  .contact-transmission{margin-top:38px}.contact-action{width:calc(100% - 24px);margin:12px;min-height:85px;padding:15px;font-size:clamp(17px,5vw,27px)}.contact-recall{inset:12px 12px auto;width:calc(100% - 24px);min-height:85px;font-size:15px}.transmission-head,.transmission-foot{padding:10px 12px;font-size:9px}.social-line{margin-top:44px}
+  .site-footer{display:grid;grid-template-columns:1fr auto;gap:8px 12px;min-height:0}.site-footer>div:first-child{grid-column:1}.site-footer p{grid-column:1/-1;grid-row:1;text-align:start;font-size:12px}.footer-actions{grid-column:2;grid-row:2;font-size:10px;gap:10px}.site-footer small{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+  .compiler-caret,.story-beacon{animation:none}.work-phase-2 .project-entry.in-view,.codex-detail{animation:none;clip-path:none;opacity:1;transform:none;filter:none}
+  .skill-tree .activity-bars i.is-filled{opacity:1;transition:none}.skill-branches span{transform:scaleY(1);transition:none}
+  .story-track{height:auto}.story-stage{position:relative;top:auto;height:auto;min-height:0;display:grid;gap:0;padding:35px 0}.story-orbit,.story-progress,.story-controls{display:none}.story-panel,.story-panel.is-active{position:relative;top:auto;inset:auto;opacity:1;visibility:visible;transform:none;filter:none;transition:none;padding:22px 15px;border-bottom:1px solid #ffffff44}.story-panel p{font-size:clamp(22px,3vw,32px)}
+  .contact-action,.contact-action.is-lost{transition:none;clip-path:none;opacity:1;visibility:visible;transform:none}
+  .site-nav{transition:none}
+}

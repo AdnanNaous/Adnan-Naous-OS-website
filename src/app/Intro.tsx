@@ -13,27 +13,10 @@ export default function Intro({ ar }: { ar: boolean }) {
       return;
     }
 
-    const start = performance.now();
-    let sceneReady = document.querySelector(".live-world")?.getAttribute("data-ready") === "true";
-    let fontReady = false;
-    let closed = false;
-    let closeTimer: ReturnType<typeof setTimeout>;
-    const complete = () => {
-      if (closed || !sceneReady || !fontReady) return;
-      closeTimer = setTimeout(() => {
-        if (!closed) el.dataset.state = "done";
-      }, Math.max(0, 1600 - (performance.now() - start)));
-    };
-    const onSceneReady = () => { sceneReady = true; complete(); };
-    addEventListener("portfolio-scene-ready", onSceneReady);
-    document.fonts.ready.then(() => { fontReady = true; complete(); });
-    const failSafe = setTimeout(() => { if (!closed) el.dataset.state = "done"; }, 4500);
-    return () => {
-      closed = true;
-      removeEventListener("portfolio-scene-ready", onSceneReady);
-      clearTimeout(closeTimer);
-      clearTimeout(failSafe);
-    };
+    // The scan lasts 1.5s in CSS. Start fading at a fixed point so loading
+    // fonts or the decorative WebGL scene cannot hold the page behind the intro.
+    const closeTimer = setTimeout(() => { el.dataset.state = "done"; }, 1600);
+    return () => clearTimeout(closeTimer);
   }, []);
 
   return <div className="intro" data-state="loading" ref={root} aria-hidden="true">

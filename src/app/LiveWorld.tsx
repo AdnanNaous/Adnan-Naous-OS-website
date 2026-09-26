@@ -26,40 +26,52 @@ export default function LiveWorld() {
 
       const media = matchMedia("(prefers-reduced-motion: reduce)");
       renderer.setPixelRatio(Math.min(devicePixelRatio, innerWidth < 700 ? 1.45 : 1.8));
-      renderer.setClearColor(0x08090b);
+      renderer.setClearColor(0x090909);
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.3;
+      renderer.toneMappingExposure = 1.18;
+      renderer.shadowMap.enabled = innerWidth >= 900 && !media.matches;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       host.appendChild(renderer.domElement);
 
       const scene = new THREE.Scene();
-      scene.fog = new THREE.FogExp2(0x08090b, 0.025);
+      scene.fog = new THREE.FogExp2(0x090909, 0.025);
       const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 110);
       camera.position.set(0, 1.0, 18);
       camera.lookAt(0, 0, 0);
-      scene.add(new THREE.AmbientLight(0x9ea5b0, 0.64));
-      const key = new THREE.DirectionalLight(0xffffff, 3.1);
+      scene.add(new THREE.AmbientLight(0xa4a4a4, 0.55));
+      const key = new THREE.DirectionalLight(0xffffff, 3.15);
       key.position.set(-5, 9, 9);
+      key.castShadow = true;
+      key.shadow.mapSize.set(1024, 1024);
+      key.shadow.camera.left = -11;
+      key.shadow.camera.right = 11;
+      key.shadow.camera.top = 11;
+      key.shadow.camera.bottom = -11;
+      key.shadow.camera.near = 1;
+      key.shadow.camera.far = 35;
+      key.shadow.bias = -0.0005;
       scene.add(key);
-      const rim = new THREE.DirectionalLight(0xc2cad7, 3.8);
+      const rim = new THREE.DirectionalLight(0xc8c8c8, 3.2);
       rim.position.set(7, 3, -6);
       scene.add(rim);
-      const lower = new THREE.PointLight(0xf2f3f5, 30, 19, 2);
+      const lower = new THREE.PointLight(0xf2f2f2, 28, 19, 2);
       lower.position.set(3, -4, 4);
       scene.add(lower);
 
       const world = new THREE.Group();
       scene.add(world);
-      const steel = new THREE.MeshPhysicalMaterial({ color: 0x555b63, metalness: 0.87, roughness: 0.25, clearcoat: 0.72, clearcoatRoughness: 0.17 });
-      const graphite = new THREE.MeshStandardMaterial({ color: 0x15191d, metalness: 0.75, roughness: 0.4 });
-      const bright = new THREE.MeshStandardMaterial({ color: 0xd4d7d9, metalness: 0.64, roughness: 0.27, emissive: 0x5a6065, emissiveIntensity: 0.24 });
-      const glass = new THREE.MeshPhysicalMaterial({ color: 0x84919d, metalness: 0.16, roughness: 0.1, transparent: true, opacity: 0.42, transmission: 0.26, thickness: 0.8, clearcoat: 1, clearcoatRoughness: 0.08, side: THREE.DoubleSide });
+      const steel = new THREE.MeshPhysicalMaterial({ color: 0x5b5b5b, metalness: 0.87, roughness: 0.25, clearcoat: 0.72, clearcoatRoughness: 0.17 });
+      const graphite = new THREE.MeshStandardMaterial({ color: 0x191919, metalness: 0.75, roughness: 0.4 });
+      const bright = new THREE.MeshStandardMaterial({ color: 0xd6d6d6, metalness: 0.64, roughness: 0.27, emissive: 0x606060, emissiveIntensity: 0.24 });
+      const glass = new THREE.MeshPhysicalMaterial({ color: 0x929292, metalness: 0.16, roughness: 0.1, transparent: true, opacity: 0.42, transmission: 0.26, thickness: 0.8, clearcoat: 1, clearcoatRoughness: 0.08, side: THREE.DoubleSide });
       const resources: Array<{ dispose: () => void }> = [steel, graphite, bright, glass];
 
       // The core is built as one architectural object: an inner spine, glass shell,
       // concentric machined bands, and hinged radial vanes.
       const spineGeometry = new THREE.CylinderGeometry(0.31, 0.58, 6.8, 7);
       const spine = new THREE.Mesh(spineGeometry, steel);
+      spine.castShadow = true;
       spine.rotation.z = -0.1;
       world.add(spine);
       resources.push(spineGeometry);
@@ -70,6 +82,7 @@ export default function LiveWorld() {
       resources.push(shellGeometry);
       const slitGeometry = new THREE.BoxGeometry(0.075, 5.8, 0.075);
       const slit = new THREE.Mesh(slitGeometry, bright);
+      slit.castShadow = true;
       slit.position.set(-0.19, 0.08, 0.49);
       slit.rotation.z = -0.1;
       world.add(slit);
@@ -79,6 +92,7 @@ export default function LiveWorld() {
       for (const [index, radius, tube, z] of [[0, 3.15, 0.075, 0], [1, 2.48, 0.045, 0.55], [2, 3.65, 0.025, -0.65]] as const) {
         const geometry = new THREE.TorusGeometry(radius, tube, 10, 112);
         const ring = new THREE.Mesh(geometry, index === 1 ? bright : steel);
+        ring.castShadow = true;
         ring.rotation.set(0.22 + index * 0.31, -0.58 + index * 0.18, -0.26 + index * 0.22);
         ring.position.z = z;
         world.add(ring);
@@ -106,7 +120,7 @@ export default function LiveWorld() {
       const energyMaterials: InstanceType<typeof THREE.MeshBasicMaterial>[] = [];
       for (let i = 0; i < 4; i++) {
         const geometry = new THREE.TorusGeometry(3.17 + i * 0.12, 0.012, 6, 40, 0.52 + i * 0.2);
-        const material = new THREE.MeshBasicMaterial({ color: 0xf2f4f5, transparent: true, opacity: 0.25, depthWrite: false });
+        const material = new THREE.MeshBasicMaterial({ color: 0xf2f2f2, transparent: true, opacity: 0.25, depthWrite: false });
         const trace = new THREE.Mesh(geometry, material);
         trace.position.z = 0.17 + i * 0.03;
         trace.rotation.z = i * 1.7;
@@ -118,6 +132,7 @@ export default function LiveWorld() {
 
       const vaneGeometry = new THREE.BoxGeometry(0.14, 0.68, 0.28);
       const vanes = new THREE.InstancedMesh(vaneGeometry, graphite, 64);
+      vanes.castShadow = true;
       const dummy = new THREE.Object3D();
       for (let i = 0; i < 64; i++) {
         const angle = i / 64 * Math.PI * 2;
@@ -136,6 +151,7 @@ export default function LiveWorld() {
       scene.add(architecture);
       const wallGeometry = new THREE.BoxGeometry(0.22, 12, 1.2);
       const wall = new THREE.InstancedMesh(wallGeometry, graphite, 26);
+      wall.castShadow = true;
       for (let i = 0; i < 26; i++) {
         const side = i % 2 ? -1 : 1;
         const depth = Math.floor(i / 2);
@@ -150,12 +166,13 @@ export default function LiveWorld() {
       resources.push(wallGeometry);
 
       const floorGeometry = new THREE.PlaneGeometry(160, 160);
-      const floor = new THREE.Mesh(floorGeometry, new THREE.MeshStandardMaterial({ color: 0x101216, metalness: 0.48, roughness: 0.55 }));
+      const floor = new THREE.Mesh(floorGeometry, new THREE.MeshStandardMaterial({ color: 0x121212, metalness: 0.48, roughness: 0.55 }));
+      floor.receiveShadow = true;
       floor.rotation.x = -Math.PI / 2;
       floor.position.y = -5.1;
       scene.add(floor);
       resources.push(floorGeometry, floor.material);
-      const grid = new THREE.GridHelper(150, 72, 0x626871, 0x2e3338);
+      const grid = new THREE.GridHelper(150, 72, 0x666666, 0x333333);
       grid.position.y = -5.07;
       (grid.material as InstanceType<typeof THREE.Material>).transparent = true;
       (grid.material as InstanceType<typeof THREE.Material>).opacity = 0.13;
@@ -167,7 +184,7 @@ export default function LiveWorld() {
         transparent: true, depthWrite: false, side: THREE.DoubleSide,
         uniforms: { uOpacity: { value: 0.12 } },
         vertexShader: "varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}",
-        fragmentShader: "varying vec2 vUv;uniform float uOpacity;void main(){float width=pow(max(0.0,1.0-abs(vUv.x-.5)*2.0),2.0);float fade=smoothstep(0.0,.35,vUv.y)*(1.0-smoothstep(.75,1.0,vUv.y));gl_FragColor=vec4(vec3(.82,.86,.9),width*fade*uOpacity);}",
+        fragmentShader: "varying vec2 vUv;uniform float uOpacity;void main(){float width=pow(max(0.0,1.0-abs(vUv.x-.5)*2.0),2.0);float fade=smoothstep(0.0,.35,vUv.y)*(1.0-smoothstep(.75,1.0,vUv.y));gl_FragColor=vec4(vec3(.86),width*fade*uOpacity);}",
       });
       resources.push(beamMaterial);
       const beams = new THREE.Group();
@@ -191,7 +208,7 @@ export default function LiveWorld() {
       }
       const dustGeometry = new THREE.BufferGeometry();
       dustGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-      const dustMaterial = new THREE.PointsMaterial({ color: 0xd0d4d8, size: 0.032, transparent: true, opacity: 0.68, sizeAttenuation: true });
+      const dustMaterial = new THREE.PointsMaterial({ color: 0xd2d2d2, size: 0.032, transparent: true, opacity: 0.55, sizeAttenuation: true });
       const dust = new THREE.Points(dustGeometry, dustMaterial);
       scene.add(dust);
       resources.push(dustGeometry, dustMaterial);
@@ -205,6 +222,7 @@ export default function LiveWorld() {
         camera.updateProjectionMatrix();
         renderer.setSize(width, height, false);
         renderer.setPixelRatio(Math.min(devicePixelRatio, width < 700 ? 1.45 : 1.8));
+        renderer.shadowMap.enabled = width >= 900 && !media.matches;
         if (media.matches) renderer.render(scene, camera);
       };
       const onPointer = (event: PointerEvent) => {
@@ -228,7 +246,7 @@ export default function LiveWorld() {
           const targetScale = mobile ? 0.74 : 1.02;
           world.scale.setScalar(targetScale);
           const tick = media.matches ? 0 : time * 0.00012;
-          world.rotation.y += ((scrollProgress * 0.58 + pointerX * 0.22 + Math.sin(tick) * 0.07) - world.rotation.y) * 0.025;
+          world.rotation.y += ((scrollProgress * 0.5 + pointerX * 0.16 + tick * 0.55) - world.rotation.y) * 0.025;
           world.rotation.z += ((scrollProgress * -0.18 + pointerY * 0.08) - world.rotation.z) * 0.03;
           rings[0].rotation.z = -0.26 + tick * 0.24;
           rings[1].rotation.z = -0.04 - tick * 0.34;

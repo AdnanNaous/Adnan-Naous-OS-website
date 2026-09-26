@@ -10,21 +10,21 @@
 
 ## 01 / The signal
 
-This is my working portfolio: projects I am building, what I am learning now, the path that brought me here, and a direct way to reach me. It is a record in progress, shaped by real work and revision.
+This is my working portfolio: projects I am building, what I am learning now, the path that brought me here, and a direct way to reach me. Every chapter has its own interaction, but the record is still in progress.
 
 ## 02 / Explore
 
 | Channel | What you will find |
 | --- | --- |
-| **Work** | A Windows maintenance toolkit and this website, with notes on how each is made. |
-| **Now** | University coursework, Java practice, AI experiments, and my current activity. |
-| **Codex** | The direction I am working toward: learn deeply, make useful software, contribute to a team. |
-| **About** | A brief, scroll-driven story of my move from medicine to computing. |
-| **Contact** | Email and the places where I share my work. |
+| **Work** | Run the build log, then open the Windows toolkit and website records. |
+| **Now** | A skill tree for university coursework, Java practice, and AI experiments. The 70% energy bar is a visual status, not a measured productivity score. |
+| **Codex** | Select one of three long-term objectives: learn deeply, make useful software, contribute to a team. |
+| **About** | Follow the beacon through three chapters, from medicine to computing and what comes next. |
+| **Contact** | Open a mail draft through the final transmission, or use the always-available email link. |
 
 ## 03 / Built from code
 
-Next.js, React, TypeScript, and Three.js power the site. The monochrome world is procedural WebGL: machined rings, glass, fasteners, white energy traces, light, and particles. Pointer and scroll movement influence the scene; the mathematical notation reflects real scroll values. All essential content remains readable HTML. There are no game assets or stock backgrounds.
+Next.js, React, TypeScript, and Three.js power the site. The strictly grayscale world is procedural WebGL: machined rings, glass, fasteners, energy traces, light, and particles. The model slowly spins while pointer and scroll movement change its view. On capable desktop screens it casts real-time shadows; smaller screens use a lighter rendering path. The mathematical notation reflects real scroll values. All essential content remains readable HTML. There are no game assets or stock backgrounds.
 
 The interface supports Arabic and English, keyboard navigation, reduced motion, narrow screens, and a fallback when WebGL is unavailable. Thmanyah Sans is self-hosted.
 
