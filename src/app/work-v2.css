@@ -1,0 +1,36 @@
+/* The trace has fixed line slots, so typing never changes the panel height. */
+.work-v2 .section-head{max-width:1050px}
+.work-v2 .work-compiler{align-items:center}
+.work-v2 .work-command{gap:7px;min-width:0;font-variant-ligatures:none}
+.work-v2 .work-command code{min-height:1.5em;white-space:pre;overflow-wrap:normal;overflow-x:auto;scrollbar-width:none}
+.work-v2 .work-command code::-webkit-scrollbar{display:none}
+.work-v2 .work-v2-caret{display:inline-block;color:#fff;animation:work-v2-blink .8s steps(1,end) infinite}
+@keyframes work-v2-blink{50%{opacity:0}}
+.work-v2 .work-compile-control{align-self:center}
+.work-v2 .work-v2-actions{display:flex;align-items:center;justify-content:flex-end;min-height:46px}
+.work-v2 .work-v2-skip{min-height:44px;padding:8px 2px;border:0;border-bottom:1px solid #ffffff9e;background:transparent;color:#f1f1f1;font:600 11px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.04em;cursor:pointer}
+.work-v2 .work-v2-skip:hover,.work-v2 .work-v2-skip:focus-visible{border-color:#fff;color:#fff}
+.work-v2 .project-list[hidden]{display:none}
+.work-v2-ready .project-entry{animation:work-v2-reveal .48s ease-out both}
+.work-v2-ready .project-entry:nth-child(2){animation-delay:.13s}
+@keyframes work-v2-reveal{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.work-v2 .project-schematic path{stroke-dashoffset:0;animation:none}
+.work-v2 .project-schematic circle{opacity:1;animation:none}
+.work-v2 .project-trigger:focus-visible,.work-v2 .script-button:focus-visible,.work-v2 .work-v2-skip:focus-visible,.work-v2 .text-link:focus-visible{outline:2px solid #fff;outline-offset:4px}
+[dir=rtl] .work-v2 .section-title{font-size:clamp(38px,5vw,65px);line-height:1.42;letter-spacing:0;overflow:visible}
+[dir=rtl] .work-v2 .section-head{max-width:100%;text-align:start}
+[dir=rtl] .work-v2 .work-command{direction:ltr;text-align:left}
+[dir=rtl] .work-v2 .work-compile-control{text-align:start}
+[dir=rtl] .work-v2 .work-v2-skip{font-family:var(--font-thmanyah),sans-serif;letter-spacing:0}
+[dir=rtl] .work-v2 .project-number,[dir=rtl] .work-v2 .project-verb{letter-spacing:0}
+@media(max-width:700px){
+  .work-v2 .work-compiler{gap:14px}
+  .work-v2 .work-command{font-size:clamp(10px,2.9vw,12px)}
+  .work-v2 .work-command code{overflow-x:auto}
+  .work-v2 .work-compile-control{align-items:center}
+  .work-v2 .work-v2-actions{min-height:44px}
+  [dir=rtl] .work-v2 .section-title{font-size:clamp(36px,8.6vw,50px);line-height:1.44}
+}
+@media(prefers-reduced-motion:reduce){
+  .work-v2 .work-v2-caret,.work-v2-ready .project-entry{animation:none;opacity:1;transform:none}
+}

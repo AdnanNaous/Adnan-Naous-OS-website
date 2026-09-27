@@ -1,121 +1,36 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { contact, copy, projects, socials, type Language } from "@/data/portfolio";
+import { useEffect, useRef, useState } from "react";
+import { contact, copy, socials, type Language } from "@/data/portfolio";
 
 type SectionProps = { lang: Language };
-
-export function WorkSection({ lang }: SectionProps) {
-  const ar = lang === "ar";
-  const text = (en: string, arabic: string) => ar ? arabic : en;
-  const section = useRef<HTMLElement>(null);
-  const timer = useRef<number | null>(null);
-  const [phase, setPhase] = useState<0 | 1 | 2>(0);
-  const [runId, setRunId] = useState(0);
-  const [expanded, setExpanded] = useState<number | null>(null);
-
-  const run = useCallback(() => {
-    if (timer.current !== null) clearTimeout(timer.current);
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setPhase(2);
-      return;
-    }
-    setRunId(value => value + 1);
-    setPhase(1);
-    timer.current = window.setTimeout(() => setPhase(2), 1250);
-  }, []);
-
-  useEffect(() => {
-    const node = section.current;
-    if (!node) return;
-    const observer = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting)) {
-        run();
-        observer.disconnect();
-      }
-    }, { threshold: 0.2 });
-    observer.observe(node);
-    return () => {
-      observer.disconnect();
-      if (timer.current !== null) clearTimeout(timer.current);
-    };
-  }, [run]);
-
-  return <section id="work" ref={section} className={`content-section work-section work-phase-${phase}`} aria-labelledby="work-title">
-    <div className="section-head reveal">
-      <p className="section-index">02 / {text("SELECTED WORK", "أعمال مختارة")}</p>
-      <h2 id="work-title" className="section-title">{text("Built, tested, revised.", "أبني، أجرّب، وأحسّن.")}</h2>
-      <p className="section-lead">{text("Two projects in progress. The build log opens them below.", "مشروعان قيد التطوير. يبدأ سجل البناء ثم تظهر تفاصيلهما.")}</p>
-    </div>
-    <div className={`work-compiler${phase === 1 ? " is-running" : ""}`}>
-      <div className="work-command" key={runId} dir="ltr" lang="en" aria-label="Project build sequence">
-        <span className="work-command-kicker">AN.OS / PROJECT INDEX</span>
-        <code><span className="command-prefix">&gt;</span> build --selected-work</code>
-        <code><span className="command-prefix">01</span> resolve windows-maintenance</code>
-        <code><span className="command-prefix">02</span> resolve personal-portfolio</code>
-      </div>
-      <div className="work-compile-control"><span role="status" aria-live="polite">{phase === 0 ? text("Standing by", "جاهز للبدء") : phase === 1 ? text("Assembling records…", "يُجمّع السجلات…") : text("Two records ready", "سجلان جاهزان")}</span><button className="script-button" type="button" onClick={run} aria-label={text("Replay project build", "أعد تشغيل عرض المشاريع")}>{text("RUN AGAIN ↻", "أعِد التشغيل ↻")}</button></div>
-    </div>
-    <div className="project-list" key={`projects-${runId}`}>
-      {projects.map((project, index) => <article className={`project-entry${phase === 1 ? " is-assembling" : ""}`} key={project.slug}>
-        <button className="project-trigger" type="button" aria-expanded={expanded === index} aria-controls={`project-detail-${index}`} onClick={() => setExpanded(expanded === index ? null : index)}>
-          <span className="project-number">0{index + 1} / {project.category[lang]}</span>
-          <span className="project-main"><strong>{project.title[lang]}</strong><span>{project.summary[lang]}</span></span>
-          <svg className="project-schematic" viewBox="0 0 170 90" aria-hidden="true"><path d={index === 0 ? "M8 45H48V17H108V45H160M8 61H74V77H138" : "M8 19H58V45H114V72H160M8 71H44V45H87"}/><circle cx={index === 0 ? 108 : 114} cy={index === 0 ? 45 : 72} r="4"/><circle cx="8" cy={index === 0 ? 45 : 19} r="4"/></svg>
-          <span className="project-verb">{expanded === index ? text("CLOSE −", "أغلق −") : text("OPEN +", "افتح +")}</span>
-        </button>
-        <div id={`project-detail-${index}`} className="project-detail" hidden={expanded !== index}>
-          <div className="project-detail-grid">{project.sections.map(item => <div key={item.title.en}><h3>{item.title[lang]}</h3><p>{item.body[lang]}</p></div>)}</div>
-          <a className="text-link" href={project.repositoryUrl} target="_blank" rel="noreferrer">{text("View code on GitHub ↗", "شاهد الكود على GitHub ↗")}</a>
-        </div>
-      </article>)}
-    </div>
-  </section>;
-}
-
-export function NowSection({ lang }: SectionProps) {
-  const ar = lang === "ar";
-  const text = (en: string, arabic: string) => ar ? arabic : en;
-  const [selected, setSelected] = useState(0);
-  const paths = [
-    { en: "FOUNDATIONS", ar: "الأساسيات", nodes: [
-      { en: "Programming", ar: "البرمجة", detail: { en: "Programming fundamentals and the logic behind small programs.", ar: "أساسيات البرمجة والمنطق وراء البرامج الصغيرة." } },
-      { en: "AI fundamentals", ar: "أساسيات الذكاء الاصطناعي", detail: { en: "Coursework and experiments in introductory AI.", ar: "دراسة وتجارب في مبادئ الذكاء الاصطناعي." } },
-    ] },
-    { en: "SYSTEMS", ar: "الأنظمة", nodes: [
-      { en: "Windows setup", ar: "إعداد Windows", detail: { en: "Windows installation and configuration.", ar: "تثبيت Windows وإعداده." } },
-      { en: "Troubleshooting", ar: "استكشاف الأعطال", detail: { en: "Technical troubleshooting, one cause at a time.", ar: "تشخيص المشكلات التقنية خطوةً خطوة." } },
-    ] },
-    { en: "BUILDING", ar: "البناء", nodes: [
-      { en: "AI workflows", ar: "سير عمل الذكاء الاصطناعي", detail: { en: "AI agents and assisted workflows as practical tools.", ar: "وكلاء الذكاء الاصطناعي وسير العمل المدعوم بها كأدوات عملية." } },
-      { en: "Web projects", ar: "مشاريع الويب", detail: { en: "Web-based project development, including this portfolio.", ar: "تطوير مشاريع الويب، ومنها هذا الموقع." } },
-    ] },
-  ];
-  const current = paths.flatMap(path => path.nodes)[selected];
-  return <section id="now" className="content-section now-section" aria-labelledby="now-title">
-    <div className="section-head reveal"><p className="section-index">03 / {text("RIGHT NOW", "حاليًا")}</p><h2 id="now-title" className="section-title">{text("The skills I’m building.", "المهارات التي أبنيها.")}</h2><p className="section-lead">{text("A living map of what I study and practice. Select a node to read more.", "خريطة لما أدرسه وأتدرّب عليه. اختر عقدة لتعرف المزيد.")}</p></div>
-    <div className="skill-tree reveal">
-      <div className="skill-root"><span className="skill-root-orbit" aria-hidden="true"/><span className="skill-root-label">01 / {text("CURRENT PATH", "المسار الحالي")}</span><strong>{text("Computer Science + AI", "علوم الحاسوب + الذكاء الاصطناعي")}</strong><small>{text("Arab Open University · Jeddah", "الجامعة العربية المفتوحة · جدة")}</small></div>
-      <div className="activity-status"><div className="activity-title"><span>{text("CURRENT ENERGY", "الطاقة الحالية")}</span><strong>70%</strong></div><div className="activity-bars" role="meter" aria-valuemin={0} aria-valuemax={100} aria-valuenow={70} aria-label={text("Current energy", "الطاقة الحالية")}>{Array.from({ length: 10 }, (_, index) => <i className={index < 7 ? "is-filled" : ""} key={index} />)}</div></div>
-      <div className="skill-paths">{paths.map((path, pathIndex) => <div className="skill-path" key={path.en}><span className="skill-path-label">0{pathIndex + 1} / {path[ar ? "ar" : "en"]}</span><div className="skill-nodes">{path.nodes.map((node, nodeIndex) => { const index = pathIndex * 2 + nodeIndex; return <button key={node.en} type="button" className={`skill-node${selected === index ? " is-selected" : ""}`} aria-pressed={selected === index} onClick={() => setSelected(index)}><span className="skill-node-ring" aria-hidden="true"><span>0{index + 1}</span></span><strong>{node[ar ? "ar" : "en"]}</strong></button>; })}</div></div>)}</div>
-      <div className="skill-readout" aria-live="polite"><span>{text("SELECTED PATH", "المسار المختار")} / 0{selected + 1}</span><p>{current.detail[lang]}</p></div>
-    </div>
-  </section>;
-}
-
 export function CodexSection({ lang }: SectionProps) {
   const ar = lang === "ar";
   const text = (en: string, arabic: string) => ar ? arabic : en;
   const [selected, setSelected] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const section = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const node = section.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(entries => setVisible(entries[0]?.isIntersecting ?? false), { threshold: 0.3 });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+  useEffect(() => {
+    if (!visible || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setTimeout(() => setSelected(index => (index + 1) % 3), 6000);
+    return () => window.clearTimeout(timer);
+  }, [visible, selected]);
   const objectives = [
     { code: "LEARN", arCode: "أتعلّم", title: text("Build a strong foundation in computer science and AI.", "أبني أساسًا قويًا في علوم الحاسوب والذكاء الاصطناعي."), note: text("University study, Java practice, and experiments.", "دراسة جامعية، وتدريب على Java، وتجارب عملية.") },
     { code: "MAKE", arCode: "أبني", title: text("Turn what I learn into useful software.", "أحوّل ما أتعلمه إلى برامج مفيدة."), note: text("Real projects, tested and revised in public.", "مشاريع حقيقية أختبرها وأحسّنها علنًا.") },
     { code: "CONTRIBUTE", arCode: "أساهم", title: text("Grow into a role where I can help a team ship better work.", "أنمو في دور أساهم فيه مع فريق يبني عملًا أفضل."), note: text("Looking for an internship or junior opportunity.", "أبحث عن تدريب أو فرصة للمبتدئين.") },
   ];
   const objective = objectives[selected];
-  return <section id="codex" className="content-section codex-section" aria-labelledby="codex-title">
+  return <section id="codex" ref={section} className="content-section codex-section" aria-labelledby="codex-title">
     <div className="codex-top reveal"><p className="section-index">04 / {text("CODEX · LONG GAME", "السجل · المدى البعيد")}</p><h2 id="codex-title" className="section-title">{text("The long game.", "ما أسعى إليه.")}</h2><p className="section-lead">{text("A working log of the direction I’m taking, not a finished checklist.", "سجل للاتجاه الذي أسير نحوه، لا قائمة منجزة.")}</p></div>
-    <div className="codex-console reveal"><div className="codex-console-head"><span>AN / LONG-RANGE RECORD</span><span>{text("SELECT A CHAPTER", "اختر فصلًا")}</span></div>
+    <div className="codex-console reveal"><div className="codex-console-head"><span>AN / LONG-RANGE RECORD</span><span>{text("AUTO CYCLE · SELECT ANY CHAPTER", "تنتقل الفصول تلقائيًا · اختر أي فصل")}</span></div>
       <div className="codex-console-body"><ol className="codex-menu">{objectives.map((item, index) => <li key={item.code}><button type="button" className={selected === index ? "is-selected" : ""} onClick={() => setSelected(index)} aria-pressed={selected === index} aria-label={`0${index + 1}: ${item.title}`}><span>0{index + 1} / {text("CHAPTER", "الفصل")}</span><strong>{ar ? item.arCode : item.code}</strong></button></li>)}</ol>
       <div className="codex-detail" key={selected}><div className="codex-detail-copy"><span className="codex-status">{text("CHAPTER", "الفصل")} 0{selected + 1} / 03</span><strong>{objective.title}</strong><p>{objective.note}</p><small>{text("A direction I keep working toward.", "اتجاه أواصل العمل نحوه.")}</small></div></div></div>
     </div>
@@ -176,7 +91,7 @@ export function ContactSection({ lang }: SectionProps) {
     let timer: number | null = null;
     let entered = false;
     const clear = () => { if (timer !== null) clearTimeout(timer); timer = null; };
-    const schedule = () => { if (!entered) return; clear(); timer = window.setTimeout(() => { if (!action.matches(":hover, :focus")) setSignal("lost"); }, 8000); };
+    const schedule = () => { if (!entered) return; clear(); timer = window.setTimeout(() => { if (!action.matches(":hover, :focus")) setSignal("lost"); }, 12000); };
     const observer = new IntersectionObserver(entries => { if (entries.some(entry => entry.isIntersecting)) { entered = true; schedule(); observer.disconnect(); } }, { threshold: 0.4 });
     observer.observe(node);
     action.addEventListener("pointerenter", clear);
@@ -189,7 +104,7 @@ export function ContactSection({ lang }: SectionProps) {
   return <section id="contact" ref={section} className="content-section contact-section" aria-labelledby="contact-title">
     <div className="contact-content reveal"><p className="section-index">06 / {text("CONTACT", "تواصل")}</p><h2 id="contact-title" className="section-title">{text("Let’s talk.", "خلّينا نحكي.")}</h2>
       <div className="contact-transmission"><div className="transmission-head"><span>AN / FINAL TRANSMISSION</span><span>{signal === "ready" ? text("CHANNEL OPEN", "القناة مفتوحة") : text("SIGNAL PAUSED", "الإشارة معلّقة")}</span></div>
-        <div className="transmission-slot">{signal === "ready" ? <a className="contact-action" href={contact.href}><span className="contact-glitch" data-label={text("PRESS TO SEND", "اضغط للإرسال")}>{text("PRESS TO SEND", "اضغط للإرسال")}</span><span aria-hidden="true">↗</span></a> : <button className="contact-recall" type="button" onClick={() => setSignal("ready")}><span>{text("REOPEN CHANNEL", "أعد فتح القناة")}</span><span aria-hidden="true">↻</span></button>}</div>
+        <div className="transmission-slot">{signal === "ready" ? <a className="contact-action" href={contact.href}><span className="contact-action-copy"><small>{text("01 / NEW MESSAGE", "٠١ / رسالة جديدة")}</small><strong className="contact-glitch">{text("Write an email", "اكتب بريدًا")}</strong></span><span className="contact-action-arrow" aria-hidden="true">↗</span></a> : <button className="contact-recall" type="button" onClick={() => setSignal("ready")}><span className="contact-action-copy"><small>{text("01 / CHANNEL PAUSED", "٠١ / القناة متوقفة")}</small><strong>{text("Reopen email", "أعد فتح البريد")}</strong></span><span className="contact-action-arrow" aria-hidden="true">↻</span></button>}</div>
         <div className="transmission-foot"><span>{text("A note from you starts the next conversation.", "رسالتك قد تبدأ المحادثة القادمة.")}</span><a href={contact.href}>{contact.value} ↗</a></div>
       </div>
       <div className="social-line">{socials.map((social, index) => <a key={social.id} href={social.url} target="_blank" rel="noreferrer"><span className="social-number">0{index + 1}</span><span className="social-name">{social.label}<small>{social.handle}</small></span><span aria-hidden="true">↗</span></a>)}</div>

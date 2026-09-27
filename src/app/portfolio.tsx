@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import LiveWorld from "./LiveWorld";
 import TechField from "./TechField";
 import Intro from "./Intro";
-import { AboutSection, CodexSection, ContactSection, NowSection, WorkSection } from "./ExperienceSections";
+import { AboutSection, CodexSection, ContactSection } from "./ExperienceSections";
+import { WorkSectionV2 } from "./WorkSectionV2";
+import { NowSectionV2 } from "./NowSectionV2";
 import { contact, type Language } from "@/data/portfolio";
 
 const destinations = ["home", "work", "now", "codex", "about", "contact"] as const;
@@ -96,7 +98,7 @@ export default function Portfolio({ initialLanguage }: { initialLanguage: Langua
       <section id="home" className="hero-section" aria-labelledby="hero-title">
         <div className="hero-content reveal">
           <p className="section-index">01 / {text("SOFTWARE · LEARNING · CURIOSITY", "برمجة · تعلّم · فضول")}</p>
-          <h1 id="hero-title" className="hero-title"><span className="hero-name-line">{text("Adnan", "عدنان")}</span><span className="hero-name-line">{text("Naous.", "نعوس.")}</span></h1>
+          <h1 id="hero-title" className="hero-title"><span className="hero-name-line">{text("Adnan", "عدنان")}</span><span className="hero-name-line">{text("Naous.", "نعوس")}</span></h1>
           <p className="hero-statement">{text("I build to learn. I keep what works.", "أبني لأتعلّم، وأحسّن ما ينجح.")}</p>
           <p className="hero-intro">{text("I study Computer Science and AI at Arab Open University. These are the projects I’m learning from now.", "أدرس علوم الحاسوب والذكاء الاصطناعي في الجامعة العربية المفتوحة. هذه المشاريع التي أتعلم منها الآن.")}</p>
           <div className="hero-terminal" aria-label={text("Welcome message", "رسالة ترحيب")}>
@@ -109,8 +111,8 @@ export default function Portfolio({ initialLanguage }: { initialLanguage: Langua
         <div className="hero-coordinate" aria-hidden="true"><span>AN / 2026</span></div>
       </section>
 
-      <WorkSection lang={lang} />
-      <NowSection lang={lang} />
+      <WorkSectionV2 lang={lang} />
+      <NowSectionV2 lang={lang} />
       <CodexSection lang={lang} />
       <AboutSection lang={lang} />
       <ContactSection lang={lang} />

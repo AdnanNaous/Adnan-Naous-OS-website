@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 import "./globals.css";
 import "./experience.css";
 import "./revision.css";
+import "./work-v2.css";
+import "./now-v2.css";
 import "./intro-retro.css";
 
 const thmanyah = localFont({ src: [
