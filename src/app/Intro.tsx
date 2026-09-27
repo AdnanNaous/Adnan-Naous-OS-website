@@ -26,7 +26,6 @@ export default function Intro({ ar }: { ar: boolean }) {
   }, []);
 
   return <div className="intro intro-retro" data-state="loading" ref={root}>
-    <div className="intro-retro-halo" aria-hidden="true" />
     <div className="intro-retro-set">
       <div className="intro-retro-bezel">
         <div className="intro-retro-screen">
@@ -44,10 +43,6 @@ export default function Intro({ ar }: { ar: boolean }) {
             <span>● REC</span>
           </div>
         </div>
-      </div>
-      <div className="intro-retro-chassis" aria-hidden="true">
-        <span>ADNAN NAOUS / PERSONAL COMPUTER</span>
-        <span className="intro-retro-controls"><i /><i /><i /></span>
       </div>
     </div>
     <button className="intro-retro-skip" type="button" onClick={() => { if (root.current) root.current.dataset.state = "done"; }}>

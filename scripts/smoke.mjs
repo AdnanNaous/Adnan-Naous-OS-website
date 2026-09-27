@@ -9,6 +9,12 @@ try {
   page.on("pageerror", error => errors.push(error.message));
   await page.goto(base);
   assert(await page.locator(".intro-retro-screen").isVisible());
+  const fillsViewport = () => page.locator(".intro-retro-screen").evaluate(screen => {
+    const bounds = screen.getBoundingClientRect();
+    return bounds.left <= 20 && bounds.top <= 20 && bounds.right >= innerWidth - 20 && bounds.bottom >= innerHeight - 20;
+  });
+  assert(await fillsViewport(), "Desktop CRT should fill the viewport");
+  assert(await page.evaluate(() => document.querySelector(".intro-retro-skip").getBoundingClientRect().bottom < document.querySelector(".intro-retro-bottom").getBoundingClientRect().top), "Desktop Skip should clear the status line");
   assert((await page.locator(".intro-retro-name").textContent()).includes("Adnan"));
   await page.waitForFunction(() => ["done", "skip"].includes(document.querySelector(".intro")?.getAttribute("data-state")), { timeout: 7000 });
   await page.locator(".intro").waitFor({ state: "hidden" });
@@ -81,6 +87,11 @@ try {
   assert.deepEqual(errors, []);
   const startPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
   await startPage.goto(base);
+  assert(await startPage.locator(".intro-retro-screen").evaluate(screen => {
+    const bounds = screen.getBoundingClientRect();
+    return bounds.left <= 12 && bounds.top <= 12 && bounds.right >= innerWidth - 12 && bounds.bottom >= innerHeight - 12;
+  }), "Phone CRT should fill the viewport");
+  assert(await startPage.evaluate(() => document.querySelector(".intro-retro-skip").getBoundingClientRect().bottom < document.querySelector(".intro-retro-bottom").getBoundingClientRect().top), "Phone Skip should clear the status line");
   await startPage.locator(".intro-retro-prompt").click();
   await startPage.locator(".intro").waitFor({ state: "hidden" });
   await startPage.close();
