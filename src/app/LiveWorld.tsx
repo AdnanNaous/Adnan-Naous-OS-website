@@ -51,10 +51,26 @@ export default function LiveWorld() {
       const dark = mat(0x181818, 0.12, 0.87);
       const charcoal = mat(0x252525, 0.08, 0.91);
       const pewter = mat(0x777777, 0.53, 0.31);
-      const catFur = mat(0x626262, 0.05, 0.9);
-      const white = new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false, fog: false, transparent: true, opacity: 0, depthWrite: false });
+      const white = new THREE.MeshBasicMaterial({ color: 0xe4e4e4, toneMapped: false, fog: false, transparent: true, opacity: 0, depthWrite: false });
       const whiteHaze = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide, toneMapped: false, fog: false });
       resources.push(white, whiteHaze);
+      const doorCanvas = document.createElement("canvas");
+      doorCanvas.width = 256; doorCanvas.height = 512;
+      const doorInk = doorCanvas.getContext("2d");
+      if (doorInk) {
+        const glow = doorInk.createLinearGradient(0, 0, 256, 0);
+        glow.addColorStop(0, "#303030"); glow.addColorStop(.18, "#a0a0a0");
+        glow.addColorStop(.5, "#ededed"); glow.addColorStop(.82, "#a0a0a0"); glow.addColorStop(1, "#303030");
+        doorInk.fillStyle = glow; doorInk.fillRect(0, 0, 256, 512);
+        for (let x = 8; x < 256; x += 24) { doorInk.fillStyle = x % 48 ? "#16161636" : "#ffffff36"; doorInk.fillRect(x, 0, x % 48 ? 7 : 2, 512); }
+        const vertical = doorInk.createLinearGradient(0, 0, 0, 512);
+        vertical.addColorStop(0, "#08080899"); vertical.addColorStop(.35, "#ffffff00"); vertical.addColorStop(1, "#10101066");
+        doorInk.fillStyle = vertical; doorInk.fillRect(0, 0, 256, 512);
+        const doorTexture = new THREE.CanvasTexture(doorCanvas);
+        doorTexture.colorSpace = THREE.SRGBColorSpace;
+        resources.push(doorTexture);
+        white.map = doorTexture; white.color.set(0xffffff); white.needsUpdate = true;
+      }
       const line = new THREE.MeshBasicMaterial({ color: 0xd0d0d0, toneMapped: false });
       resources.push(line);
       const block = (parent: InstanceType<typeof THREE.Object3D>, material: InstanceType<typeof THREE.Material>, x: number, y: number, z: number, sx: number, sy: number, sz: number) => {
@@ -105,42 +121,41 @@ export default function LiveWorld() {
       blocks(scene, graphite, ribTransforms);
       blocks(scene, line, railTransforms);
 
-      // Home: retain the original entry; the small cat gives it life.
+      // Home: retain the original gate and put a quiet server room behind it.
       const home = station(0);
       portal(home, -2, 7.5, 6.9, steel);
       block(home, glass, 3.45, 0.1, -2.25, 0.55, 5.1, 1.5);
       for (let i = 0; i < 5; i++) block(home, pale, 3.92, 2.2 - i * 0.9, -1.38, 0.11, 0.3, 0.03);
       block(home, line, 0, -2.75, -1.9, 3.8, 0.055, 0.1);
-      const cat = new THREE.Group();
-      home.add(cat);
-      const catProfile = new THREE.Shape();
-      catProfile.moveTo(-1.02, 0.51);
-      catProfile.lineTo(-0.9, 0.62); catProfile.lineTo(-0.88, 0.9);
-      catProfile.lineTo(-0.74, 1.12); catProfile.lineTo(-0.64, 0.88);
-      catProfile.lineTo(-0.5, 1.04); catProfile.lineTo(-0.43, 0.76);
-      catProfile.bezierCurveTo(-0.17, 0.65, 0.25, 0.73, 0.58, 0.53);
-      catProfile.lineTo(0.64, 0.31);
-      catProfile.bezierCurveTo(0.22, 0.24, -0.32, 0.26, -0.67, 0.42);
-      catProfile.lineTo(-0.98, 0.43); catProfile.closePath();
-      const catGeometry = new THREE.ExtrudeGeometry(catProfile, { depth: 0.17, bevelEnabled: false, curveSegments: 10 });
-      resources.push(catGeometry);
-      const catBody = new THREE.Mesh(catGeometry, catFur);
-      catBody.position.z = -0.085; cat.add(catBody);
-      const legs: Array<InstanceType<typeof THREE.Group>> = [];
-      for (const x of [-0.48, 0.45]) for (const z of [-0.13, 0.13]) {
-        const leg = new THREE.Group(); leg.position.set(x, 0.3, z);
-        block(leg, catFur, 0, -0.14, 0, 0.09, 0.32, 0.085);
-        cat.add(leg); legs.push(leg);
+      const rackFaces: number[][] = [];
+      const rackSlots: number[][] = [];
+      const statusLights: number[][] = [];
+      for (const side of [-1, 1]) for (let row = 0; row < 4; row++) {
+        const x = side * 6.7, z = -5.5 - row * 5.6;
+        block(home, charcoal, x, -0.18, z, 1.9, 5.65, 2.15);
+        block(home, steel, x - side * 1.02, -0.18, z, 0.055, 5.63, 2.12);
+        rackFaces.push([x - side * 1.065, -0.18, z, 0.02, 5.25, 1.82]);
+        for (let slot = 0; slot < 9; slot++) {
+          const y = -2.48 + slot * 0.54;
+          rackSlots.push([x - side * 1.085, y, z, 0.022, 0.025, 1.64]);
+          if ((slot + row) % 3 === 0) statusLights.push([x - side * 1.11, y + 0.16, z + 0.7, 0.04, 0.035, 0.13]);
+        }
       }
-      const tailCurve = new THREE.CatmullRomCurve3([
-        new THREE.Vector3(0.53, 0.55, 0), new THREE.Vector3(0.89, 0.74, 0),
-        new THREE.Vector3(1.04, 1.12, 0), new THREE.Vector3(0.91, 1.43, 0),
-      ]);
-      const tailGeometry = new THREE.TubeGeometry(tailCurve, 12, 0.07, 5, false);
-      resources.push(tailGeometry);
-      cat.add(new THREE.Mesh(tailGeometry, catFur));
-      cat.position.set(3.2, -3.07, 0.7);
-      cat.scale.set(1, 1, 1);
+      blocks(home, glass, rackFaces);
+      blocks(home, pewter, rackSlots);
+      blocks(home, line, statusLights);
+      for (const z of [-7, -17]) for (const offset of [-0.42, 0, 0.42]) {
+        const curve = new THREE.CatmullRomCurve3([
+          new THREE.Vector3(-6.7, 3.15, z + offset), new THREE.Vector3(-3.4, 4.08, z + offset),
+          new THREE.Vector3(0, 4.25, z + offset), new THREE.Vector3(3.4, 4.08, z + offset),
+          new THREE.Vector3(6.7, 3.15, z + offset),
+        ]);
+        const geometry = new THREE.TubeGeometry(curve, 28, offset === 0 ? 0.052 : 0.027, 5, false);
+        resources.push(geometry);
+        home.add(new THREE.Mesh(geometry, offset === 0 ? steel : graphite));
+      }
+      const rackLight = new THREE.PointLight(0xe8e8e8, 23, 13, 1.8);
+      rackLight.position.set(0, 3.5, -9); home.add(rackLight);
 
       // Work: a folded steel ribbon, lit like a single gallery object.
       const work = station(-17);
@@ -210,18 +225,24 @@ export default function LiveWorld() {
       aboutLight.position.set(-5.5, 5.5, 1); aboutLight.target.position.set(-3.5, -0.2, -3);
       about.add(aboutLight, aboutLight.target);
 
-      // Contact: the hinged slab physically opens to a white plane beyond.
+      // Contact: two heavy server-room leaves withdraw behind a matching frame.
       const contact = station(-85);
       const doorX = 2.8, doorZ = -5.8, doorWidth = 5.0, doorHeight = 6.7;
       block(contact, graphite, doorX - doorWidth / 2 - 0.18, 0.2, doorZ, 0.4, 7.2, 0.8);
       block(contact, graphite, doorX + doorWidth / 2 + 0.18, 0.2, doorZ, 0.4, 7.2, 0.8);
       block(contact, graphite, doorX, 3.75, doorZ, 5.75, 0.4, 0.8);
+      block(contact, steel, doorX, 3.56, doorZ + 0.46, 4.9, 0.035, 0.05);
       block(contact, white, doorX, 0.2, doorZ - 0.3, doorWidth, doorHeight, 0.08);
-      const doorHinge = new THREE.Group();
-      doorHinge.position.set(doorX - doorWidth / 2, 0.2, doorZ + 0.1);
-      contact.add(doorHinge);
-      block(doorHinge, charcoal, doorWidth / 2, 0, 0, doorWidth, doorHeight, 0.2);
-      block(doorHinge, steel, doorWidth - 0.57, -0.15, 0.12, 0.11, 0.6, 0.08);
+      const doorLeft = new THREE.Group(), doorRight = new THREE.Group();
+      doorLeft.position.set(doorX - doorWidth / 4, 0.2, doorZ + 0.1);
+      doorRight.position.set(doorX + doorWidth / 4, 0.2, doorZ + 0.1);
+      contact.add(doorLeft, doorRight);
+      for (const [leaf, side] of [[doorLeft, -1], [doorRight, 1]] as const) {
+        block(leaf, charcoal, 0, 0, 0, doorWidth / 2, doorHeight, 0.32);
+        block(leaf, graphite, 0, 0, 0.18, doorWidth / 2 - 0.18, doorHeight - 0.2, 0.045);
+        block(leaf, steel, -side * (doorWidth / 4 - 0.12), 0, 0.24, 0.055, doorHeight - 0.28, 0.055);
+        for (let i = 0; i < 6; i++) block(leaf, i === 3 ? pale : pewter, 0, -2.4 + i * 0.94, 0.25, doorWidth / 2 - 0.55, 0.035, 0.025);
+      }
       block(contact, pale, doorX, -3.105, doorZ + 2.5, 4.2, 0.012, 5.7);
       for (let i = 0; i < 3; i++) {
         const beam = block(contact, whiteHaze, doorX, -1.9 + i * 0.95, doorZ + 1.2 + i * 0.65, 4.4 + i * 1.6, 0.025, 6 + i * 1.5);
@@ -262,7 +283,7 @@ export default function LiveWorld() {
       lightLayer.setAttribute("aria-hidden", "true");
       Object.assign(lightLayer.style, {
         position: "absolute", left: "0", top: "0", width: "100%", height: "100%", zIndex: "0", pointerEvents: "none",
-        background: "linear-gradient(90deg, #d6d6d6, #ffffff 38%, #f7f7f7)",
+        background: "linear-gradient(90deg, #525252, #cecece 42%, #888888 70%, #424242)",
         opacity: "0", visibility: "hidden", filter: "blur(1px)",
       });
       const foreground = Array.from(contactContent?.children ?? []).filter((element): element is HTMLElement => element instanceof HTMLElement).map((element) => ({ element, position: element.style.position, zIndex: element.style.zIndex }));
@@ -302,10 +323,11 @@ export default function LiveWorld() {
         camera.lookAt(currentLook);
         camera.rotation.z += (mix(a.roll, b.roll) - camera.rotation.z) * damping;
         const doorOpen = THREE.MathUtils.smoothstep(progress, 4.42, 4.94);
-        doorHinge.rotation.y = -1.16 * doorOpen;
-        white.opacity = doorOpen;
-        whiteHaze.opacity = 0.13 * doorOpen;
-        exitLight.intensity = 68 * doorOpen;
+        doorLeft.position.x = doorX - doorWidth / 4 - doorOpen * (doorWidth / 2 + 0.12);
+        doorRight.position.x = doorX + doorWidth / 4 + doorOpen * (doorWidth / 2 + 0.12);
+        white.opacity = 0.72 * doorOpen;
+        whiteHaze.opacity = 0.1 * doorOpen;
+        exitLight.intensity = 58 * doorOpen;
         const exposure = THREE.MathUtils.smoothstep(progress, 4.55, 4.96);
         if (shade) shade.style.opacity = String(1 - 0.78 * exposure);
         if (contactSection) contactSection.style.backgroundColor = `rgba(9,9,9,${0.55 - 0.43 * exposure})`;
@@ -316,19 +338,12 @@ export default function LiveWorld() {
             const point = new THREE.Vector3(x, y, contact.position.z + doorZ - 0.3).project(camera);
             return `${((point.x + 1) * host.clientWidth / 2 - (contentRect?.left ?? 0)).toFixed(1)}px ${((1 - point.y) * host.clientHeight / 2 - (contentRect?.top ?? 0)).toFixed(1)}px`;
           };
-          const left = doorX - 0.1, right = doorX + doorWidth / 2 - 0.16;
+          const left = doorX - doorWidth / 2 + 0.18, right = doorX + doorWidth / 2 - 0.18;
           lightLayer.style.clipPath = `polygon(${project(left, 3.48)}, ${project(right, 3.48)}, ${project(right, -3.07)}, ${project(left, -3.07)})`;
-          lightLayer.style.opacity = String(0.82 * exposure);
+          lightLayer.style.opacity = String(0.45 * exposure);
           lightLayer.style.visibility = "visible";
         } else {
           lightLayer.style.visibility = "hidden";
-        }
-        if (!reduced.matches && progress < 0.7) {
-          const walk = performance.now() * 0.00042;
-          cat.position.x = 3.3 + Math.sin(walk) * 0.9;
-          cat.scale.x = Math.cos(walk) < 0 ? 1 : -1;
-          cat.position.y = -3.07 + Math.abs(Math.sin(walk * 8)) * 0.018;
-          legs.forEach((leg, index) => { leg.rotation.z = Math.sin(walk * 8 + (index === 0 || index === 3 ? 0 : Math.PI)) * 0.33; });
         }
         renderer.render(scene, camera);
       };
@@ -351,7 +366,7 @@ export default function LiveWorld() {
         const delta = Math.min(0.05, Math.max(0, (time - lastTime) / 1000));
         lastTime = time;
         render(1 - Math.exp(-4.8 * delta));
-        if (progress < 0.7 || camera.position.distanceToSquared(desiredPosition) > 0.00001 || currentLook.distanceToSquared(desiredLook) > 0.00001) schedule();
+        if (camera.position.distanceToSquared(desiredPosition) > 0.00001 || currentLook.distanceToSquared(desiredLook) > 0.00001) schedule();
       };
       const schedule = () => {
         if (!frame && active && !contextLost) { lastTime = lastTime || performance.now(); frame = requestAnimationFrame(animate); }

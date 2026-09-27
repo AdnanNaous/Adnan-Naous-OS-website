@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import LiveWorld from "./LiveWorld";
 import Intro from "./Intro";
 import TerminalOverlay from "./TerminalOverlay";
@@ -16,6 +16,7 @@ export default function Portfolio() {
   const [scrolled, setScrolled] = useState(false);
   const [secretOpen, setSecretOpen] = useState(false);
   const [secondsHere, setSecondsHere] = useState(0);
+  const closeTerminal = useCallback(() => setSecretOpen(false), []);
 
   useEffect(() => {
     const started = performance.now();
@@ -76,6 +77,11 @@ export default function Portfolio() {
   return <>
     <LiveWorld />
     <div className="world-shade" aria-hidden="true" />
+    <div className="world-schematic" aria-hidden="true">
+      <span>AN / MEMORY ARRAY &nbsp; 0001—2048</span><span>CORE 01 · SIGNAL ACTIVE</span>
+      <span>route.compute(learning);</span><span>01 00 11 10 · 01 01 11</span>
+      <svg viewBox="0 0 1480 760" preserveAspectRatio="none"><path d="M0 565H170L275 450H415M1480 225H1310L1200 360H1060M0 610H235L358 510H480M1480 180H1285L1180 310H1030"/><circle cx="415" cy="450" r="3"/><circle cx="1060" cy="360" r="3"/></svg>
+    </div>
     <Intro />
     <a className="skip-link" href="#main">Skip to content</a>
     <header className={`site-nav${navHidden ? " nav-hidden" : ""}${scrolled ? " nav-scrolled" : ""}`} style={scrolled ? { backdropFilter: "blur(22px) saturate(.55)" } : undefined}>
@@ -116,6 +122,6 @@ export default function Portfolio() {
     </main>
 
     <footer className="site-footer"><div><strong>Adnan Naous.</strong><small>© {new Date().getFullYear()} · All rights reserved</small></div><p>Thanks for spending a moment here.</p><div className="footer-actions"><a href="#home">Back to top ↑</a></div></footer>
-    {secretOpen && <TerminalOverlay onClose={() => setSecretOpen(false)} />}
+    {secretOpen && <TerminalOverlay onClose={closeTerminal} />}
   </>;
 }

@@ -19,8 +19,6 @@
 .work-section .section-head{margin-bottom:38px}
 .work-compiler{display:grid;grid-template-columns:1fr auto;gap:0 20px;align-items:center;padding:15px 0;border-top:1px solid #ffffff8a;border-bottom:1px solid #ffffff38;margin-bottom:10px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
 .compiler-caret{color:#fff;animation:terminal-blink 1s steps(1,end) infinite}
-.script-button{min-width:108px;min-height:46px;padding:9px 14px;border:1px solid #f1f1f1;background:#ededed;color:#080808;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;font-weight:800;letter-spacing:.08em;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));transition:background .25s,transform .25s}
-.script-button:hover{background:#fff;transform:translateY(-2px)}
 .work-section .project-list{border-top:0}
 .work-section .project-trigger{padding:28px 0}
 .work-section .project-main strong{font-size:clamp(27px,3vw,43px)}
@@ -93,7 +91,7 @@
 @media(max-width:700px){
   .site-nav.nav-scrolled{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
   .hero-terminal{margin-top:16px}.terminal-head{font-size:8px}.hero-terminal>p{font-size:14px}.terminal-secret{font-size:10px}
-  .work-compiler{grid-template-columns:1fr auto;gap:6px}.script-button{min-width:83px;min-height:44px;font-size:10px;padding:8px}
+  .work-compiler{grid-template-columns:1fr auto;gap:6px}
   .work-section .project-trigger{padding:25px 0}.work-section .project-main strong{font-size:27px}.work-section .project-verb{font-size:9px}
   .codex-console-body{display:block}.codex-menu button{padding:15px 13px}.codex-menu button strong{font-size:17px}.codex-detail{display:grid;grid-template-columns:1fr;min-height:0;gap:15px;padding:25px 18px}.codex-sigil{width:58px;height:58px;font-size:18px}.codex-detail-copy strong{font-size:27px}.codex-detail-copy p{font-size:14px}
   .story-track{height:180svh}.story-stage{top:12svh;height:72svh;min-height:390px}.story-panel{padding:30px 20px 0}.story-panel p{font-size:clamp(24px,6.8vw,36px);line-height:1.32}.story-orbit{top:12%}.story-beacon{font-size:28px}.story-controls{bottom:12px;inset-inline-end:13px}.cv-command{min-width:250px}

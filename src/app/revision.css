@@ -18,13 +18,8 @@
 .work-command-kicker{margin-bottom:5px;color:#b8b8b8;font-size:10px;letter-spacing:.17em}
 .work-command code{display:block;max-width:100%;overflow-wrap:anywhere;color:#ddd;font:inherit}
 .command-prefix{display:inline-block;width:27px;color:#fff}
-.work-compiler.is-running .work-command code{animation:work-write .65s steps(20,end) both}
-.work-compiler.is-running .work-command code:nth-of-type(2){animation-delay:.25s}
-.work-compiler.is-running .work-command code:nth-of-type(3){animation-delay:.5s}
-@keyframes work-write{from{opacity:.25;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
 .work-compile-control{display:grid;justify-items:end;gap:12px;min-width:160px}
 .work-compile-control>span{font-size:12px;color:#c8c8c8;line-height:1.5}
-.work-compile-control .script-button{min-width:160px}
 .work-section .project-list{overflow:visible}
 .work-section .project-entry{opacity:1;border-bottom:1px solid #ffffff47}
 .work-section .project-trigger{grid-template-columns:minmax(145px,.45fr) minmax(0,1fr) 170px auto;gap:20px;padding:45px 0;align-items:center}
@@ -92,7 +87,6 @@
   .work-section .section-head{margin-bottom:30px}
   .work-compiler{grid-template-columns:1fr;gap:17px;padding:18px 0}
   .work-compile-control{display:flex;justify-content:space-between;justify-items:stretch;align-items:center;gap:10px;min-width:0}
-  .work-compile-control .script-button{min-width:130px}
   .work-section .project-trigger{grid-template-columns:minmax(0,1fr) auto;gap:15px;padding:35px 0}
   .work-section .project-number{grid-column:1/-1}
   .work-section .project-main{grid-column:1}
@@ -115,7 +109,7 @@
   .transmission-slot{padding:12px;min-height:109px}
 }
 @media(prefers-reduced-motion:reduce){
-  .hero-content.in-view .hero-name-line,.work-compiler.is-running .work-command code,.project-schematic path,.project-schematic circle,.story-beacon,.codex-section .codex-detail{animation:none;clip-path:none;opacity:1;transform:none}
+  .hero-content.in-view .hero-name-line,.project-schematic path,.project-schematic circle,.story-beacon,.codex-section .codex-detail{animation:none;clip-path:none;opacity:1;transform:none}
   .project-schematic path{stroke-dashoffset:0}
   .story-track{height:auto}
   .story-stage{position:relative;top:auto;height:auto;min-height:0}
@@ -123,7 +117,8 @@
 
 /* The chapter is readable without a click; selection shows the loop's pace. */
 .codex-section .codex-menu button.is-selected{position:relative}
-.codex-section .codex-menu button.is-selected:after{content:"";position:absolute;bottom:0;inset-inline-start:22px;width:calc(100% - 44px);height:2px;background:#e3e3e3;transform-origin:left;animation:codex-cycle 6s linear both}
+.codex-section .codex-menu button.is-selected:after{content:"";position:absolute;bottom:0;inset-inline-start:22px;width:calc(100% - 44px);height:2px;background:#e3e3e3;transform-origin:left;transform:scaleX(0)}
+.codex-section.is-live .codex-menu button.is-selected:after{animation:codex-cycle 6s linear both}
 @keyframes codex-cycle{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 
 /* A smaller story reads like a chapter instead of a billboard. */

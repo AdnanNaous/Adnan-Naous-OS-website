@@ -10,20 +10,26 @@
 .work-v2 .work-v2-actions{display:flex;align-items:center;justify-content:flex-end;min-height:46px}
 .work-v2 .work-v2-skip{min-height:44px;padding:8px 2px;border:0;border-bottom:1px solid #ffffff9e;background:transparent;color:#f1f1f1;font:600 11px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.04em;cursor:pointer}
 .work-v2 .work-v2-skip:hover,.work-v2 .work-v2-skip:focus-visible{border-color:#fff;color:#fff}
-.work-v2 .project-list[hidden]{display:none}
-.work-v2-ready .project-entry{animation:work-v2-reveal .48s ease-out both}
-.work-v2-ready .project-entry:nth-child(2){animation-delay:.13s}
+.work-v2 .work-build-track{height:165svh;position:relative}
+.work-v2 .work-compiler{position:sticky;top:24svh;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;min-height:205px;align-content:center}
+.work-build-progress{grid-column:1/-1;height:2px;margin-top:9px;background:#d7e7d43a;overflow:hidden}
+.work-build-progress span{display:block;height:100%;background:#f5fff3;box-shadow:0 0 15px #edffe9c9;transition:width .08s linear}
+.work-v2:not(.work-v2-ready) .project-list{opacity:0;pointer-events:none}
+.work-v2-ready .project-list{opacity:1;transition:opacity .65s ease}
+.work-v2 .project-entry{animation:work-v2-reveal .65s ease-out both}
+.work-v2 .project-entry:nth-child(2){animation-delay:.13s}
 @keyframes work-v2-reveal{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .work-v2 .project-schematic path{stroke-dashoffset:0;animation:none}
 .work-v2 .project-schematic circle{opacity:1;animation:none}
-.work-v2 .project-trigger:focus-visible,.work-v2 .script-button:focus-visible,.work-v2 .work-v2-skip:focus-visible,.work-v2 .text-link:focus-visible{outline:2px solid #fff;outline-offset:4px}
+.work-v2 .project-trigger:focus-visible,.work-v2 .work-v2-skip:focus-visible,.work-v2 .text-link:focus-visible{outline:2px solid #fff;outline-offset:4px}
 @media(max-width:700px){
-  .work-v2 .work-compiler{gap:14px}
+  .work-v2 .work-compiler{gap:14px;top:20svh}
   .work-v2 .work-command{font-size:clamp(10px,2.9vw,12px)}
   .work-v2 .work-command code{overflow-x:auto}
   .work-v2 .work-compile-control{align-items:center}
   .work-v2 .work-v2-actions{min-height:44px}
 }
 @media(prefers-reduced-motion:reduce){
-  .work-v2 .work-v2-caret,.work-v2-ready .project-entry{animation:none;opacity:1;transform:none}
+  .work-v2 .work-build-track{height:auto}.work-v2 .work-compiler{position:relative;top:auto}
+  .work-v2 .work-v2-caret,.work-v2 .project-entry{animation:none;opacity:1;transform:none}
 }

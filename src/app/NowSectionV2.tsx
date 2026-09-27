@@ -66,10 +66,10 @@ export function NowSectionV2() {
           <small>Arab Open University · Jeddah</small>
         </div>
         <div className="now-v2-energy">
-          <div className="now-v2-energy-dial" role="meter" aria-valuemin={0} aria-valuemax={100} aria-valuenow={energy} aria-label="Current energy" style={{ "--energy": `${energy}%` } as CSSProperties}>
-            <span className="now-v2-energy-core" aria-hidden="true"><span /></span>
+          <div className="now-v2-energy-copy"><span>CURRENT ENERGY</span><strong>{energy}%</strong></div>
+          <div className="now-v2-energy-bar" role="meter" aria-valuemin={0} aria-valuemax={100} aria-valuenow={energy} aria-label="Current energy" style={{ "--energy": `${energy}%` } as CSSProperties}>
+            <span className="now-v2-energy-fill" aria-hidden="true"><span className="now-v2-heatwave" /></span>
           </div>
-          <div className="now-v2-energy-copy"><span>CURRENT ENERGY</span><strong>{energy}%</strong><small>steady momentum</small></div>
         </div>
       </div>
 

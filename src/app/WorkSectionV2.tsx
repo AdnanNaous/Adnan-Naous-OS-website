@@ -1,9 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { projects } from "@/data/portfolio";
 
-type Phase = "idle" | "typing" | "ready";
 const trace = [
   "> select --work",
   "01 index windows-maintenance",
@@ -11,97 +10,60 @@ const trace = [
 ] as const;
 
 export function WorkSectionV2() {
-  const section = useRef<HTMLElement>(null);
-  const started = useRef(false);
-  const [phase, setPhase] = useState<Phase>("idle");
-  const [runId, setRunId] = useState(0);
-  const [position, setPosition] = useState({ line: 0, count: 0 });
+  const track = useRef<HTMLDivElement>(null);
+  const [progress, setProgress] = useState(0);
   const [expanded, setExpanded] = useState<number | null>(null);
 
-  const run = useCallback(() => {
-    started.current = true;
-    setPosition({ line: 0, count: 0 });
-    setRunId(value => value + 1);
-    setPhase(window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "ready" : "typing");
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const node = track.current;
+        if (!node) return;
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) { setProgress(1); return; }
+        const rect = node.getBoundingClientRect();
+        const travel = Math.max(1, rect.height - innerHeight * .72);
+        const next = Math.min(1, Math.max(0, -rect.top / travel));
+        setProgress(previous => Math.abs(previous - next) >= .005 || next === 0 || next === 1 ? next : previous);
+      });
+    };
+    addEventListener("scroll", update, { passive: true });
+    addEventListener("resize", update);
+    update();
+    return () => { removeEventListener("scroll", update); removeEventListener("resize", update); cancelAnimationFrame(frame); };
   }, []);
 
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      started.current = true;
-      const reveal = window.setTimeout(() => setPhase("ready"), 0);
-      return () => window.clearTimeout(reveal);
-    }
-    const node = section.current;
-    if (!node) return;
-    if (!window.IntersectionObserver) {
-      const start = window.setTimeout(run, 0);
-      return () => window.clearTimeout(start);
-    }
-    const observer = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting) && !started.current) {
-        run();
-        observer.disconnect();
-      }
-    }, { threshold: 0, rootMargin: "0px 0px 80px 0px" });
-    observer.observe(node);
-    // A missed intersection must never leave the project links inaccessible.
-    const fallback = window.setTimeout(() => {
-      if (!started.current) {
-        started.current = true;
-        setPhase("ready");
-      }
-    }, 8000);
-    return () => {
-      observer.disconnect();
-      window.clearTimeout(fallback);
-    };
-  }, [run]);
+  const totalCharacters = trace.reduce((sum, line) => sum + line.length, 0);
+  const visibleCharacters = Math.round(progress * totalCharacters);
+  const phase = progress === 0 ? "idle" : progress < 1 ? "typing" : "ready";
+  const skip = () => document.getElementById("work-projects")?.scrollIntoView({ behavior: "smooth" });
 
-  useEffect(() => {
-    if (phase !== "typing") return;
-    let line = 0;
-    let count = 0;
-    let timeout: number;
-    const advance = () => {
-      if (count < trace[line].length) {
-        count += 1;
-        setPosition({ line, count });
-        timeout = window.setTimeout(advance, 37);
-      } else if (line < trace.length - 1) {
-        line += 1;
-        count = 0;
-        setPosition({ line, count });
-        timeout = window.setTimeout(advance, 190);
-      } else {
-        timeout = window.setTimeout(() => setPhase("ready"), 330);
-      }
-    };
-    timeout = window.setTimeout(advance, 220);
-    return () => window.clearTimeout(timeout);
-  }, [phase, runId]);
-
-  const skip = () => setPhase("ready");
-
-  return <section id="work" ref={section} className={`content-section work-section work-v2 work-v2-${phase}`} aria-labelledby="work-title">
+  return <section id="work" className={`content-section work-section work-v2 work-v2-${phase}`} aria-labelledby="work-title">
     <div className="section-head reveal">
       <p className="section-index">02 / SELECTED WORK</p>
       <h2 id="work-title" className="section-title">Built, tested, revised.</h2>
       <p className="section-lead">Two projects in progress. A short index trace introduces them below.</p>
     </div>
-    <div className="work-compiler" aria-label="Project index trace">
+    <div className="work-build-track" ref={track}><div className="work-compiler" aria-label="Project index trace">
       <div className="work-command" dir="ltr" lang="en" aria-hidden="true">
         <span className="work-command-kicker">AN.OS / SELECTED WORK</span>
-        {trace.map((line, index) => <code key={line}>{phase === "ready" ? line : phase === "typing" && index <= position.line ? line.slice(0, index === position.line ? position.count : line.length) : ""}{phase === "typing" && index === position.line && <span className="work-v2-caret">▍</span>}</code>)}
+        {trace.map((line, index) => {
+          const before = trace.slice(0, index).reduce((sum, item) => sum + item.length, 0);
+          const count = Math.min(line.length, Math.max(0, visibleCharacters - before));
+          return <code key={line}>{line.slice(0, count)}{phase === "typing" && count < line.length && visibleCharacters >= before && <span className="work-v2-caret">▍</span>}</code>;
+        })}
       </div>
       <div className="work-compile-control">
-        <span role="status" aria-live="polite">{phase === "idle" ? "Waiting to index" : phase === "typing" ? "Indexing two projects…" : "Two projects ready"}</span>
+        <span role="status" aria-live="polite">{phase === "ready" ? "Two projects ready" : "Building index"}<span aria-hidden="true"> · {Math.round(progress * 100)}%</span></span>
         <div className="work-v2-actions">
-          {phase === "typing" && <button className="work-v2-skip" type="button" onClick={skip}>Skip animation</button>}
-          {phase === "ready" && <button className="script-button" type="button" onClick={run}>REPLAY ↻</button>}
+          {phase !== "ready" && <button className="work-v2-skip" type="button" onClick={skip}>Skip to projects ↓</button>}
         </div>
       </div>
-    </div>
-    <div className="project-list" hidden={phase !== "ready"}>
+      <div className="work-build-progress" role="progressbar" aria-label="Project index build" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)}><span style={{ width: `${progress * 100}%` }} /></div>
+    </div></div>
+    <div id="work-projects" className="project-list" inert={phase !== "ready"}>
       {projects.map((project, index) => <article className="project-entry reveal" key={project.slug}>
         <button className="project-trigger" type="button" aria-expanded={expanded === index} aria-controls={`project-detail-${index}`} onClick={() => setExpanded(expanded === index ? null : index)}>
           <span className="project-number">0{index + 1} / {project.category.en}</span>

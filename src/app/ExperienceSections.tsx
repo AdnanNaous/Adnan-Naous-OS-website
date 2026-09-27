@@ -6,17 +6,23 @@ import { contact, copy, socials } from "@/data/portfolio";
 export function CodexSection() {
   const [selected, setSelected] = useState(0);
   const [visible, setVisible] = useState(false);
+  const firstCycle = useRef(true);
   const section = useRef<HTMLElement>(null);
   useEffect(() => {
     const node = section.current;
     if (!node) return;
-    const observer = new IntersectionObserver(entries => setVisible(entries[0]?.isIntersecting ?? false), { threshold: 0.3 });
-    observer.observe(node);
+    const target = node.querySelector(".codex-console") ?? node;
+    const observer = new IntersectionObserver(entries => {
+      const inView = entries[0]?.isIntersecting ?? false;
+      if (inView && !node.classList.contains("is-live")) { firstCycle.current = true; setSelected(0); }
+      setVisible(inView);
+    }, { threshold: 0.08, rootMargin: "0px 0px -12% 0px" });
+    observer.observe(target);
     return () => observer.disconnect();
   }, []);
   useEffect(() => {
     if (!visible || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const timer = window.setTimeout(() => setSelected(index => (index + 1) % 3), 6000);
+    const timer = window.setTimeout(() => { firstCycle.current = false; setSelected(index => (index + 1) % 3); }, firstCycle.current ? 2600 : 6000);
     return () => window.clearTimeout(timer);
   }, [visible, selected]);
   const objectives = [
@@ -25,7 +31,7 @@ export function CodexSection() {
     { code: "CONTRIBUTE", title: "Grow into a role where I can help a team ship better work.", note: "Looking for an internship or junior opportunity." },
   ];
   const objective = objectives[selected];
-  return <section id="codex" ref={section} className="content-section codex-section" aria-labelledby="codex-title">
+  return <section id="codex" ref={section} className={`content-section codex-section${visible ? " is-live" : ""}`} aria-labelledby="codex-title">
     <div className="codex-top reveal"><p className="section-index">04 / CODEX · LONG GAME</p><h2 id="codex-title" className="section-title">The long game.</h2><p className="section-lead">A working log of the direction I’m taking, not a finished checklist.</p></div>
     <div className="codex-console reveal"><div className="codex-console-head"><span>AN / LONG-RANGE RECORD</span><span>AUTO CYCLE · SELECT ANY CHAPTER</span></div>
       <div className="codex-console-body"><ol className="codex-menu">{objectives.map((item, index) => <li key={item.code}><button type="button" className={selected === index ? "is-selected" : ""} onClick={() => setSelected(index)} aria-pressed={selected === index} aria-label={`0${index + 1}: ${item.title}`}><span>0{index + 1} / CHAPTER</span><strong>{item.code}</strong></button></li>)}</ol>
@@ -52,6 +58,8 @@ export function AboutSection() {
         setStep(Math.min(3, Math.floor(progress * 4)));
         stage.current.style.setProperty("--beacon-position", `${8 + progress * 84}%`);
         stage.current.style.setProperty("--story-fill", `${progress * 100}%`);
+        stage.current.style.setProperty("--story-code-opacity", `${Math.max(0, .36 * (1 - Math.max(0, (progress - .42) / .58))).toFixed(3)}`);
+        stage.current.style.setProperty("--story-code-shift", `${Math.round(progress * -38)}px`);
       });
     };
     addEventListener("scroll", update, { passive: true });
@@ -63,6 +71,14 @@ export function AboutSection() {
   return <section id="about" className="content-section about-section" aria-labelledby="about-title">
     <div className="section-head reveal"><p className="section-index">05 / BACKGROUND</p><h2 id="about-title" className="section-title">How I got here.</h2></div>
     <div className="story-track" ref={track}><div className="story-stage" ref={stage}>
+      <div className="story-code-field" aria-hidden="true">{[
+        "const origin = 'medicine';", "observe(signal);", "01 / a new direction", "if (curious) keepBuilding();",
+        "read(path[0]);", "// the first build", "trace(root, next);", "commit('learn by making');",
+        "for (const question of questions)", "  test(question);", "const work = revise(idea);", "signal += practice;",
+        "while (learning) experiment();", "open('new chapter');", "// systems / people / craft", "return usefulSoftware;",
+        "const route = ['learn','make'];", "measure(progress);", "// nothing is finished", "render(nextStep);",
+        "await findOpportunity();", "const path = choose('computing');", "// from one field to another", "continue();",
+      ].map((line, index) => <span key={index}>{line}</span>)}</div>
       <div className="story-orbit" aria-hidden="true"><span className="story-beacon"/></div>
       <div className="story-progress" aria-hidden="true"><span/></div>
       {copy.en.story.map((beat, index) => <div className={`story-panel${step === index ? " is-active" : ""}`} key={index}><span className="story-marker">0{index + 1} / {labels[index]}</span><p>{beat}</p></div>)}
