@@ -19,17 +19,25 @@ try {
   await page.waitForFunction(() => ["done", "skip"].includes(document.querySelector(".intro")?.getAttribute("data-state")), { timeout: 7000 });
   await page.locator(".intro").waitFor({ state: "hidden" });
   assert.equal(await page.locator("h1").count(), 1);
+  assert.equal(await page.locator("html").getAttribute("lang"), "en");
+  assert.equal(await page.locator(".language-toggle").count(), 0);
   assert.equal(await page.locator(".live-world canvas").count(), 1);
   assert.equal(await page.locator(".live-world").getAttribute("data-chapter"), "home");
   assert.equal(await page.locator("#home .command-action").count(), 0);
   assert(await page.locator(".hero-terminal").isVisible());
   assert(await page.evaluate(() => document.querySelector(".hero-coordinate").getBoundingClientRect().top > document.querySelector(".hero-terminal").getBoundingClientRect().bottom));
   await page.locator(".terminal-secret").click();
-  assert(await page.locator(".terminal-reveal").isVisible());
+  assert(await page.getByRole("dialog", { name: "AN/OS terminal" }).isVisible());
+  await page.locator("#terminal-input").fill("cat cv.json");
+  await page.locator("#terminal-input").press("Enter");
+  assert((await page.locator(".terminal-window-screen").textContent()).includes("Ain Shams University"));
+  await page.locator("#terminal-input").press("ArrowUp");
+  assert.equal(await page.locator("#terminal-input").inputValue(), "cat cv.json");
+  await page.locator("#terminal-input").press("Escape");
+  assert.equal(await page.getByRole("dialog", { name: "AN/OS terminal" }).count(), 0);
   assert.equal(await page.locator(".timeline-rail a").count(), 6);
   assert.equal(await page.locator("#codex").count(), 1);
   assert.equal(await page.locator("a[href*='kanz-ai']").count(), 0);
-  assert.equal(await page.locator(".site-nav").evaluate(element => getComputedStyle(element).backdropFilter), "none");
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
   const enterChapter = async id => {
     await page.evaluate(id => {
@@ -39,15 +47,18 @@ try {
     await page.waitForFunction(id => document.querySelector(".live-world")?.getAttribute("data-chapter") === id, id, { timeout: 3000 });
   };
   await enterChapter("now");
+  await page.locator(".site-nav.nav-scrolled").waitFor({ state: "attached" });
+  await page.evaluate(() => scrollBy({ top: -180, behavior: "instant" }));
+  await page.locator(".site-nav.nav-scrolled:not(.nav-hidden)").waitFor({ state: "attached" });
+  assert(await page.locator(".site-nav").evaluate(element => getComputedStyle(element).backdropFilter !== "none"));
   await enterChapter("work");
   await enterChapter("now");
-  assert.equal(await page.locator(".now-v2-energy-bars i").count(), 10);
-  assert.equal(await page.locator(".now-v2-energy-bars i.is-filled").count(), 7);
-  assert.equal(await page.locator(".now-v2-energy-bars").getAttribute("aria-valuenow"), "70");
+  assert.equal(await page.locator(".now-v2-energy-dial").getAttribute("aria-valuenow"), "70");
   assert.equal(await page.locator(".now-v2-node").count(), 6);
   await page.locator(".now-v2-node").nth(4).click();
-  assert.equal(await page.locator(".now-v2-node").nth(4).getAttribute("aria-pressed"), "true");
+  assert.equal(await page.locator(".now-v2-node").nth(4).getAttribute("aria-expanded"), "true");
   assert((await page.locator(".now-v2-readout").textContent()).includes("AI agents"));
+  assert.equal(await page.locator(".now-v2-readout").count(), 1);
   await page.locator("#codex").scrollIntoViewIfNeeded();
   await page.waitForFunction(() => document.querySelectorAll(".codex-menu button")[1]?.classList.contains("is-selected"), null, { timeout: 8500 });
   await page.locator(".codex-menu button").nth(1).click();
@@ -61,7 +72,7 @@ try {
   await page.evaluate(() => { const track = document.querySelector(".story-track"); const top = track.getBoundingClientRect().top + scrollY; scrollTo({ top: top + (track.offsetHeight - innerHeight) * 0.55, behavior: "instant" }); });
   await page.waitForFunction(() => document.querySelector(".story-panel.is-active")?.textContent?.includes("Adnan OS"), null, { timeout: 3000 });
   await page.evaluate(() => { const track = document.querySelector(".story-track"); const top = track.getBoundingClientRect().top + scrollY; scrollTo({ top: top + (track.offsetHeight - innerHeight) * 0.9, behavior: "instant" }); });
-  await page.waitForFunction(() => document.querySelector(".story-panel.is-active")?.textContent?.includes("bilingual portfolio"), null, { timeout: 3000 });
+  await page.waitForFunction(() => document.querySelector(".story-panel.is-active")?.textContent?.includes("portfolio"), null, { timeout: 3000 });
   await page.locator(".project-trigger").first().click();
   assert.equal(await page.locator(".project-trigger").first().getAttribute("aria-expanded"), "true");
   assert(await page.locator(".project-detail").first().isVisible());
@@ -76,7 +87,8 @@ try {
   await page.locator(".work-v2-skip").click();
   assert((await page.locator(".work-compile-control").textContent()).includes("Two projects ready"));
   assert.equal(await page.locator(".contact-section .contact-action").getAttribute("href"), "mailto:Adnan.Naous@outlook.com");
-  assert.equal(await page.locator(".transmission-foot a").getAttribute("href"), "mailto:Adnan.Naous@outlook.com");
+  assert(!(await page.locator("#contact").textContent()).includes("Adnan.Naous@outlook.com"));
+  assert.equal(await page.locator(".social-name small").count(), 0);
   await page.locator("#contact").scrollIntoViewIfNeeded();
   await page.locator(".contact-recall").waitFor({ state: "visible", timeout: 16000 });
   assert.equal(await page.locator(".contact-action").count(), 0);
@@ -86,11 +98,8 @@ try {
   assert((await page.locator(".site-footer").textContent()).includes("All rights reserved"));
   assert.equal((await page.request.get(new URL("/documents/adnan-naous-cv.pdf", page.url()).href)).status(), 200);
   await page.evaluate(() => scrollTo(0, 0));
-  await page.waitForTimeout(750);
-  await page.getByRole("button", { name: "Switch to Arabic" }).click();
-  assert.equal(await page.locator("html").getAttribute("dir"), "rtl");
-  await page.reload();
-  assert.equal(await page.locator("html").getAttribute("lang"), "ar");
+  await page.waitForTimeout(1100);
+  assert.notEqual(await page.locator(".visitor-clock strong").textContent(), "00:00");
   await page.setViewportSize({ width: 390, height: 844 });
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
   assert.deepEqual(errors, []);
@@ -104,7 +113,7 @@ try {
   await startPage.locator(".intro-retro-prompt").click();
   await startPage.locator(".intro").waitFor({ state: "hidden" });
   await startPage.close();
-  console.log("PASS: intro, live scene, terminal, timeline, Codex, story, projects, contact/CV, Arabic, mobile, no page errors.");
+  console.log("PASS: English intro, live scene, interactive terminal, timeline, Codex, story, projects, contact/CV, mobile, no page errors.");
 } finally {
   await browser.close();
 }

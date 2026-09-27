@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-export default function Intro({ ar }: { ar: boolean }) {
+export default function Intro() {
   const root = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export default function Intro({ ar }: { ar: boolean }) {
     }
 
     // The page opens on a fixed clock, independent of fonts, WebGL, or CSS events.
-    const closeTimer = window.setTimeout(() => { el.dataset.state = "done"; }, 1750);
+    const closeTimer = window.setTimeout(() => { el.dataset.state = "done"; }, 2550);
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") el.dataset.state = "done";
     };
@@ -35,9 +35,9 @@ export default function Intro({ ar }: { ar: boolean }) {
           </div>
           <div className="intro-retro-content">
             <span className="intro-retro-signal" aria-hidden="true">SIGNAL ACQUIRED &nbsp; / &nbsp; 001</span>
-            <button className="intro-retro-prompt" type="button" onClick={() => { if (root.current) root.current.dataset.state = "done"; }}>&gt; {ar ? "اضغط للبدء" : "PRESS START"}<span className="intro-retro-caret" aria-hidden="true">_</span></button>
-            <strong className="intro-retro-name">{ar ? <>عدنان<br />نعوس.</> : <>Adnan<br />Naous.</>}</strong>
-            <span className="intro-retro-tagline">{ar ? "برمجة • فضول • عوالم قيد البناء" : "CODE  /  CURIOSITY  /  WORLDS IN PROGRESS"}</span>
+            <button className="intro-retro-prompt" type="button" onClick={() => { if (root.current) root.current.dataset.state = "done"; }}>&gt; PRESS START<span className="intro-retro-caret" aria-hidden="true">_</span></button>
+            <strong className="intro-retro-name">Adnan<br />Naous.</strong>
+            <span className="intro-retro-tagline">CODE  /  CURIOSITY  /  WORLDS IN PROGRESS</span>
           </div>
           <div className="intro-retro-bottom" aria-hidden="true">
             <span>READY &gt; run portfolio.exe</span>
@@ -46,7 +46,7 @@ export default function Intro({ ar }: { ar: boolean }) {
         </div>
     </div>
     <button className="intro-retro-skip" type="button" onClick={() => { if (root.current) root.current.dataset.state = "done"; }}>
-      {ar ? "تخطّ المقدمة ←" : "SKIP INTRO →"}
+      SKIP INTRO →
     </button>
   </div>;
 }

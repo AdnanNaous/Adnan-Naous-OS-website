@@ -3,27 +3,25 @@
 import { useEffect, useState } from "react";
 import LiveWorld from "./LiveWorld";
 import Intro from "./Intro";
+import TerminalOverlay from "./TerminalOverlay";
 import { AboutSection, CodexSection, ContactSection } from "./ExperienceSections";
 import { WorkSectionV2 } from "./WorkSectionV2";
 import { NowSectionV2 } from "./NowSectionV2";
-import { contact, type Language } from "@/data/portfolio";
 
 const destinations = ["home", "work", "now", "codex", "about", "contact"] as const;
 
-export default function Portfolio({ initialLanguage }: { initialLanguage: Language }) {
-  const [lang, setLang] = useState<Language>(initialLanguage);
+export default function Portfolio() {
   const [active, setActive] = useState<(typeof destinations)[number]>("home");
   const [navHidden, setNavHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [secretOpen, setSecretOpen] = useState(false);
-  const ar = lang === "ar";
-  const text = (en: string, arabic: string) => ar ? arabic : en;
+  const [secondsHere, setSecondsHere] = useState(0);
 
   useEffect(() => {
-    document.documentElement.lang = lang;
-    document.documentElement.dir = ar ? "rtl" : "ltr";
-    document.cookie = `portfolio-language=${lang};path=/;max-age=31536000;SameSite=Lax`;
-  }, [lang, ar]);
+    const started = performance.now();
+    const timer = window.setInterval(() => setSecondsHere(Math.floor((performance.now() - started) / 1000)), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const sections = destinations.map(id => document.getElementById(id)).filter((section): section is HTMLElement => !!section);
@@ -66,56 +64,58 @@ export default function Portfolio({ initialLanguage }: { initialLanguage: Langua
   }, []);
 
   const nav = [
-    { id: "home", en: "Home", ar: "البداية" },
-    { id: "work", en: "Work", ar: "الأعمال" },
-    { id: "now", en: "Now", ar: "الآن" },
-    { id: "codex", en: "Codex", ar: "السجل" },
-    { id: "about", en: "About", ar: "عني" },
-    { id: "contact", en: "Contact", ar: "تواصل" },
+    { id: "home", label: "Home" },
+    { id: "work", label: "Work" },
+    { id: "now", label: "Now" },
+    { id: "codex", label: "Codex" },
+    { id: "about", label: "About" },
+    { id: "contact", label: "Contact" },
   ] as const;
+  const visitorClock = `${String(Math.floor(secondsHere / 60)).padStart(2, "0")}:${String(secondsHere % 60).padStart(2, "0")}`;
 
   return <>
     <LiveWorld />
     <div className="world-shade" aria-hidden="true" />
-    <Intro ar={ar} />
-    <a className="skip-link" href="#main">{text("Skip to content", "انتقل إلى المحتوى")}</a>
-    <header className={`site-nav${navHidden ? " nav-hidden" : ""}${scrolled ? " nav-scrolled" : ""}`}>
+    <Intro />
+    <a className="skip-link" href="#main">Skip to content</a>
+    <header className={`site-nav${navHidden ? " nav-hidden" : ""}${scrolled ? " nav-scrolled" : ""}`} style={scrolled ? { backdropFilter: "blur(22px) saturate(.55)" } : undefined}>
       <div className="nav-inner">
         <a className="wordmark" href="#home" onClick={() => setActive("home")}>Adnan Naous<span className="wordmark-period">.</span></a>
-        <nav aria-label={text("Main navigation", "التنقل الرئيسي")}>
-          {nav.map((item, index) => <a key={item.id} href={`#${item.id}`} className={active === item.id ? "is-current" : ""} aria-current={active === item.id ? "location" : undefined} onClick={() => setActive(item.id)}><span className="nav-code" aria-hidden="true">0{index + 1}</span>{item[lang]}</a>)}
+        <nav aria-label="Main navigation">
+          {nav.map((item, index) => <a key={item.id} href={`#${item.id}`} className={active === item.id ? "is-current" : ""} aria-current={active === item.id ? "location" : undefined} onClick={() => setActive(item.id)}><span className="nav-code" aria-hidden="true">0{index + 1}</span>{item.label}</a>)}
         </nav>
-        <button className="language-toggle" type="button" onClick={() => setLang(ar ? "en" : "ar")} aria-label={text("Switch to Arabic", "Switch to English")}>{ar ? "EN" : "AR"}</button>
+        <div className="visitor-clock" aria-label={`Time on page ${visitorClock}`}><span>SESSION</span><strong>{visitorClock}</strong></div>
       </div>
     </header>
-    <aside className="timeline-rail" aria-label={text("Page timeline", "خطّ الصفحة")}>
-      {nav.map((item, index) => <a key={item.id} href={`#${item.id}`} aria-label={`${index + 1}. ${item[lang]}`} aria-current={active === item.id ? "location" : undefined} className={active === item.id ? "is-current" : ""}><span className="timeline-dot"/><span className="timeline-label">0{index + 1} / {item[lang]}</span></a>)}
+    <aside className="timeline-rail" aria-label="Page timeline" style={{ "--timeline-progress": `${destinations.indexOf(active) / (destinations.length - 1) * 100}%` } as React.CSSProperties}>
+      <span className="timeline-progress" aria-hidden="true" />
+      {nav.map((item, index) => <a key={item.id} href={`#${item.id}`} aria-label={`${index + 1}. ${item.label}`} aria-current={active === item.id ? "location" : undefined} className={active === item.id ? "is-current" : ""}><span className="timeline-dot"/><span className="timeline-label">0{index + 1} / {item.label}</span></a>)}
     </aside>
 
     <main id="main">
       <section id="home" className="hero-section" aria-labelledby="hero-title">
         <div className="hero-content reveal">
-          <p className="section-index">01 / {text("SOFTWARE · LEARNING · CURIOSITY", "برمجة · تعلّم · فضول")}</p>
-          <h1 id="hero-title" className="hero-title"><span className="hero-name-line">{text("Adnan", "عدنان")}</span><span className="hero-name-line">{text("Naous.", "نعوس")}</span></h1>
-          <p className="hero-statement">{text("I build to learn. I keep what works.", "أبني لأتعلّم، وأحسّن ما ينجح.")}</p>
-          <p className="hero-intro">{text("I study Computer Science and AI at Arab Open University. These are the projects I’m learning from now.", "أدرس علوم الحاسوب والذكاء الاصطناعي في الجامعة العربية المفتوحة. هذه المشاريع التي أتعلم منها الآن.")}</p>
-          <div className="hero-terminal" aria-label={text("Welcome message", "رسالة ترحيب")}>
+          <p className="section-index">01 / SOFTWARE · LEARNING · CURIOSITY</p>
+          <h1 id="hero-title" className="hero-title"><span className="hero-name-line">Adnan</span><span className="hero-name-line">Naous.</span></h1>
+          <p className="hero-statement">I build to learn. I keep what works.</p>
+          <p className="hero-intro">I study Computer Science and AI at Arab Open University. These are the projects I’m learning from now.</p>
+          <div className="hero-terminal" aria-label="Welcome message">
             <div className="terminal-head"><span>AN // VISITOR CHANNEL</span><span>● LIVE</span></div>
-            <p><span aria-hidden="true">&gt; </span>{text("Welcome. Follow the signal.", "أهلًا بك. اتبع الإشارة.")}<span className="terminal-cursor" aria-hidden="true">_</span></p>
-            <button type="button" className="terminal-secret" onClick={() => setSecretOpen(!secretOpen)} aria-expanded={secretOpen}>{text("[ ? ] list commands", "[ ؟ ] اعرض الأوامر")}</button>
-            {secretOpen && <div className="terminal-reveal"><a href="#work">&gt; work</a><a href="#now">&gt; now</a><a href="#contact">&gt; contact</a></div>}
+            <p><span aria-hidden="true">&gt; </span>Welcome. Follow the signal.<span className="terminal-cursor" aria-hidden="true">_</span></p>
+            <button type="button" className="terminal-secret" onClick={() => setSecretOpen(true)} aria-expanded={secretOpen} aria-haspopup="dialog">[ ? ] OPEN TERMINAL</button>
           </div>
         </div>
         <div className="hero-coordinate" aria-hidden="true"><span>AN / 2026</span></div>
       </section>
 
-      <WorkSectionV2 lang={lang} />
-      <NowSectionV2 lang={lang} />
-      <CodexSection lang={lang} />
-      <AboutSection lang={lang} />
-      <ContactSection lang={lang} />
+      <WorkSectionV2 />
+      <NowSectionV2 />
+      <CodexSection />
+      <AboutSection />
+      <ContactSection />
     </main>
 
-    <footer className="site-footer"><div><strong>Adnan Naous.</strong><small>© {new Date().getFullYear()} · {text("All rights reserved", "جميع الحقوق محفوظة")}</small></div><p>{text("Thanks for spending a moment here.", "شكرًا لأنك منحتني بعض وقتك.")}</p><div className="footer-actions"><a href={contact.href}>{text("Email", "بريد")}</a><a href="#home">{text("Back to top", "إلى البداية")} ↑</a></div></footer>
+    <footer className="site-footer"><div><strong>Adnan Naous.</strong><small>© {new Date().getFullYear()} · All rights reserved</small></div><p>Thanks for spending a moment here.</p><div className="footer-actions"><a href="#home">Back to top ↑</a></div></footer>
+    {secretOpen && <TerminalOverlay onClose={() => setSecretOpen(false)} />}
   </>;
 }

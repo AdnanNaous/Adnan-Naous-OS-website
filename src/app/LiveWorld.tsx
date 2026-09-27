@@ -44,11 +44,17 @@ export default function LiveWorld() {
         resources.push(value);
         return value;
       };
-      const dark = mat(0x181818, 0.12, 0.87);
       const graphite = mat(0x383838, 0.48, 0.62);
       const steel = mat(0x858585, 0.66, 0.34);
       const pale = mat(0xc8c8c8, 0.4, 0.39);
       const glass = mat(0x313131, 0.27, 0.24);
+      const dark = mat(0x181818, 0.12, 0.87);
+      const charcoal = mat(0x252525, 0.08, 0.91);
+      const pewter = mat(0x777777, 0.53, 0.31);
+      const catFur = mat(0x626262, 0.05, 0.9);
+      const white = new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false, fog: false, transparent: true, opacity: 0, depthWrite: false });
+      const whiteHaze = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide, toneMapped: false, fog: false });
+      resources.push(white, whiteHaze);
       const line = new THREE.MeshBasicMaterial({ color: 0xd0d0d0, toneMapped: false });
       resources.push(line);
       const block = (parent: InstanceType<typeof THREE.Object3D>, material: InstanceType<typeof THREE.Material>, x: number, y: number, z: number, sx: number, sy: number, sz: number) => {
@@ -85,7 +91,7 @@ export default function LiveWorld() {
         block(parent, line, width / 2 - 0.2, height / 2 - 3.1, z + 0.42, 0.035, height - 0.2, 0.035);
       };
 
-      // Widely spaced structural gates retain depth without becoming a grid wall.
+      // Retain the existing structural passage and add life at its stations.
       block(scene, dark, 0, -3.35, -39, 34, 0.45, 105);
       const ribTransforms: number[][] = [];
       const railTransforms: number[][] = [];
@@ -99,29 +105,62 @@ export default function LiveWorld() {
       blocks(scene, graphite, ribTransforms);
       blocks(scene, line, railTransforms);
 
-      // Home: a monumental entry with luminous machined edges.
+      // Home: retain the original entry; the small cat gives it life.
       const home = station(0);
       portal(home, -2, 7.5, 6.9, steel);
       block(home, glass, 3.45, 0.1, -2.25, 0.55, 5.1, 1.5);
       for (let i = 0; i < 5; i++) block(home, pale, 3.92, 2.2 - i * 0.9, -1.38, 0.11, 0.3, 0.03);
       block(home, line, 0, -2.75, -1.9, 3.8, 0.055, 0.1);
+      const cat = new THREE.Group();
+      home.add(cat);
+      const catProfile = new THREE.Shape();
+      catProfile.moveTo(-1.02, 0.51);
+      catProfile.lineTo(-0.9, 0.62); catProfile.lineTo(-0.88, 0.9);
+      catProfile.lineTo(-0.74, 1.12); catProfile.lineTo(-0.64, 0.88);
+      catProfile.lineTo(-0.5, 1.04); catProfile.lineTo(-0.43, 0.76);
+      catProfile.bezierCurveTo(-0.17, 0.65, 0.25, 0.73, 0.58, 0.53);
+      catProfile.lineTo(0.64, 0.31);
+      catProfile.bezierCurveTo(0.22, 0.24, -0.32, 0.26, -0.67, 0.42);
+      catProfile.lineTo(-0.98, 0.43); catProfile.closePath();
+      const catGeometry = new THREE.ExtrudeGeometry(catProfile, { depth: 0.17, bevelEnabled: false, curveSegments: 10 });
+      resources.push(catGeometry);
+      const catBody = new THREE.Mesh(catGeometry, catFur);
+      catBody.position.z = -0.085; cat.add(catBody);
+      const legs: Array<InstanceType<typeof THREE.Group>> = [];
+      for (const x of [-0.48, 0.45]) for (const z of [-0.13, 0.13]) {
+        const leg = new THREE.Group(); leg.position.set(x, 0.3, z);
+        block(leg, catFur, 0, -0.14, 0, 0.09, 0.32, 0.085);
+        cat.add(leg); legs.push(leg);
+      }
+      const tailCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(0.53, 0.55, 0), new THREE.Vector3(0.89, 0.74, 0),
+        new THREE.Vector3(1.04, 1.12, 0), new THREE.Vector3(0.91, 1.43, 0),
+      ]);
+      const tailGeometry = new THREE.TubeGeometry(tailCurve, 12, 0.07, 5, false);
+      resources.push(tailGeometry);
+      cat.add(new THREE.Mesh(tailGeometry, catFur));
+      cat.position.set(3.2, -3.07, 0.7);
+      cat.scale.set(1, 1, 1);
 
-      // Work: a curled drawing surface, built from continuous concentric wire.
+      // Work: a folded steel ribbon, lit like a single gallery object.
       const work = station(-17);
-      portal(work, -2, 9.8, 7.5, graphite);
       const leaves = new THREE.Group();
-      leaves.position.set(5.1, 0.1, 0.5);
+      leaves.position.set(5.1, 0.0, -0.5);
       work.add(leaves);
-      for (let i = 0; i < 12; i++) {
-        const geometry = new THREE.TorusGeometry(1.1 + i * 0.16, i % 3 === 0 ? 0.025 : 0.012, 5, 88, Math.PI * (1.16 + i * 0.025));
-        const wire = new THREE.Mesh(geometry, i % 3 === 0 ? pale : line);
-        wire.position.z = -i * 0.12;
-        wire.rotation.set(0.25 + i * 0.018, -0.52, 0.34 + i * 0.15);
+      for (let i = 0; i < 9; i++) {
+        const geometry = new THREE.TorusGeometry(1.15 + i * 0.2, 0.045, 6, 76, Math.PI * (1.18 + i * 0.022));
+        const wire = new THREE.Mesh(geometry, i % 3 === 0 ? pale : pewter);
+        wire.position.z = -i * 0.24;
+        wire.rotation.set(0.24 + i * 0.035, -0.55, 0.2 + i * 0.16);
         leaves.add(wire);
         resources.push(geometry);
       }
-      block(work, steel, 4.25, -2.72, -2.8, 5.3, 0.16, 2.8);
-      for (let i = 0; i < 5; i++) block(work, line, 2.1 + i * 1.08, -2.61, -1.38, 0.4, 0.025, 0.035);
+      block(work, charcoal, 5.2, -2.8, -1.7, 6.8, 0.5, 4.6);
+      block(work, steel, 5.2, -2.52, -1.7, 6.3, 0.028, 4.1);
+      block(work, line, 5.2, -2.49, 0.33, 5.1, 0.012, 0.02);
+      const workLight = new THREE.SpotLight(0xffffff, 68, 20, 0.53, 0.72, 1.3);
+      workLight.position.set(3.1, 5.8, 3); workLight.target.position.set(5.1, -1, -1.5);
+      work.add(workLight, workLight.target);
 
       // Now: a physical work table with a stepped set of active modules.
       const now = station(-34);
@@ -155,22 +194,41 @@ export default function LiveWorld() {
         block(codex, pale, -3.6, y, -2.1 - (i % 3) * 0.25, 1.9, 0.06, 0.12);
       }
 
-      // About: an open archive; shelf depth becomes visible as the camera passes.
+      // About: interlocking arcs read as a quiet, unfinished personal monogram.
       const about = station(-68);
-      for (let row = 0; row < 2; row++) for (let level = 0; level < 4; level++) {
-        const x = row ? 4.1 : -4.1;
-        block(about, steel, x, -2.65 + level * 1.35, -2.2, 4.1, 0.13, 2.1);
-        for (let j = 0; j < 6; j++) block(about, (j + level) % 4 === 0 ? pale : glass, x - 1.65 + j * 0.64, -2.07 + level * 1.35, -2.2, 0.4, 1.05, 0.76);
+      const arcs = new THREE.Group(); arcs.position.set(-3.8, -0.2, -2.8); about.add(arcs);
+      for (let i = 0; i < 5; i++) {
+        const geometry = new THREE.TorusGeometry(1.8 + i * 0.24, 0.09, 8, 80, Math.PI * 1.42);
+        const arc = new THREE.Mesh(geometry, i % 2 ? graphite : pewter);
+        arc.rotation.set(0.06 * i, -0.12 * i, -0.34 + i * 0.17);
+        arc.position.set(i * 0.11, i * 0.1, -i * 0.32);
+        arcs.add(arc); resources.push(geometry);
       }
-      portal(about, -5, 10.8, 8.3, graphite);
+      block(about, charcoal, -3.4, -2.8, -3.4, 6.5, 0.45, 4.5);
+      block(about, line, -3.4, -2.55, -1.16, 4.5, 0.012, 0.025);
+      const aboutLight = new THREE.SpotLight(0xffffff, 54, 16, 0.52, 0.72, 1.4);
+      aboutLight.position.set(-5.5, 5.5, 1); aboutLight.target.position.set(-3.5, -0.2, -3);
+      about.add(aboutLight, aboutLight.target);
 
-      // Contact: a bright exit cut into the same architecture.
+      // Contact: the hinged slab physically opens to a white plane beyond.
       const contact = station(-85);
-      portal(contact, -4.5, 11, 8.5, steel);
-      block(contact, dark, 0, 0.52, -5.15, 7.4, 7.2, 0.28);
-      block(contact, glass, 0, 0.52, -4.92, 6.85, 6.7, 0.08);
-      block(contact, line, 0, -2.88, -4.72, 4.8, 0.055, 0.07);
-      for (let i = 0; i < 8; i++) block(contact, line, -3.1 + i * 0.89, 3.76, -4.7, 0.45, 0.04, 0.07);
+      const doorX = 2.8, doorZ = -5.8, doorWidth = 5.0, doorHeight = 6.7;
+      block(contact, graphite, doorX - doorWidth / 2 - 0.18, 0.2, doorZ, 0.4, 7.2, 0.8);
+      block(contact, graphite, doorX + doorWidth / 2 + 0.18, 0.2, doorZ, 0.4, 7.2, 0.8);
+      block(contact, graphite, doorX, 3.75, doorZ, 5.75, 0.4, 0.8);
+      block(contact, white, doorX, 0.2, doorZ - 0.3, doorWidth, doorHeight, 0.08);
+      const doorHinge = new THREE.Group();
+      doorHinge.position.set(doorX - doorWidth / 2, 0.2, doorZ + 0.1);
+      contact.add(doorHinge);
+      block(doorHinge, charcoal, doorWidth / 2, 0, 0, doorWidth, doorHeight, 0.2);
+      block(doorHinge, steel, doorWidth - 0.57, -0.15, 0.12, 0.11, 0.6, 0.08);
+      block(contact, pale, doorX, -3.105, doorZ + 2.5, 4.2, 0.012, 5.7);
+      for (let i = 0; i < 3; i++) {
+        const beam = block(contact, whiteHaze, doorX, -1.9 + i * 0.95, doorZ + 1.2 + i * 0.65, 4.4 + i * 1.6, 0.025, 6 + i * 1.5);
+        beam.rotation.x = 0.08 + i * 0.03;
+      }
+      const exitLight = new THREE.PointLight(0xffffff, 0, 16, 1.3);
+      exitLight.position.set(doorX, 0.8, doorZ + 0.8); contact.add(exitLight);
 
       scene.add(new THREE.HemisphereLight(0xd5d5d5, 0x181818, 1.15));
       const key = new THREE.DirectionalLight(0xffffff, 2.6);
@@ -196,6 +254,20 @@ export default function LiveWorld() {
       const currentLook = new THREE.Vector3();
       let progress = 0, pointerX = 0, pointerY = 0, frame = 0, lastTime = 0;
       let active = false, contextLost = false;
+      const shade = document.querySelector<HTMLElement>(".world-shade");
+      const contactSection = document.getElementById("contact");
+      const contactContent = contactSection?.querySelector<HTMLElement>(".contact-content");
+      const socialLine = contactContent?.querySelector<HTMLElement>(".social-line");
+      const lightLayer = document.createElement("div");
+      lightLayer.setAttribute("aria-hidden", "true");
+      Object.assign(lightLayer.style, {
+        position: "absolute", left: "0", top: "0", width: "100%", height: "100%", zIndex: "0", pointerEvents: "none",
+        background: "linear-gradient(90deg, #d6d6d6, #ffffff 38%, #f7f7f7)",
+        opacity: "0", visibility: "hidden", filter: "blur(1px)",
+      });
+      const foreground = Array.from(contactContent?.children ?? []).filter((element): element is HTMLElement => element instanceof HTMLElement).map((element) => ({ element, position: element.style.position, zIndex: element.style.zIndex }));
+      foreground.forEach(({ element }) => { if (getComputedStyle(element).position === "static") element.style.position = "relative"; element.style.zIndex = "1"; });
+      contactContent?.appendChild(lightLayer);
       const measure = () => {
         const maxScroll = Math.max(1, document.documentElement.scrollHeight - innerHeight);
         CHAPTERS.forEach((id, index) => {
@@ -220,16 +292,44 @@ export default function LiveWorld() {
         const a = shots[chapter], b = shots[chapter + 1];
         const mix = (x: number, y: number) => THREE.MathUtils.lerp(x, y, blend);
         const mobile = host.clientWidth < 700;
-        const side = document.documentElement.dir === "rtl" ? -1 : 1;
         desiredPosition.set(mix(a.p[0], b.p[0]), mix(a.p[1], b.p[1]), mix(a.p[2], b.p[2]));
         desiredLook.set(mix(a.t[0], b.t[0]), mix(a.t[1], b.t[1]), mix(a.t[2], b.t[2]));
-        desiredPosition.x += (mobile ? 1.1 : 0.55) * side;
-        desiredLook.x += (mobile ? 1.1 : 0.55) * side;
+        desiredPosition.x += mobile ? 1.1 : 0.55;
+        desiredLook.x += mobile ? 1.1 : 0.55;
         if (!reduced.matches && !mobile) { desiredPosition.x += pointerX * 0.22; desiredPosition.y -= pointerY * 0.14; }
         camera.position.lerp(desiredPosition, damping);
         currentLook.lerp(desiredLook, damping);
         camera.lookAt(currentLook);
         camera.rotation.z += (mix(a.roll, b.roll) - camera.rotation.z) * damping;
+        const doorOpen = THREE.MathUtils.smoothstep(progress, 4.42, 4.94);
+        doorHinge.rotation.y = -1.16 * doorOpen;
+        white.opacity = doorOpen;
+        whiteHaze.opacity = 0.13 * doorOpen;
+        exitLight.intensity = 68 * doorOpen;
+        const exposure = THREE.MathUtils.smoothstep(progress, 4.55, 4.96);
+        if (shade) shade.style.opacity = String(1 - 0.78 * exposure);
+        if (contactSection) contactSection.style.backgroundColor = `rgba(9,9,9,${0.55 - 0.43 * exposure})`;
+        if (socialLine) socialLine.style.backgroundColor = `rgba(9,9,9,${0.88 * exposure})`;
+        if (exposure > 0.001 && contactSection) {
+          const contentRect = contactContent?.getBoundingClientRect();
+          const project = (x: number, y: number) => {
+            const point = new THREE.Vector3(x, y, contact.position.z + doorZ - 0.3).project(camera);
+            return `${((point.x + 1) * host.clientWidth / 2 - (contentRect?.left ?? 0)).toFixed(1)}px ${((1 - point.y) * host.clientHeight / 2 - (contentRect?.top ?? 0)).toFixed(1)}px`;
+          };
+          const left = doorX - 0.1, right = doorX + doorWidth / 2 - 0.16;
+          lightLayer.style.clipPath = `polygon(${project(left, 3.48)}, ${project(right, 3.48)}, ${project(right, -3.07)}, ${project(left, -3.07)})`;
+          lightLayer.style.opacity = String(0.82 * exposure);
+          lightLayer.style.visibility = "visible";
+        } else {
+          lightLayer.style.visibility = "hidden";
+        }
+        if (!reduced.matches && progress < 0.7) {
+          const walk = performance.now() * 0.00042;
+          cat.position.x = 3.3 + Math.sin(walk) * 0.9;
+          cat.scale.x = Math.cos(walk) < 0 ? 1 : -1;
+          cat.position.y = -3.07 + Math.abs(Math.sin(walk * 8)) * 0.018;
+          legs.forEach((leg, index) => { leg.rotation.z = Math.sin(walk * 8 + (index === 0 || index === 3 ? 0 : Math.PI)) * 0.33; });
+        }
         renderer.render(scene, camera);
       };
       const resize = () => {
@@ -251,7 +351,7 @@ export default function LiveWorld() {
         const delta = Math.min(0.05, Math.max(0, (time - lastTime) / 1000));
         lastTime = time;
         render(1 - Math.exp(-4.8 * delta));
-        if (camera.position.distanceToSquared(desiredPosition) > 0.00001 || currentLook.distanceToSquared(desiredLook) > 0.00001) schedule();
+        if (progress < 0.7 || camera.position.distanceToSquared(desiredPosition) > 0.00001 || currentLook.distanceToSquared(desiredLook) > 0.00001) schedule();
       };
       const schedule = () => {
         if (!frame && active && !contextLost) { lastTime = lastTime || performance.now(); frame = requestAnimationFrame(animate); }
@@ -299,6 +399,11 @@ export default function LiveWorld() {
         reduced.removeEventListener("change", onMotion);
         renderer.domElement.removeEventListener("webglcontextlost", onContextLost);
         renderer.domElement.removeEventListener("webglcontextrestored", onContextRestored);
+        shade?.style.removeProperty("opacity");
+        contactSection?.style.removeProperty("background-color");
+        socialLine?.style.removeProperty("background-color");
+        foreground.forEach(({ element, position, zIndex }) => { element.style.position = position; element.style.zIndex = zIndex; });
+        lightLayer.remove();
         resources.forEach((resource) => resource.dispose());
         renderer.dispose(); renderer.domElement.remove();
       };

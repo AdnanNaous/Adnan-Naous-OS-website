@@ -17,19 +17,12 @@
 .work-v2 .project-schematic path{stroke-dashoffset:0;animation:none}
 .work-v2 .project-schematic circle{opacity:1;animation:none}
 .work-v2 .project-trigger:focus-visible,.work-v2 .script-button:focus-visible,.work-v2 .work-v2-skip:focus-visible,.work-v2 .text-link:focus-visible{outline:2px solid #fff;outline-offset:4px}
-[dir=rtl] .work-v2 .section-title{font-size:clamp(38px,5vw,65px);line-height:1.42;letter-spacing:0;overflow:visible}
-[dir=rtl] .work-v2 .section-head{max-width:100%;text-align:start}
-[dir=rtl] .work-v2 .work-command{direction:ltr;text-align:left}
-[dir=rtl] .work-v2 .work-compile-control{text-align:start}
-[dir=rtl] .work-v2 .work-v2-skip{font-family:var(--font-thmanyah),sans-serif;letter-spacing:0}
-[dir=rtl] .work-v2 .project-number,[dir=rtl] .work-v2 .project-verb{letter-spacing:0}
 @media(max-width:700px){
   .work-v2 .work-compiler{gap:14px}
   .work-v2 .work-command{font-size:clamp(10px,2.9vw,12px)}
   .work-v2 .work-command code{overflow-x:auto}
   .work-v2 .work-compile-control{align-items:center}
   .work-v2 .work-v2-actions{min-height:44px}
-  [dir=rtl] .work-v2 .section-title{font-size:clamp(36px,8.6vw,50px);line-height:1.44}
 }
 @media(prefers-reduced-motion:reduce){
   .work-v2 .work-v2-caret,.work-v2-ready .project-entry{animation:none;opacity:1;transform:none}
