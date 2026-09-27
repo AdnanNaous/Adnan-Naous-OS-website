@@ -20,6 +20,7 @@ try {
   await page.locator(".intro").waitFor({ state: "hidden" });
   assert.equal(await page.locator("h1").count(), 1);
   assert.equal(await page.locator(".live-world canvas").count(), 1);
+  assert.equal(await page.locator(".live-world").getAttribute("data-chapter"), "home");
   assert.equal(await page.locator("#home .command-action").count(), 0);
   assert(await page.locator(".hero-terminal").isVisible());
   assert(await page.evaluate(() => document.querySelector(".hero-coordinate").getBoundingClientRect().top > document.querySelector(".hero-terminal").getBoundingClientRect().bottom));
@@ -30,10 +31,16 @@ try {
   assert.equal(await page.locator("a[href*='kanz-ai']").count(), 0);
   assert.equal(await page.locator(".site-nav").evaluate(element => getComputedStyle(element).backdropFilter), "none");
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
-  const phaseAtTop = await page.locator(".tech-script-b output").textContent();
-  await page.locator("#now").scrollIntoViewIfNeeded();
-  await page.waitForTimeout(200);
-  assert.notEqual(await page.locator(".tech-script-b output").textContent(), phaseAtTop);
+  const enterChapter = async id => {
+    await page.evaluate(id => {
+      const section = document.getElementById(id);
+      scrollTo({ top: section.getBoundingClientRect().top + scrollY - innerHeight * 0.18, behavior: "instant" });
+    }, id);
+    await page.waitForFunction(id => document.querySelector(".live-world")?.getAttribute("data-chapter") === id, id, { timeout: 3000 });
+  };
+  await enterChapter("now");
+  await enterChapter("work");
+  await enterChapter("now");
   assert.equal(await page.locator(".now-v2-energy-bars i").count(), 10);
   assert.equal(await page.locator(".now-v2-energy-bars i.is-filled").count(), 7);
   assert.equal(await page.locator(".now-v2-energy-bars").getAttribute("aria-valuenow"), "70");

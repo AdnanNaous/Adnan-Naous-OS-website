@@ -45,39 +45,6 @@
 [dir=rtl] .work-section .project-main strong{letter-spacing:0;line-height:1.36}
 [dir=rtl] .work-compile-control>span,[dir=rtl] .work-compile-control .script-button{font-family:var(--font-thmanyah),sans-serif;letter-spacing:0}
 
-/* Now: a root and six connected learning nodes, without cards. */
-.now-section .section-head{margin-bottom:60px}
-.now-section .skill-tree{display:block;max-width:1160px;margin:0 auto;border:0;background:none}
-.now-section .skill-root{position:relative;display:grid;justify-items:center;gap:8px;width:min(480px,100%);min-height:0;margin:auto;padding:36px 20px 20px;border:0;clip-path:none;background:none;text-align:center}
-.now-section .skill-root:before{content:none}
-.skill-root-orbit{position:absolute;top:0;left:50%;width:96px;height:96px;border:1px solid #ffffff9a;border-radius:50%;transform:translateX(-50%);box-shadow:0 0 0 8px #ffffff0a,inset 0 0 0 9px #ffffff0c}
-.skill-root-orbit:before{content:"";position:absolute;inset:31px;border:1px solid #fff;border-radius:50%;background:radial-gradient(circle,#d3d3d3 0 2px,transparent 3px)}
-.skill-root-label{position:relative;margin-top:98px;color:#aaa;font:600 10px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em}
-.skill-root strong{font-size:clamp(25px,3.4vw,43px);font-weight:600;line-height:1.25}
-.skill-root small{color:#bcbcbc;font-size:12px}
-.now-section .activity-status{max-width:360px;margin:17px auto 0;text-align:start}
-.now-section .activity-bars{height:16px}
-.skill-paths{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5%;margin-top:95px}
-.skill-paths:before{content:"";position:absolute;top:-52px;left:16.66%;right:16.66%;height:1px;background:#ffffff73;transform:scaleX(0);transition:transform .9s ease .2s}
-.skill-tree.in-view .skill-paths:before{transform:scaleX(1)}
-.skill-path{position:relative;text-align:center}
-.skill-path:before{content:"";position:absolute;top:-52px;left:50%;width:1px;height:45px;background:#ffffff8c;transform:scaleY(0);transform-origin:top;transition:transform .65s ease .65s}
-.skill-tree.in-view .skill-path:before{transform:scaleY(1)}
-.skill-path-label{color:#bbb;font:600 10px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.15em}
-.skill-nodes{display:flex;justify-content:center;gap:16px;margin-top:27px}
-.skill-node{display:grid;justify-items:center;align-content:start;gap:16px;min-width:0;width:48%;padding:0;background:none;border:0;color:#bbb;text-align:center;opacity:.5;transform:translateY(20px);transition:opacity .45s,transform .55s,color .35s}
-.skill-tree.in-view .skill-node{opacity:1;transform:none}
-.skill-tree.in-view .skill-node:nth-child(2){transition-delay:.28s}
-.skill-node:hover,.skill-node.is-selected{color:#fff}
-.skill-node-ring{position:relative;display:grid;place-items:center;width:clamp(76px,8vw,118px);height:clamp(76px,8vw,118px);border:1px solid #ffffff72;border-radius:50%;background:radial-gradient(circle at 50% 45%,#343434,#101010 65%,#070707);box-shadow:0 0 0 7px #ffffff09,inset 0 0 0 10px #ffffff09;transition:border-color .3s,box-shadow .3s,transform .3s}
-.skill-node-ring:before{content:"";position:absolute;inset:11px;border:1px dashed #ffffff75;border-radius:50%}
-.skill-node-ring span{font:700 22px/1 ui-monospace,SFMono-Regular,Consolas,monospace}
-.skill-node:hover .skill-node-ring,.skill-node.is-selected .skill-node-ring{border-color:#fff;box-shadow:0 0 0 8px #ffffff17,0 0 24px #ffffff3b,inset 0 0 0 10px #ffffff0d;transform:scale(1.04)}
-.skill-node strong{max-width:150px;font-size:clamp(13px,1.35vw,17px);font-weight:600;line-height:1.35}
-.skill-readout{display:grid;grid-template-columns:180px 1fr;gap:25px;align-items:baseline;max-width:780px;margin:75px auto 0;padding-top:18px;border-top:1px solid #ffffff70}
-.skill-readout span{font:600 10px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.12em;color:#aaa}
-.skill-readout p{font-size:clamp(19px,2.2vw,29px);line-height:1.4}
-[dir=rtl] .skill-root-label,[dir=rtl] .skill-path-label,[dir=rtl] .skill-readout span{font-family:var(--font-thmanyah),sans-serif;letter-spacing:0}
 
 /* Codex: an open manuscript with chapter selectors, not a spreadsheet. */
 .codex-section .codex-console{border:0;box-shadow:none;background:none;overflow:visible}
@@ -128,7 +95,6 @@
 @media(max-width:900px){
   .work-section .project-trigger{grid-template-columns:100px minmax(0,1fr) 110px auto;gap:13px}
   .project-schematic{width:110px;height:70px}
-  .skill-paths{gap:1%}
   .codex-section .codex-console-body{gap:4%}
 }
 @media(max-width:700px){
@@ -147,15 +113,6 @@
   .work-section .project-schematic{grid-column:2;grid-row:2;width:85px;height:70px}
   .work-section .project-verb{grid-column:1/-1;text-align:start}
   [dir=rtl] .work-section .section-title{font-size:clamp(39px,9vw,52px);line-height:1.35}
-  .now-section .section-head{margin-bottom:45px}
-  .skill-paths{grid-template-columns:1fr;gap:58px;margin-top:65px}
-  .skill-paths:before{left:50%;right:auto;top:-42px;width:1px;height:calc(100% + 25px);transform:scaleY(0);transform-origin:top}
-  .skill-tree.in-view .skill-paths:before{transform:scaleY(1)}
-  .skill-path:before{content:none}
-  .skill-path{padding:0 12px;background:#090909e8}
-  .skill-nodes{gap:15px}
-  .skill-node-ring{width:82px;height:82px}
-  .skill-readout{grid-template-columns:1fr;gap:12px;margin-top:55px}
   .codex-section .codex-console-body{display:block;padding-top:20px;min-height:0}
   .codex-section .codex-menu{gap:7px}
   .codex-section .codex-menu button{padding:13px 16px}
@@ -176,7 +133,6 @@
 @media(prefers-reduced-motion:reduce){
   .hero-content.in-view .hero-name-line,.work-compiler.is-running .work-command code,.project-schematic path,.project-schematic circle,.story-beacon,.codex-section .codex-detail{animation:none;clip-path:none;opacity:1;transform:none}
   .project-schematic path{stroke-dashoffset:0}
-  .skill-paths:before,.skill-path:before,.skill-node{transform:none;opacity:1;transition:none}
   .story-track{height:auto}
   .story-stage{position:relative;top:auto;height:auto;min-height:0}
 }

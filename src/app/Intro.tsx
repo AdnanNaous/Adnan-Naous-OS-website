@@ -27,23 +27,23 @@ export default function Intro({ ar }: { ar: boolean }) {
 
   return <div className="intro intro-retro" data-state="loading" ref={root}>
     <div className="intro-retro-set">
-      <div className="intro-retro-bezel">
         <div className="intro-retro-screen">
+          <div className="intro-retro-glass" aria-hidden="true" />
           <div className="intro-retro-top" aria-hidden="true">
             <span>AN/OS <span className="intro-retro-led">●</span> 01</span>
-            <span>CH 01 / 2026</span>
+            <span>INPUT 01 &nbsp;·&nbsp; 2026</span>
           </div>
           <div className="intro-retro-content">
+            <span className="intro-retro-signal" aria-hidden="true">SIGNAL ACQUIRED &nbsp; / &nbsp; 001</span>
             <button className="intro-retro-prompt" type="button" onClick={() => { if (root.current) root.current.dataset.state = "done"; }}>&gt; {ar ? "اضغط للبدء" : "PRESS START"}<span className="intro-retro-caret" aria-hidden="true">_</span></button>
             <strong className="intro-retro-name">{ar ? <>عدنان<br />نعوس.</> : <>Adnan<br />Naous.</>}</strong>
             <span className="intro-retro-tagline">{ar ? "برمجة • فضول • عوالم قيد البناء" : "CODE  /  CURIOSITY  /  WORLDS IN PROGRESS"}</span>
           </div>
           <div className="intro-retro-bottom" aria-hidden="true">
             <span>READY &gt; run portfolio.exe</span>
-            <span>● REC</span>
+            <span>● LIVE</span>
           </div>
         </div>
-      </div>
     </div>
     <button className="intro-retro-skip" type="button" onClick={() => { if (root.current) root.current.dataset.state = "done"; }}>
       {ar ? "تخطّ المقدمة ←" : "SKIP INTRO →"}

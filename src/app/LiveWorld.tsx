@@ -2,7 +2,9 @@
 
 import { useEffect, useRef } from "react";
 
-/** A continuous, original WebGL environment. No backdrop image or game asset. */
+const CHAPTERS = ["home", "work", "now", "codex", "about", "contact"] as const;
+
+/** An authored passage: scroll determines a reversible camera position in one scene. */
 export default function LiveWorld() {
   const mount = useRef<HTMLDivElement>(null);
 
@@ -15,6 +17,7 @@ export default function LiveWorld() {
 
     import("three").then((THREE) => {
       if (disposed) return;
+      const reduced = matchMedia("(prefers-reduced-motion: reduce)");
       let renderer: InstanceType<typeof THREE.WebGLRenderer>;
       try {
         renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
@@ -23,271 +26,283 @@ export default function LiveWorld() {
         announceReady();
         return;
       }
-
-      const media = matchMedia("(prefers-reduced-motion: reduce)");
-      renderer.setPixelRatio(Math.min(devicePixelRatio, innerWidth < 700 ? 1.45 : 1.8));
-      renderer.setClearColor(0x090909);
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.16;
-      renderer.shadowMap.enabled = innerWidth >= 900 && !media.matches;
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.toneMappingExposure = 1.28;
+      renderer.setClearColor(0x090909);
       host.appendChild(renderer.domElement);
-
+      const resources: Array<{ dispose: () => void }> = [];
       const scene = new THREE.Scene();
-      scene.fog = new THREE.FogExp2(0x090909, 0.025);
-      const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 110);
-      camera.position.set(0, 1.0, 18);
-      camera.lookAt(0, 0, 0);
-      // One high, near-side key makes the metal planes readable. A quiet rim
-      // separates the silhouette without filling in its cast shadows.
-      scene.add(new THREE.HemisphereLight(0xd8d8d8, 0x101010, 0.62));
-      const key = new THREE.DirectionalLight(0xffffff, 3.6);
-      key.position.set(-5, 8, 9);
-      key.castShadow = true;
-      key.shadow.mapSize.set(1024, 1024);
-      key.shadow.camera.left = -10;
-      key.shadow.camera.right = 10;
-      key.shadow.camera.top = 10;
-      key.shadow.camera.bottom = -10;
-      key.shadow.camera.near = 1;
-      key.shadow.camera.far = 35;
-      key.shadow.bias = -0.0002;
-      key.shadow.normalBias = 0.025;
-      scene.add(key);
-      const rim = new THREE.DirectionalLight(0xc8c8c8, 1.1);
-      rim.position.set(6, 4, -7);
-      scene.add(rim);
-      const bounce = new THREE.DirectionalLight(0x9a9a9a, 0.42);
-      bounce.position.set(4, -3, 5);
-      scene.add(bounce);
+      scene.background = new THREE.Color(0x090909);
+      scene.fog = new THREE.FogExp2(0x090909, 0.013);
+      const camera = new THREE.PerspectiveCamera(49, 1, 0.1, 140);
+      const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
+      const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 12);
+      resources.push(boxGeometry, cylinderGeometry);
+      const mat = (color: number, metalness = 0.3, roughness = 0.6) => {
+        const value = new THREE.MeshStandardMaterial({ color, metalness, roughness });
+        resources.push(value);
+        return value;
+      };
+      const dark = mat(0x181818, 0.12, 0.87);
+      const graphite = mat(0x383838, 0.48, 0.62);
+      const steel = mat(0x858585, 0.66, 0.34);
+      const pale = mat(0xc8c8c8, 0.4, 0.39);
+      const glass = mat(0x313131, 0.27, 0.24);
+      const line = new THREE.MeshBasicMaterial({ color: 0xd0d0d0, toneMapped: false });
+      resources.push(line);
+      const block = (parent: InstanceType<typeof THREE.Object3D>, material: InstanceType<typeof THREE.Material>, x: number, y: number, z: number, sx: number, sy: number, sz: number) => {
+        const mesh = new THREE.Mesh(boxGeometry, material);
+        mesh.position.set(x, y, z);
+        mesh.scale.set(sx, sy, sz);
+        parent.add(mesh);
+        return mesh;
+      };
+      const blocks = (parent: InstanceType<typeof THREE.Object3D>, material: InstanceType<typeof THREE.Material>, transforms: number[][]) => {
+        const mesh = new THREE.InstancedMesh(boxGeometry, material, transforms.length);
+        const dummy = new THREE.Object3D();
+        transforms.forEach(([x, y, z, sx, sy, sz], index) => {
+          dummy.position.set(x, y, z);
+          dummy.scale.set(sx, sy, sz);
+          dummy.updateMatrix();
+          mesh.setMatrixAt(index, dummy.matrix);
+        });
+        mesh.instanceMatrix.needsUpdate = true;
+        parent.add(mesh);
+        return mesh;
+      };
+      const station = (z: number) => {
+        const group = new THREE.Group();
+        group.position.z = z;
+        scene.add(group);
+        return group;
+      };
+      const portal = (parent: InstanceType<typeof THREE.Object3D>, z: number, width: number, height: number, material: InstanceType<typeof THREE.Material>) => {
+        block(parent, material, -width / 2, height / 2 - 3.1, z, 0.32, height, 0.8);
+        block(parent, material, width / 2, height / 2 - 3.1, z, 0.32, height, 0.8);
+        block(parent, material, 0, height - 3.1, z, width + 0.3, 0.36, 0.8);
+        block(parent, line, -width / 2 + 0.2, height / 2 - 3.1, z + 0.42, 0.035, height - 0.2, 0.035);
+        block(parent, line, width / 2 - 0.2, height / 2 - 3.1, z + 0.42, 0.035, height - 0.2, 0.035);
+      };
 
-      const world = new THREE.Group();
-      scene.add(world);
-      const steel = new THREE.MeshPhysicalMaterial({ color: 0x999999, metalness: 0.38, roughness: 0.38, clearcoat: 0.24, clearcoatRoughness: 0.32 });
-      const graphite = new THREE.MeshStandardMaterial({ color: 0x393939, metalness: 0.18, roughness: 0.68 });
-      const bright = new THREE.MeshStandardMaterial({ color: 0xd0d0d0, metalness: 0.3, roughness: 0.34, emissive: 0x303030, emissiveIntensity: 0.08 });
-      const glass = new THREE.MeshPhysicalMaterial({ color: 0x9b9b9b, metalness: 0.08, roughness: 0.24, transparent: true, opacity: 0.24, depthWrite: false, side: THREE.DoubleSide });
-      const resources: Array<{ dispose: () => void }> = [steel, graphite, bright, glass];
+      // Widely spaced structural gates retain depth without becoming a grid wall.
+      block(scene, dark, 0, -3.35, -39, 34, 0.45, 105);
+      const ribTransforms: number[][] = [];
+      const railTransforms: number[][] = [];
+      for (let i = 0; i < 15; i++) {
+        const z = 8 - i * 7;
+        ribTransforms.push([-8.6, 0.55, z, 0.14, 8, 0.24], [8.6, 0.55, z, 0.14, 8, 0.24]);
+        if (i % 3 === 0) ribTransforms.push([0, 4.55, z, 17.4, 0.12, 0.24]);
+      }
+      for (let i = 0; i < 42; i++) ribTransforms.push([i % 2 ? -5.5 : 5.5, -3.09, 8 - i * 2.45, 0.12, 0.02, 0.9]);
+      railTransforms.push([-8.3, -2.55, -41, 0.025, 0.025, 100], [8.3, -2.55, -41, 0.025, 0.025, 100]);
+      blocks(scene, graphite, ribTransforms);
+      blocks(scene, line, railTransforms);
 
-      // The core is built as one architectural object: an inner spine, glass shell,
-      // concentric machined bands, and hinged radial vanes.
-      const spineGeometry = new THREE.CylinderGeometry(0.31, 0.58, 6.8, 7);
-      const spine = new THREE.Mesh(spineGeometry, steel);
-      spine.castShadow = true;
-      spine.receiveShadow = true;
-      spine.rotation.z = -0.1;
-      world.add(spine);
-      resources.push(spineGeometry);
-      const shellGeometry = new THREE.CylinderGeometry(0.7, 0.8, 5.45, 8, 1, true);
-      const shell = new THREE.Mesh(shellGeometry, glass);
-      shell.rotation.z = -0.1;
-      world.add(shell);
-      resources.push(shellGeometry);
-      const slitGeometry = new THREE.BoxGeometry(0.075, 5.8, 0.075);
-      const slit = new THREE.Mesh(slitGeometry, bright);
-      slit.castShadow = true;
-      slit.position.set(-0.19, 0.08, 0.49);
-      slit.rotation.z = -0.1;
-      world.add(slit);
-      resources.push(slitGeometry);
+      // Home: a monumental entry with luminous machined edges.
+      const home = station(0);
+      portal(home, -2, 7.5, 6.9, steel);
+      block(home, glass, 3.45, 0.1, -2.25, 0.55, 5.1, 1.5);
+      for (let i = 0; i < 5; i++) block(home, pale, 3.92, 2.2 - i * 0.9, -1.38, 0.11, 0.3, 0.03);
+      block(home, line, 0, -2.75, -1.9, 3.8, 0.055, 0.1);
 
-      const rings: InstanceType<typeof THREE.Mesh>[] = [];
-      for (const [index, radius, tube, z] of [[0, 3.15, 0.075, 0], [1, 2.48, 0.045, 0.55], [2, 3.65, 0.025, -0.65]] as const) {
-        const geometry = new THREE.TorusGeometry(radius, tube, 10, 112);
-        const ring = new THREE.Mesh(geometry, index === 1 ? bright : steel);
-        ring.castShadow = true;
-        ring.receiveShadow = true;
-        ring.rotation.set(0.22 + index * 0.31, -0.58 + index * 0.18, -0.26 + index * 0.22);
-        ring.position.z = z;
-        world.add(ring);
-        rings.push(ring);
+      // Work: a curled drawing surface, built from continuous concentric wire.
+      const work = station(-17);
+      portal(work, -2, 9.8, 7.5, graphite);
+      const leaves = new THREE.Group();
+      leaves.position.set(5.1, 0.1, 0.5);
+      work.add(leaves);
+      for (let i = 0; i < 12; i++) {
+        const geometry = new THREE.TorusGeometry(1.1 + i * 0.16, i % 3 === 0 ? 0.025 : 0.012, 5, 88, Math.PI * (1.16 + i * 0.025));
+        const wire = new THREE.Mesh(geometry, i % 3 === 0 ? pale : line);
+        wire.position.z = -i * 0.12;
+        wire.rotation.set(0.25 + i * 0.018, -0.52, 0.34 + i * 0.15);
+        leaves.add(wire);
         resources.push(geometry);
       }
+      block(work, steel, 4.25, -2.72, -2.8, 5.3, 0.16, 2.8);
+      for (let i = 0; i < 5; i++) block(work, line, 2.1 + i * 1.08, -2.61, -1.38, 0.4, 0.025, 0.035);
 
-      // Brushed fasteners and travelling white energy traces add scale cues
-      // without introducing a second palette or a separate visual object.
-      const boltGeometry = new THREE.CylinderGeometry(0.045, 0.045, 0.025, 6);
-      const bolts = new THREE.InstancedMesh(boltGeometry, bright, 32);
-      const boltDummy = new THREE.Object3D();
-      for (let i = 0; i < 32; i++) {
-        const angle = i / 32 * Math.PI * 2;
-        boltDummy.position.set(Math.cos(angle) * 3.13, Math.sin(angle) * 3.13, 0.13);
-        boltDummy.rotation.set(Math.PI / 2, 0, angle);
-        boltDummy.updateMatrix();
-        bolts.setMatrixAt(i, boltDummy.matrix);
-      }
-      bolts.instanceMatrix.needsUpdate = true;
-      world.add(bolts);
-      resources.push(boltGeometry);
-
-      const energy: InstanceType<typeof THREE.Mesh>[] = [];
-      const energyMaterials: InstanceType<typeof THREE.MeshBasicMaterial>[] = [];
+      // Now: a physical work table with a stepped set of active modules.
+      const now = station(-34);
+      block(now, graphite, 5.4, -2.45, -2, 6.5, 0.24, 3.8);
       for (let i = 0; i < 4; i++) {
-        const geometry = new THREE.TorusGeometry(3.17 + i * 0.12, 0.012, 6, 40, 0.52 + i * 0.2);
-        const material = new THREE.MeshBasicMaterial({ color: 0xf2f2f2, transparent: true, opacity: 0.25, depthWrite: false });
-        const trace = new THREE.Mesh(geometry, material);
-        trace.position.z = 0.17 + i * 0.03;
-        trace.rotation.z = i * 1.7;
-        world.add(trace);
-        energy.push(trace);
-        energyMaterials.push(material);
-        resources.push(geometry, material);
+        const h = 0.65 + i * 0.35;
+        block(now, i === 2 ? pale : glass, 3.25 + i * 1.38, -2.25 + h / 2, -2.1 - i * 0.2, 0.72, h, 0.75);
+        block(now, line, 3.25 + i * 1.38, -2.18 + h, -1.7 - i * 0.2, 0.55, 0.026, 0.028);
+      }
+      for (let i = 0; i < 7; i++) block(now, i === 3 ? line : steel, 2.1 + i * 0.8, -2.3, -0.5, 0.025, 0.03, 2.6);
+      portal(now, -2, 9.6, 7, graphite);
+
+      // Codex: a rail-lined core, with circuit-like light travelling in depth.
+      const codex = station(-51);
+      portal(codex, -1.5, 8.5, 8.2, steel);
+      const core = new THREE.Mesh(cylinderGeometry, graphite);
+      core.position.set(3.25, -0.2, -2.5);
+      core.scale.set(0.55, 5.5, 0.55);
+      codex.add(core);
+      for (let i = 0; i < 7; i++) {
+        const geometry = new THREE.TorusGeometry(0.78 + i * 0.16, 0.018, 5, 64, Math.PI * 1.73);
+        const ring = new THREE.Mesh(geometry, i % 2 ? pale : line);
+        ring.position.set(3.25, -0.2, -2.5 - i * 0.25);
+        ring.rotation.z = i * 0.39;
+        codex.add(ring);
+        resources.push(geometry);
+      }
+      for (let i = 0; i < 9; i++) {
+        const y = -2.55 + i * 0.58;
+        block(codex, line, 3.25, y, -1.88, 0.76, 0.032, 0.035);
+        block(codex, pale, -3.6, y, -2.1 - (i % 3) * 0.25, 1.9, 0.06, 0.12);
       }
 
-      const vaneGeometry = new THREE.BoxGeometry(0.14, 0.68, 0.28);
-      const vanes = new THREE.InstancedMesh(vaneGeometry, graphite, 64);
-      vanes.castShadow = true;
-      vanes.receiveShadow = true;
-      const dummy = new THREE.Object3D();
-      for (let i = 0; i < 64; i++) {
-        const angle = i / 64 * Math.PI * 2;
-        const radius = 3.45 + Math.sin(i * 4.3) * 0.06;
-        dummy.position.set(Math.sin(angle) * radius, Math.cos(angle) * radius, Math.sin(i * 1.9) * 0.12 - 0.12);
-        dummy.rotation.set(0.12, 0.22, -angle);
-        dummy.scale.set(1, 0.75 + (i % 5) * 0.16, 1);
-        dummy.updateMatrix();
-        vanes.setMatrixAt(i, dummy.matrix);
+      // About: an open archive; shelf depth becomes visible as the camera passes.
+      const about = station(-68);
+      for (let row = 0; row < 2; row++) for (let level = 0; level < 4; level++) {
+        const x = row ? 4.1 : -4.1;
+        block(about, steel, x, -2.65 + level * 1.35, -2.2, 4.1, 0.13, 2.1);
+        for (let j = 0; j < 6; j++) block(about, (j + level) % 4 === 0 ? pale : glass, x - 1.65 + j * 0.64, -2.07 + level * 1.35, -2.2, 0.4, 1.05, 0.76);
       }
-      vanes.instanceMatrix.needsUpdate = true;
-      world.add(vanes);
-      resources.push(vaneGeometry);
+      portal(about, -5, 10.8, 8.3, graphite);
 
-      const architecture = new THREE.Group();
-      scene.add(architecture);
-      const wallGeometry = new THREE.BoxGeometry(0.22, 12, 1.2);
-      const wall = new THREE.InstancedMesh(wallGeometry, graphite, 26);
-      wall.castShadow = true;
-      wall.receiveShadow = true;
-      for (let i = 0; i < 26; i++) {
-        const side = i % 2 ? -1 : 1;
-        const depth = Math.floor(i / 2);
-        dummy.position.set(side * (7.8 + depth * 0.37), -0.9, -4.5 - depth * 1.45);
-        dummy.rotation.set(0, side * 0.18, 0);
-        dummy.scale.set(1, 1 + (depth % 3) * 0.25, 1);
-        dummy.updateMatrix();
-        wall.setMatrixAt(i, dummy.matrix);
+      // Contact: a bright exit cut into the same architecture.
+      const contact = station(-85);
+      portal(contact, -4.5, 11, 8.5, steel);
+      block(contact, dark, 0, 0.52, -5.15, 7.4, 7.2, 0.28);
+      block(contact, glass, 0, 0.52, -4.92, 6.85, 6.7, 0.08);
+      block(contact, line, 0, -2.88, -4.72, 4.8, 0.055, 0.07);
+      for (let i = 0; i < 8; i++) block(contact, line, -3.1 + i * 0.89, 3.76, -4.7, 0.45, 0.04, 0.07);
+
+      scene.add(new THREE.HemisphereLight(0xd5d5d5, 0x181818, 1.15));
+      const key = new THREE.DirectionalLight(0xffffff, 2.6);
+      key.position.set(-6, 9, 7);
+      scene.add(key);
+      for (let i = 0; i < CHAPTERS.length; i++) {
+        const point = new THREE.PointLight(0xffffff, 42, 18, 1.5);
+        point.position.set(i % 2 ? -3.5 : 4, 2.1, -i * 17 - 1);
+        scene.add(point);
       }
-      wall.instanceMatrix.needsUpdate = true;
-      architecture.add(wall);
-      resources.push(wallGeometry);
 
-      const floorGeometry = new THREE.PlaneGeometry(160, 160);
-      const floor = new THREE.Mesh(floorGeometry, new THREE.MeshStandardMaterial({ color: 0x181818, metalness: 0.04, roughness: 0.92 }));
-      floor.receiveShadow = true;
-      floor.rotation.x = -Math.PI / 2;
-      floor.position.y = -5.1;
-      scene.add(floor);
-      resources.push(floorGeometry, floor.material);
-      const grid = new THREE.GridHelper(150, 72, 0x666666, 0x333333);
-      grid.position.y = -5.07;
-      (grid.material as InstanceType<typeof THREE.Material>).transparent = true;
-      (grid.material as InstanceType<typeof THREE.Material>).opacity = 0.045;
-      scene.add(grid);
-      resources.push(grid.geometry, grid.material as InstanceType<typeof THREE.Material>);
-
-      // A transparent rear receiver lets the moving assembly throw a soft
-      // silhouette onto the architecture, even while the object hovers.
-      const catcherGeometry = new THREE.PlaneGeometry(22, 14);
-      const catcherMaterial = new THREE.ShadowMaterial({ color: 0x000000, opacity: 0.34, depthWrite: false });
-      const catcher = new THREE.Mesh(catcherGeometry, catcherMaterial);
-      catcher.position.set(0, 0, -2.8);
-      catcher.receiveShadow = true;
-      catcher.visible = renderer.shadowMap.enabled;
-      scene.add(catcher);
-      resources.push(catcherGeometry, catcherMaterial);
-
-      const dustCount = innerWidth < 700 ? 45 : 75;
-      const positions = new Float32Array(dustCount * 3);
-      for (let i = 0; i < dustCount; i++) {
-        positions[i * 3] = (Math.random() - 0.5) * 20;
-        positions[i * 3 + 1] = (Math.random() - 0.5) * 11;
-        positions[i * 3 + 2] = (Math.random() - 0.5) * 18;
-      }
-      const dustGeometry = new THREE.BufferGeometry();
-      dustGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-      const dustMaterial = new THREE.PointsMaterial({ color: 0xb0b0b0, size: 0.024, transparent: true, opacity: 0.28, sizeAttenuation: true });
-      const dust = new THREE.Points(dustGeometry, dustMaterial);
-      scene.add(dust);
-      resources.push(dustGeometry, dustMaterial);
-
-      let frame = 0, lastFrame = 0, targetX = 0, targetY = 0, scrollProgress = 0;
-      let pointerX = 0, pointerY = 0;
+      const shots = [
+        { p: [0, 0.45, 12.8], t: [2.3, 0.2, -3.5], roll: -0.035 },
+        { p: [-1.55, 1.15, -4.2], t: [2.25, 0.0, -20], roll: 0.025 },
+        { p: [1.2, 1.9, -21.3], t: [2.1, -0.5, -36], roll: -0.025 },
+        { p: [-1.4, 0.7, -38.2], t: [2.5, 0.0, -54], roll: 0.03 },
+        { p: [0.8, 0.2, -55.1], t: [-1.4, -0.4, -72], roll: -0.02 },
+        { p: [0, 0.6, -74.2], t: [0, 0.4, -90], roll: 0 },
+      ];
+      const anchors = new Array<number>(CHAPTERS.length).fill(0);
+      const desiredPosition = new THREE.Vector3();
+      const desiredLook = new THREE.Vector3();
+      const currentLook = new THREE.Vector3();
+      let progress = 0, pointerX = 0, pointerY = 0, frame = 0, lastTime = 0;
+      let active = false, contextLost = false;
+      const measure = () => {
+        const maxScroll = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+        CHAPTERS.forEach((id, index) => {
+          const section = document.getElementById(id);
+          anchors[index] = index === 0 ? 0 : Math.min(maxScroll, Math.max(0, (section?.getBoundingClientRect().top ?? 0) + scrollY - innerHeight * 0.42));
+        });
+        for (let i = 1; i < anchors.length; i++) anchors[i] = Math.max(anchors[i], anchors[i - 1] + 1);
+      };
+      const readScroll = () => {
+        if (reduced.matches) { progress = 0; host.dataset.chapter = "home"; return; }
+        const previous = progress;
+        let index = 0;
+        while (index < anchors.length - 2 && scrollY >= anchors[index + 1]) index++;
+        progress = Math.min(CHAPTERS.length - 1, index + THREE.MathUtils.clamp((scrollY - anchors[index]) / (anchors[index + 1] - anchors[index]), 0, 1));
+        host.dataset.chapter = CHAPTERS[Math.round(progress)];
+        if (Math.abs(progress - previous) > 0.0001) schedule();
+      };
+      const render = (damping: number) => {
+        const chapter = Math.min(shots.length - 2, Math.floor(progress));
+        const raw = progress - chapter;
+        const blend = raw * raw * (3 - 2 * raw);
+        const a = shots[chapter], b = shots[chapter + 1];
+        const mix = (x: number, y: number) => THREE.MathUtils.lerp(x, y, blend);
+        const mobile = host.clientWidth < 700;
+        const side = document.documentElement.dir === "rtl" ? -1 : 1;
+        desiredPosition.set(mix(a.p[0], b.p[0]), mix(a.p[1], b.p[1]), mix(a.p[2], b.p[2]));
+        desiredLook.set(mix(a.t[0], b.t[0]), mix(a.t[1], b.t[1]), mix(a.t[2], b.t[2]));
+        desiredPosition.x += (mobile ? 1.1 : 0.55) * side;
+        desiredLook.x += (mobile ? 1.1 : 0.55) * side;
+        if (!reduced.matches && !mobile) { desiredPosition.x += pointerX * 0.22; desiredPosition.y -= pointerY * 0.14; }
+        camera.position.lerp(desiredPosition, damping);
+        currentLook.lerp(desiredLook, damping);
+        camera.lookAt(currentLook);
+        camera.rotation.z += (mix(a.roll, b.roll) - camera.rotation.z) * damping;
+        renderer.render(scene, camera);
+      };
       const resize = () => {
         const width = host.clientWidth, height = host.clientHeight;
         if (!width || !height) return;
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
+        renderer.setPixelRatio(Math.min(devicePixelRatio, width < 700 ? 1.2 : 1.7));
         renderer.setSize(width, height, false);
-        renderer.setPixelRatio(Math.min(devicePixelRatio, width < 700 ? 1.45 : 1.8));
-        renderer.shadowMap.enabled = width >= 900 && !media.matches;
-        catcher.visible = renderer.shadowMap.enabled;
-        if (media.matches) renderer.render(scene, camera);
+        camera.aspect = width / height;
+        camera.fov = width < 700 ? 61 : 49;
+        camera.updateProjectionMatrix();
+        measure();
+        readScroll();
+        if (reduced.matches) render(1);
+        else schedule();
+      };
+      const animate = (time: number) => {
+        frame = 0;
+        if (!active || contextLost) return;
+        const delta = Math.min(0.05, Math.max(0, (time - lastTime) / 1000));
+        lastTime = time;
+        render(1 - Math.exp(-4.8 * delta));
+        if (camera.position.distanceToSquared(desiredPosition) > 0.00001 || currentLook.distanceToSquared(desiredLook) > 0.00001) schedule();
+      };
+      const schedule = () => {
+        if (!frame && active && !contextLost) { lastTime = lastTime || performance.now(); frame = requestAnimationFrame(animate); }
       };
       const onPointer = (event: PointerEvent) => {
-        if (media.matches || event.pointerType !== "mouse") return;
+        if (event.pointerType !== "mouse" || reduced.matches) return;
         pointerX = event.clientX / innerWidth - 0.5;
         pointerY = event.clientY / innerHeight - 0.5;
+        schedule();
       };
-      const onScroll = () => {
-        scrollProgress = media.matches ? 0 : Math.min(1, scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight));
+      const onVisibility = () => {
+        active = !document.hidden && !reduced.matches;
+        cancelAnimationFrame(frame);
+        frame = 0;
+        if (active && !contextLost) { lastTime = performance.now(); schedule(); }
       };
-      const draw = (time: number) => {
-        if (document.hidden) return;
-        if (time - lastFrame > 25 || media.matches) {
-          const mobile = innerWidth < 700;
-          const side = document.documentElement.dir === "rtl" ? -1 : 1;
-          targetX = mobile ? 0 : side * (3.3 - scrollProgress * 1.5);
-          targetY = mobile ? -2.3 + scrollProgress * 1.8 : 0.1 + scrollProgress * 0.9;
-          const ease = media.matches ? 1 : 0.035;
-          world.position.x += (targetX + pointerX * (mobile ? 0 : 0.7) - world.position.x) * ease;
-          world.position.y += (targetY - pointerY * 0.38 - world.position.y) * ease;
-          const targetScale = mobile ? 0.74 : 1.02;
-          world.scale.setScalar(targetScale);
-          const tick = media.matches ? 0 : time * 0.00012;
-          world.rotation.y += ((scrollProgress * 0.5 + pointerX * 0.16 + tick * 0.55) - world.rotation.y) * 0.025;
-          world.rotation.z += ((scrollProgress * -0.18 + pointerY * 0.08) - world.rotation.z) * 0.03;
-          rings[0].rotation.z = -0.26 + tick * 0.24;
-          rings[1].rotation.z = -0.04 - tick * 0.34;
-          rings[2].rotation.z = 0.18 + tick * 0.13;
-          energy.forEach((trace, index) => {
-            trace.rotation.z = index * 1.7 + tick * (index % 2 ? -0.22 : 0.3);
-            energyMaterials[index].opacity = media.matches ? 0.32 : 0.16 + (Math.sin(tick * 4 + index * 1.9) + 1) * 0.15;
-          });
-          dust.rotation.y = tick * 0.05;
-          renderer.render(scene, camera);
-          lastFrame = time;
-        }
-        if (!media.matches) frame = requestAnimationFrame(draw);
-      };
-      const onVisibility = () => { cancelAnimationFrame(frame); if (!document.hidden) frame = requestAnimationFrame(draw); };
+      const onMotion = () => { readScroll(); onVisibility(); if (reduced.matches && !contextLost) render(1); };
+      const onContextLost = (event: Event) => { event.preventDefault(); contextLost = true; cancelAnimationFrame(frame); host.dataset.fallback = "true"; };
+      const onContextRestored = () => { contextLost = false; delete host.dataset.fallback; resize(); onVisibility(); };
       const observer = new ResizeObserver(resize);
       observer.observe(host);
+      const contentObserver = new ResizeObserver(() => { measure(); readScroll(); });
+      contentObserver.observe(document.documentElement);
+      addEventListener("resize", resize);
+      addEventListener("scroll", readScroll, { passive: true });
       addEventListener("pointermove", onPointer, { passive: true });
-      addEventListener("scroll", onScroll, { passive: true });
       document.addEventListener("visibilitychange", onVisibility);
-      const contextLost = (event: Event) => { event.preventDefault(); cancelAnimationFrame(frame); host.dataset.fallback = "true"; };
-      renderer.domElement.addEventListener("webglcontextlost", contextLost);
+      reduced.addEventListener("change", onMotion);
+      renderer.domElement.addEventListener("webglcontextlost", onContextLost);
+      renderer.domElement.addEventListener("webglcontextrestored", onContextRestored);
       resize();
-      onScroll();
-      renderer.render(scene, camera);
+      readScroll();
+      render(1);
       host.dataset.ready = "true";
       announceReady();
-      frame = requestAnimationFrame(draw);
-
+      onVisibility();
       cleanup = () => {
+        active = false;
         cancelAnimationFrame(frame);
-        observer.disconnect();
+        observer.disconnect(); contentObserver.disconnect();
+        removeEventListener("resize", resize);
+        removeEventListener("scroll", readScroll);
         removeEventListener("pointermove", onPointer);
-        removeEventListener("scroll", onScroll);
         document.removeEventListener("visibilitychange", onVisibility);
-        renderer.domElement.removeEventListener("webglcontextlost", contextLost);
-        resources.forEach(resource => resource.dispose());
-        renderer.dispose();
-        renderer.domElement.remove();
+        reduced.removeEventListener("change", onMotion);
+        renderer.domElement.removeEventListener("webglcontextlost", onContextLost);
+        renderer.domElement.removeEventListener("webglcontextrestored", onContextRestored);
+        resources.forEach((resource) => resource.dispose());
+        renderer.dispose(); renderer.domElement.remove();
       };
-    }).catch(() => { host.dataset.fallback = "true"; announceReady(); });
-
+    }).catch(() => { if (!disposed) { host.dataset.fallback = "true"; announceReady(); } });
     return () => { disposed = true; cleanup(); };
   }, []);
 

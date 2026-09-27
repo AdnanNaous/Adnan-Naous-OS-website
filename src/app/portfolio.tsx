@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import LiveWorld from "./LiveWorld";
-import TechField from "./TechField";
 import Intro from "./Intro";
 import { AboutSection, CodexSection, ContactSection } from "./ExperienceSections";
 import { WorkSectionV2 } from "./WorkSectionV2";
@@ -78,7 +77,6 @@ export default function Portfolio({ initialLanguage }: { initialLanguage: Langua
   return <>
     <LiveWorld />
     <div className="world-shade" aria-hidden="true" />
-    <TechField />
     <Intro ar={ar} />
     <a className="skip-link" href="#main">{text("Skip to content", "انتقل إلى المحتوى")}</a>
     <header className={`site-nav${navHidden ? " nav-hidden" : ""}${scrolled ? " nav-scrolled" : ""}`}>
