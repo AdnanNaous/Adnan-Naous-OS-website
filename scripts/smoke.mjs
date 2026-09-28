@@ -121,7 +121,10 @@ try {
     return bounds.left <= 12 && bounds.top <= 12 && bounds.right >= innerWidth - 12 && bounds.bottom >= innerHeight - 12;
   }), "Phone CRT should fill the viewport");
   assert(await startPage.evaluate(() => document.querySelector(".intro-retro-skip").getBoundingClientRect().bottom < document.querySelector(".intro-retro-bottom").getBoundingClientRect().top), "Phone Skip should clear the status line");
-  await startPage.locator(".intro-retro-prompt").click();
+  // The short intro may already be exiting by the time viewport geometry is checked.
+  if (await startPage.locator(".intro").getAttribute("data-state") === "loading") {
+    await startPage.locator(".intro-retro-prompt").evaluate(button => button.click());
+  }
   await startPage.locator(".intro").waitFor({ state: "hidden" });
   await startPage.locator(".terminal-secret").click();
   await startPage.locator("#terminal-input").click();

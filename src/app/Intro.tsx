@@ -1,29 +1,36 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 export default function Intro() {
   const root = useRef<HTMLDivElement>(null);
+  const close = useCallback(() => {
+    const el = root.current;
+    if (!el || el.dataset.state !== "loading") return;
+    el.dataset.state = "done";
+    el.inert = true;
+  }, []);
 
   useEffect(() => {
     const el = root.current;
     if (!el) return;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
       el.dataset.state = "skip";
+      el.inert = true;
       return;
     }
 
-    // The page opens on a fixed clock, independent of fonts, WebGL, or CSS events.
-    const closeTimer = window.setTimeout(() => { el.dataset.state = "done"; }, 2550);
+    // Count from navigation so hydration never adds another wait to the entrance.
+    const closeTimer = window.setTimeout(close, Math.max(0, 950 - performance.now()));
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") el.dataset.state = "done";
+      if (event.key === "Escape") close();
     };
     window.addEventListener("keydown", onKeyDown);
     return () => {
       window.clearTimeout(closeTimer);
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, []);
+  }, [close]);
 
   return <div className="intro intro-retro" data-state="loading" ref={root}>
     <div className="intro-retro-set">
@@ -35,7 +42,7 @@ export default function Intro() {
           </div>
           <div className="intro-retro-content">
             <span className="intro-retro-signal" aria-hidden="true">SIGNAL ACQUIRED &nbsp; / &nbsp; 001</span>
-            <button className="intro-retro-prompt" type="button" onClick={() => { if (root.current) root.current.dataset.state = "done"; }}>&gt; PRESS START<span className="intro-retro-caret" aria-hidden="true">_</span></button>
+            <button className="intro-retro-prompt" type="button" onClick={close}>&gt; PRESS START<span className="intro-retro-caret" aria-hidden="true">_</span></button>
             <strong className="intro-retro-name">Adnan<br />Naous.</strong>
             <span className="intro-retro-tagline">CODE  /  CURIOSITY  /  WORLDS IN PROGRESS</span>
           </div>
@@ -45,7 +52,7 @@ export default function Intro() {
           </div>
         </div>
     </div>
-    <button className="intro-retro-skip" type="button" onClick={() => { if (root.current) root.current.dataset.state = "done"; }}>
+    <button className="intro-retro-skip" type="button" onClick={close}>
       SKIP INTRO →
     </button>
   </div>;

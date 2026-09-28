@@ -64,6 +64,37 @@ export default function Portfolio() {
     return () => { observer.disconnect(); root.classList.remove("motion-ready"); };
   }, []);
 
+  useEffect(() => {
+    const root = document.documentElement;
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    let lastY = scrollY;
+    let lastTime = performance.now();
+    let frame = 0;
+    let settle = 0;
+    const clear = () => {
+      root.style.removeProperty("--motion-shift");
+      root.style.removeProperty("--motion-skew");
+    };
+    const update = () => {
+      if (reduced.matches || frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const now = performance.now();
+        const y = scrollY;
+        const speed = Math.max(-1, Math.min(1, ((y - lastY) / Math.max(16, now - lastTime)) * 1000 / 1800));
+        const touch = matchMedia("(pointer: coarse)").matches;
+        root.style.setProperty("--motion-shift", `${(speed * (touch ? 1 : 2)).toFixed(2)}px`);
+        root.style.setProperty("--motion-skew", `${(touch ? 0 : speed * .65).toFixed(3)}deg`);
+        lastY = y;
+        lastTime = now;
+        window.clearTimeout(settle);
+        settle = window.setTimeout(clear, 140);
+      });
+    };
+    addEventListener("scroll", update, { passive: true });
+    return () => { removeEventListener("scroll", update); cancelAnimationFrame(frame); window.clearTimeout(settle); clear(); };
+  }, []);
+
   const nav = [
     { id: "home", label: "Home" },
     { id: "work", label: "Work" },
