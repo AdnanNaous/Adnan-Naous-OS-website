@@ -118,7 +118,7 @@ export function ContactSection() {
         <div className="transmission-slot">{signal === "ready" ? <a className="contact-action" href={contact.href} onClick={event => { event.preventDefault(); setIncidentOpen(true); }}><span className="contact-action-copy"><small>01 / NEW MESSAGE</small><strong className="contact-glitch">Write an email</strong></span><span className="contact-action-arrow" aria-hidden="true">↗</span></a> : <button className="contact-recall" type="button" onClick={() => setSignal("ready")}><span className="contact-action-copy"><small>01 / CHANNEL PAUSED</small><strong>Reopen email</strong></span><span className="contact-action-arrow" aria-hidden="true">↻</span></button>}</div>
         <div className="transmission-foot"><span>A note from you starts the next conversation.</span><span>MAIL CHANNEL / OPEN</span></div>
       </div>
-      <div className="social-line">{socials.map((social, index) => <a key={social.id} href={social.url} target="_blank" rel="noreferrer"><span className="social-number">0{index + 1}</span><span className="social-name">{social.label}</span><span aria-hidden="true">↗</span></a>)}</div>
+      <div className="social-line">{socials.map((social, index) => <a key={social.id} href={social.url} target="_blank" rel="noreferrer"><span className="social-number">0{index + 1}</span><span className="social-name">{social.label}{"note" in social && <small>{social.note}</small>}</span><span aria-hidden="true">↗</span></a>)}</div>
     </div>
     {incidentOpen && <ContactIncident emailHref={contact.href} onClose={() => setIncidentOpen(false)} onFix={() => {
       setSignal("ready");

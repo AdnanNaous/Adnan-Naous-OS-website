@@ -10,6 +10,7 @@ export const socials = [
   { id: "github", label: "GitHub", url: "https://github.com/AdnanNaous" },
   { id: "linkedin", label: "LinkedIn", url: "https://www.linkedin.com/in/adnan-naous/" },
   { id: "x", label: "X", url: "https://x.com/vc_351" },
+  { id: "linktree", label: "All channels", note: "Linktree", url: "https://linktr.ee/VC351" },
 ];
 
 type Localized = { en: string };
