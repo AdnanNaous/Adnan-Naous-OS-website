@@ -8,6 +8,8 @@ import "./intro-retro.css";
 import "./polish.css";
 import "./cinematic.css";
 import "./manga-film.css";
+import "./feedback-polish.css";
+import "./brain.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://adnannaous.vercel.app"),

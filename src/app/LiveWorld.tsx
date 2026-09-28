@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-const CHAPTERS = ["home", "work", "now", "codex", "about", "contact"] as const;
+const CHAPTERS = ["home", "work", "now", "codex", "about", "brain", "contact"] as const;
 
 /** An authored passage: scroll determines a reversible camera position in one scene. */
 export default function LiveWorld() {
@@ -48,9 +48,33 @@ export default function LiveWorld() {
       const steel = mat(0x858585, 0.66, 0.34);
       const pale = mat(0xc8c8c8, 0.4, 0.39);
       const glass = mat(0x313131, 0.27, 0.24);
-      const dark = mat(0x181818, 0.12, 0.87);
       const charcoal = mat(0x252525, 0.08, 0.91);
       const pewter = mat(0x777777, 0.53, 0.31);
+      // Fine concrete grain and panel joints give the long passage a physical floor.
+      const floorCanvas = document.createElement("canvas");
+      floorCanvas.width = floorCanvas.height = 256;
+      const floorInk = floorCanvas.getContext("2d");
+      if (floorInk) {
+        floorInk.fillStyle = "#303030"; floorInk.fillRect(0, 0, 256, 256);
+        let seed = 1947;
+        const random = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+        for (let i = 0; i < 7200; i++) {
+          const shade = Math.floor(31 + random() * 47);
+          floorInk.fillStyle = `rgba(${shade},${shade},${shade},${.025 + random() * .08})`;
+          floorInk.fillRect(random() * 256, random() * 256, 1 + random() * 2, 1 + random() * 2);
+        }
+        floorInk.strokeStyle = "#111111"; floorInk.lineWidth = 2;
+        floorInk.strokeRect(2, 2, 252, 252);
+        floorInk.strokeStyle = "#ffffff15"; floorInk.lineWidth = 1;
+        floorInk.beginPath(); floorInk.moveTo(5, 5); floorInk.lineTo(251, 5); floorInk.moveTo(5, 5); floorInk.lineTo(5, 251); floorInk.stroke();
+      }
+      const floorTexture = new THREE.CanvasTexture(floorCanvas);
+      floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+      floorTexture.repeat.set(5, 24);
+      floorTexture.colorSpace = THREE.SRGBColorSpace;
+      floorTexture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
+      const concrete = new THREE.MeshStandardMaterial({ map: floorTexture, color: 0x9b9b9b, metalness: .14, roughness: .83 });
+      resources.push(floorTexture, concrete);
       const white = new THREE.MeshBasicMaterial({ color: 0xe4e4e4, toneMapped: false, fog: false, transparent: true, opacity: 0, depthWrite: false });
       const whiteHaze = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide, toneMapped: false, fog: false });
       resources.push(white, whiteHaze);
@@ -59,13 +83,16 @@ export default function LiveWorld() {
       const doorInk = doorCanvas.getContext("2d");
       if (doorInk) {
         const glow = doorInk.createLinearGradient(0, 0, 256, 0);
-        glow.addColorStop(0, "#303030"); glow.addColorStop(.18, "#a0a0a0");
-        glow.addColorStop(.5, "#ededed"); glow.addColorStop(.82, "#a0a0a0"); glow.addColorStop(1, "#303030");
+        glow.addColorStop(0, "#ffffff00"); glow.addColorStop(.16, "#ffffff28");
+        glow.addColorStop(.42, "#ffffffa8"); glow.addColorStop(.5, "#ffffffe8");
+        glow.addColorStop(.58, "#ffffffa8"); glow.addColorStop(.84, "#ffffff28"); glow.addColorStop(1, "#ffffff00");
         doorInk.fillStyle = glow; doorInk.fillRect(0, 0, 256, 512);
-        for (let x = 8; x < 256; x += 24) { doorInk.fillStyle = x % 48 ? "#16161636" : "#ffffff36"; doorInk.fillRect(x, 0, x % 48 ? 7 : 2, 512); }
+        for (let x = 8; x < 256; x += 24) { doorInk.fillStyle = x % 48 ? "#1b1b1b27" : "#ffffff16"; doorInk.fillRect(x, 0, x % 48 ? 5 : 2, 512); }
+        doorInk.globalCompositeOperation = "destination-in";
         const vertical = doorInk.createLinearGradient(0, 0, 0, 512);
-        vertical.addColorStop(0, "#08080899"); vertical.addColorStop(.35, "#ffffff00"); vertical.addColorStop(1, "#10101066");
+        vertical.addColorStop(0, "#ffffff55"); vertical.addColorStop(.22, "#ffffffff"); vertical.addColorStop(.72, "#ffffffff"); vertical.addColorStop(1, "#ffffff88");
         doorInk.fillStyle = vertical; doorInk.fillRect(0, 0, 256, 512);
+        doorInk.globalCompositeOperation = "source-over";
         const doorTexture = new THREE.CanvasTexture(doorCanvas);
         doorTexture.colorSpace = THREE.SRGBColorSpace;
         resources.push(doorTexture);
@@ -108,7 +135,7 @@ export default function LiveWorld() {
       };
 
       // Retain the existing structural passage and add life at its stations.
-      block(scene, dark, 0, -3.35, -39, 34, 0.45, 105);
+      block(scene, concrete, 0, -3.35, -39, 34, 0.45, 105);
       const ribTransforms: number[][] = [];
       const railTransforms: number[][] = [];
       for (let i = 0; i < 15; i++) {
@@ -120,6 +147,15 @@ export default function LiveWorld() {
       railTransforms.push([-8.3, -2.55, -41, 0.025, 0.025, 100], [8.3, -2.55, -41, 0.025, 0.025, 100]);
       blocks(scene, graphite, ribTransforms);
       blocks(scene, line, railTransforms);
+      const ceilingPanels: number[][] = [];
+      const cableRaces: number[][] = [];
+      for (let i = 0; i < 16; i++) {
+        const z = 7 - i * 6.6;
+        ceilingPanels.push([-3.9, 4.65, z, 4.3, .06, 5.5], [3.9, 4.65, z, 4.3, .06, 5.5]);
+        if (i % 2 === 0) cableRaces.push([-7.8, 3.9, z, .12, .08, 4.8], [7.8, 3.9, z, .12, .08, 4.8]);
+      }
+      blocks(scene, charcoal, ceilingPanels);
+      blocks(scene, pewter, cableRaces);
 
       // Home: retain the original gate and put a quiet server room behind it.
       const home = station(0);
@@ -225,6 +261,19 @@ export default function LiveWorld() {
       aboutLight.position.set(-5.5, 5.5, 1); aboutLight.target.position.set(-3.5, -0.2, -3);
       about.add(aboutLight, aboutLight.target);
 
+      // Brain: narrow archive volumes appear between the story and the final doorway.
+      const brain = station(-77);
+      for (let i = 0; i < 3; i++) {
+        const x = 3.1 + i * 1.02;
+        block(brain, charcoal, x, -0.75, -2.5 - i * .32, .78, 4.6, 1.1);
+        block(brain, steel, x, 1.43, -1.93 - i * .32, .59, .022, .035);
+        block(brain, pewter, x, 0.4, -1.93 - i * .32, .59, .018, .03);
+      }
+      block(brain, graphite, 4.2, -3.02, -2.5, 4.8, .2, 3.5);
+      const archiveLight = new THREE.SpotLight(0xffffff, 35, 13, .48, .8, 1.5);
+      archiveLight.position.set(4.3, 4.2, .2); archiveLight.target.position.set(4.2, -.5, -2.5);
+      brain.add(archiveLight, archiveLight.target);
+
       // Contact: two heavy server-room leaves withdraw behind a matching frame.
       const contact = station(-85);
       const doorX = 2.8, doorZ = -5.8, doorWidth = 5.0, doorHeight = 6.7;
@@ -243,13 +292,50 @@ export default function LiveWorld() {
         block(leaf, steel, -side * (doorWidth / 4 - 0.12), 0, 0.24, 0.055, doorHeight - 0.28, 0.055);
         for (let i = 0; i < 6; i++) block(leaf, i === 3 ? pale : pewter, 0, -2.4 + i * 0.94, 0.25, doorWidth / 2 - 0.55, 0.035, 0.025);
       }
-      block(contact, pale, doorX, -3.105, doorZ + 2.5, 4.2, 0.012, 5.7);
       for (let i = 0; i < 3; i++) {
         const beam = block(contact, whiteHaze, doorX, -1.9 + i * 0.95, doorZ + 1.2 + i * 0.65, 4.4 + i * 1.6, 0.025, 6 + i * 1.5);
         beam.rotation.x = 0.08 + i * 0.03;
       }
       const exitLight = new THREE.PointLight(0xffffff, 0, 16, 1.3);
       exitLight.position.set(doorX, 0.8, doorZ + 0.8); contact.add(exitLight);
+      const doorSpot = new THREE.SpotLight(0xffffff, 0, 23, .56, .9, 1.5);
+      doorSpot.position.set(doorX, 3.25, doorZ + .3);
+      doorSpot.target.position.set(doorX, -3.25, doorZ + 7.4);
+      contact.add(doorSpot, doorSpot.target);
+      const spillCanvas = document.createElement("canvas");
+      spillCanvas.width = spillCanvas.height = 128;
+      const spillInk = spillCanvas.getContext("2d");
+      if (spillInk) {
+        const glow = spillInk.createRadialGradient(64, 64, 3, 64, 64, 62);
+        glow.addColorStop(0, "#ffffffae"); glow.addColorStop(.3, "#d8d8d875"); glow.addColorStop(1, "#ffffff00");
+        spillInk.fillStyle = glow; spillInk.fillRect(0, 0, 128, 128);
+      }
+      const spillTexture = new THREE.CanvasTexture(spillCanvas);
+      const spillMaterial = new THREE.MeshBasicMaterial({ map: spillTexture, transparent: true, opacity: 0, depthWrite: false, toneMapped: false, fog: false });
+      const spillGeometry = new THREE.PlaneGeometry(10, 13);
+      const spill = new THREE.Mesh(spillGeometry, spillMaterial);
+      spill.rotation.x = -Math.PI / 2;
+      spill.position.set(doorX, -3.08, doorZ + 4.4);
+      contact.add(spill);
+      resources.push(spillTexture, spillMaterial, spillGeometry);
+      const haloCanvas = document.createElement("canvas");
+      haloCanvas.width = haloCanvas.height = 128;
+      const haloInk = haloCanvas.getContext("2d");
+      if (haloInk) {
+        const haloPaint = haloInk.createRadialGradient(64, 64, 10, 64, 64, 62);
+        haloPaint.addColorStop(0, "#ffffff9c");
+        haloPaint.addColorStop(.38, "#eeeeee68");
+        haloPaint.addColorStop(.72, "#ffffff1f");
+        haloPaint.addColorStop(1, "#ffffff00");
+        haloInk.fillStyle = haloPaint; haloInk.fillRect(0, 0, 128, 128);
+      }
+      const haloTexture = new THREE.CanvasTexture(haloCanvas);
+      const haloMaterial = new THREE.MeshBasicMaterial({ map: haloTexture, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false, fog: false });
+      const haloGeometry = new THREE.PlaneGeometry(8.2, 9.8);
+      const halo = new THREE.Mesh(haloGeometry, haloMaterial);
+      halo.position.set(doorX, .2, doorZ + .58);
+      contact.add(halo);
+      resources.push(haloTexture, haloMaterial, haloGeometry);
 
       scene.add(new THREE.HemisphereLight(0xd5d5d5, 0x181818, 1.15));
       const key = new THREE.DirectionalLight(0xffffff, 2.6);
@@ -267,6 +353,7 @@ export default function LiveWorld() {
         { p: [1.2, 1.9, -21.3], t: [2.1, -0.5, -36], roll: -0.025 },
         { p: [-1.4, 0.7, -38.2], t: [2.5, 0.0, -54], roll: 0.03 },
         { p: [0.8, 0.2, -55.1], t: [-1.4, -0.4, -72], roll: -0.02 },
+        { p: [0.35, 0.4, -64.1], t: [1.3, -0.1, -79], roll: 0.012 },
         { p: [0, 0.6, -74.2], t: [0, 0.4, -90], roll: 0 },
       ];
       const anchors = new Array<number>(CHAPTERS.length).fill(0);
@@ -283,7 +370,7 @@ export default function LiveWorld() {
       lightLayer.setAttribute("aria-hidden", "true");
       Object.assign(lightLayer.style, {
         position: "absolute", left: "0", top: "0", width: "100%", height: "100%", zIndex: "0", pointerEvents: "none",
-        background: "linear-gradient(90deg, #525252, #cecece 42%, #888888 70%, #424242)",
+        background: "radial-gradient(ellipse 65% 90% at 50% 45%, #ffffffb0 0%, #d8d8d862 38%, #ffffff08 100%)",
         opacity: "0", visibility: "hidden", filter: "blur(1px)",
       });
       const foreground = Array.from(contactContent?.children ?? []).filter((element): element is HTMLElement => element instanceof HTMLElement).map((element) => ({ element, position: element.style.position, zIndex: element.style.zIndex }));
@@ -306,7 +393,7 @@ export default function LiveWorld() {
         host.dataset.chapter = CHAPTERS[Math.round(progress)];
         // The door projection is viewport-relative even after the final camera stop.
         // Keep its light spill aligned while the contact section and footer scroll.
-        if (Math.abs(progress - previous) > 0.0001 || progress > 4.55) schedule();
+        if (Math.abs(progress - previous) > 0.0001 || progress > 5.55) schedule();
       };
       const render = (damping: number) => {
         const chapter = Math.min(shots.length - 2, Math.floor(progress));
@@ -324,13 +411,16 @@ export default function LiveWorld() {
         currentLook.lerp(desiredLook, damping);
         camera.lookAt(currentLook);
         camera.rotation.z += (mix(a.roll, b.roll) - camera.rotation.z) * damping;
-        const doorOpen = THREE.MathUtils.smoothstep(progress, 4.42, 4.94);
+        const doorOpen = THREE.MathUtils.smoothstep(progress, 5.42, 5.94);
         doorLeft.position.x = doorX - doorWidth / 4 - doorOpen * (doorWidth / 2 + 0.12);
         doorRight.position.x = doorX + doorWidth / 4 + doorOpen * (doorWidth / 2 + 0.12);
-        white.opacity = 0.72 * doorOpen;
-        whiteHaze.opacity = 0.1 * doorOpen;
-        exitLight.intensity = 58 * doorOpen;
-        const exposure = THREE.MathUtils.smoothstep(progress, 4.55, 4.96);
+        white.opacity = 0.58 * doorOpen;
+        whiteHaze.opacity = 0.065 * doorOpen;
+        exitLight.intensity = 88 * doorOpen;
+        doorSpot.intensity = 155 * doorOpen;
+        spillMaterial.opacity = .76 * doorOpen;
+        haloMaterial.opacity = .5 * doorOpen;
+        const exposure = THREE.MathUtils.smoothstep(progress, 5.55, 5.96);
         if (shade) shade.style.opacity = String(1 - 0.78 * exposure);
         if (contactSection) contactSection.style.backgroundColor = `rgba(9,9,9,${0.55 - 0.43 * exposure})`;
         if (socialLine) socialLine.style.backgroundColor = `rgba(9,9,9,${0.88 * exposure})`;
@@ -342,7 +432,7 @@ export default function LiveWorld() {
           };
           const left = doorX - doorWidth / 2 + 0.18, right = doorX + doorWidth / 2 - 0.18;
           lightLayer.style.clipPath = `polygon(${project(left, 3.48)}, ${project(right, 3.48)}, ${project(right, -3.07)}, ${project(left, -3.07)})`;
-          lightLayer.style.opacity = String(0.45 * exposure);
+          lightLayer.style.opacity = String(0.34 * exposure);
           lightLayer.style.visibility = "visible";
         } else {
           lightLayer.style.visibility = "hidden";

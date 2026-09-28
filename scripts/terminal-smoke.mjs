@@ -39,11 +39,25 @@ try {
   assert(new URL(search.url()).searchParams.get("q") === "functional portfolio");
   await search.close();
 
-  const aiPopup = context.waitForEvent("page");
-  await terminal.getByRole("button", { name: /free ai/i }).click();
-  const ai = await aiPopup;
-  await ai.waitForURL(/chatgpt\.com/);
-  await ai.close();
+  assert.equal(await terminal.getByRole("button", { name: /free ai/i }).count(), 0);
+  await terminal.getByRole("button", { name: /dot motion/i }).click();
+  await terminal.getByRole("region", { name: "Animated dot motion" }).waitFor();
+  await terminal.locator("pre").getByText("●", { exact: false }).waitFor({ timeout: 5000 });
+  const firstFrame = await terminal.locator("pre").textContent();
+  await page.waitForTimeout(190);
+  assert.notEqual(await terminal.locator("pre").textContent(), firstFrame);
+  await terminal.getByLabel("EDIT PIXEL SCRIPT").fill("function pixel(x, y, t) { return x > 0 && y > 0; }");
+  await terminal.getByRole("button", { name: "▶ Run dot script" }).click();
+  await page.waitForFunction(() => document.querySelector('[aria-label="Dot animation frame"]')?.textContent?.includes("●●●●●●●●"));
+  await terminal.getByRole("button", { name: "Close dot motion" }).click();
+  await input.fill("sudo ls"); await input.press("Enter");
+  assert((await terminal.textContent()).includes("No administrator privileges"));
+  await input.fill("cat cv.txt"); await input.press("Enter");
+  assert((await terminal.textContent()).includes("3.43/4.00"));
+  await terminal.getByRole("button", { name: /⌘ Java/i }).click();
+  await terminal.getByTitle("java code runner").waitFor();
+  assert((await terminal.getByTitle("java code runner").getAttribute("src")).includes("onecompiler.com/embed/java"));
+  await terminal.getByRole("button", { name: "Close compiler" }).click();
   await input.fill("help");
   await input.press("Enter");
   assert((await terminal.textContent()).includes("code             Open the JavaScript playground"));
@@ -64,7 +78,7 @@ try {
   assert(await mobileTerminal.getByLabel("Your code").evaluate(node => document.activeElement === node));
   assert(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
   await mobile.close();
-  console.log("Terminal sandbox, search, AI shortcut, keyboard, and phone controls passed");
+  console.log("Terminal sandbox, search, dot motion, CV, compiler and phone controls passed");
 } finally {
   await browser.close();
 }

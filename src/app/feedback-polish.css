@@ -1,0 +1,34 @@
+/* The terminal is a high-contrast workstation, separate from the subtle site chrome. */
+.hero-terminal{width:min(620px,100%);border-color:#ffffff8a;background:linear-gradient(115deg,#090909ec,#111111df);box-shadow:0 0 0 1px #ffffff14,0 18px 55px #000b,inset 0 1px #ffffff45}
+.hero-terminal .terminal-secret{min-height:70px;background:linear-gradient(90deg,#ffffff22,#ffffff0b 68%,#ffffff20);border-top-color:#ffffffa0;color:#fff;font-size:14px;box-shadow:inset 0 0 25px #ffffff0a}
+.hero-terminal .terminal-secret:hover,.hero-terminal .terminal-secret:focus-visible{background:linear-gradient(90deg,#ffffffde,#ffffffa9);color:#080808;box-shadow:0 0 28px #ffffff66;letter-spacing:.17em}
+.terminal-overlay{background:#030303e8;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.terminal-window{color:#f4f4f4;background:radial-gradient(ellipse at 48% 12%,#252525,#0b0b0b 68%,#030303);border-color:#ffffffa0;box-shadow:0 0 0 1px #ffffff21,0 22px 95px #000,inset 0 0 70px #000c;text-shadow:none}
+.terminal-window:after{background:repeating-linear-gradient(0deg,transparent 0 3px,#ffffff08 4px 5px);opacity:.22}
+.terminal-window-head,.terminal-window-foot{border-color:#ffffff50;color:#d5d5d5}
+.terminal-window-head button,.terminal-window .terminal-window-head button:hover{border-color:#ffffff89;background:#ffffff15;color:#fff}
+.terminal-window-screen{scrollbar-color:#ffffff75 transparent}
+.terminal-entry-command,.terminal-input-line label,.terminal-entry-command span,.terminal-output{color:#eee}
+.terminal-input-line input{color:#fff;caret-color:#fff}
+.terminal-window .terminal-input-line button{border-color:#ffffff8a;color:#fff;background:#ffffff16}
+.terminal-window .terminal-input-line button:hover{background:#fff;color:#111}
+.terminal-window:has([aria-label$="compiler"]) .terminal-window-screen{flex:0 0 95px;max-height:95px}
+.terminal-window:has([aria-label$="compiler"]) [aria-label$="compiler"]{flex:1;height:auto;min-height:0}
+/* The skill route sits directly over the corridor. Remove the outer and inner plates. */
+.now-v2-map{border:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;overflow:visible;padding-inline:0}
+.now-v2-map:before{opacity:.24}
+.now-v2-origin{border:0;border-bottom:1px solid #ffffff7a;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;padding-inline:8px}
+.now-v2-node:hover,.now-v2-node.is-selected{background:linear-gradient(90deg,#ffffff12,transparent 75%)}
+.now-v2-readout{background:linear-gradient(90deg,#0b0b0bc9,transparent);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+/* A broad, soft bounce from the open portal keeps the light spatial, not a white slab. */
+.contact-section{position:relative;isolation:isolate}
+.contact-section:before{content:"";position:absolute;z-index:0;inset:0;pointer-events:none;background:radial-gradient(ellipse 17% 35% at 53% 44%,#ffffff28,transparent 94%),radial-gradient(ellipse 43% 22% at 53% 96%,#ffffff24,transparent 94%);filter:blur(24px);opacity:0;transition:opacity 1s ease}
+body:has(.live-world[data-chapter="contact"]) .contact-section:before{opacity:1}
+.contact-content{position:relative;z-index:1}
+/* The work trace assembles in staggered blocks, then releases the project rows. */
+.work-v2-ready .project-entry{animation:work-block-rise .72s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(var(--build-order)*.14s)}
+.work-v2-ready .project-entry:after{content:"";position:absolute;inset:0;background:#fff;pointer-events:none;transform-origin:left;animation:work-block-wipe .85s cubic-bezier(.7,0,.2,1) both;animation-delay:calc(var(--build-order)*.14s)}
+@keyframes work-block-rise{from{opacity:0;transform:translateY(28px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes work-block-wipe{0%{transform:scaleX(0);opacity:.7}45%{transform:scaleX(1);opacity:.7}100%{transform:scaleX(0);transform-origin:right;opacity:0}}
+@media(max-width:700px){.hero-terminal .terminal-secret{min-height:62px;font-size:12px}.now-v2-map{padding-inline:4px}}
+@media(prefers-reduced-motion:reduce){.work-v2-ready .project-entry,.work-v2-ready .project-entry:after{animation:none}.work-v2-ready .project-entry:after{display:none}}

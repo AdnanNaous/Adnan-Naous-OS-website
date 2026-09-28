@@ -7,16 +7,24 @@ import TerminalOverlay from "./TerminalOverlay";
 import { AboutSection, CodexSection, ContactSection } from "./ExperienceSections";
 import { WorkSectionV2 } from "./WorkSectionV2";
 import { NowSectionV2 } from "./NowSectionV2";
+import { BrainSection } from "./BrainSection";
 
-const destinations = ["home", "work", "now", "codex", "about", "contact"] as const;
+const destinations = ["home", "work", "now", "codex", "about", "brain", "contact"] as const;
 
 export default function Portfolio() {
   const [active, setActive] = useState<(typeof destinations)[number]>("home");
   const [navHidden, setNavHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [secretOpen, setSecretOpen] = useState(false);
+  const [terminalDocument, setTerminalDocument] = useState<string | undefined>();
   const [secondsHere, setSecondsHere] = useState(0);
   const closeTerminal = useCallback(() => setSecretOpen(false), []);
+
+  useEffect(() => {
+    const openFromAction = (event: Event) => { setTerminalDocument((event as CustomEvent<string>).detail); setSecretOpen(true); };
+    addEventListener("an-os-open-terminal", openFromAction);
+    return () => removeEventListener("an-os-open-terminal", openFromAction);
+  }, []);
 
   useEffect(() => {
     const started = performance.now();
@@ -113,6 +121,7 @@ export default function Portfolio() {
     { id: "now", label: "Now" },
     { id: "codex", label: "Codex" },
     { id: "about", label: "About" },
+    { id: "brain", label: "Brain" },
     { id: "contact", label: "Contact" },
   ] as const;
   const visitorClock = `${String(Math.floor(secondsHere / 60)).padStart(2, "0")}:${String(secondsHere % 60).padStart(2, "0")}`;
@@ -175,10 +184,11 @@ export default function Portfolio() {
       <NowSectionV2 />
       <CodexSection />
       <AboutSection />
+      <BrainSection />
       <ContactSection />
     </main>
 
     <footer className="site-footer"><div><strong>Adnan Naous.</strong><small>© {new Date().getFullYear()} · All rights reserved</small></div><p>Thanks for spending a moment here.</p><div className="footer-actions"><a href="#home">Back to top ↑</a></div></footer>
-    {secretOpen && <TerminalOverlay onClose={closeTerminal} />}
+    {secretOpen && <TerminalOverlay onClose={() => { closeTerminal(); setTerminalDocument(undefined); }} initialDocument={terminalDocument} />}
   </>;
 }

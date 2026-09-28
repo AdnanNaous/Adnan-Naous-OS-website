@@ -69,6 +69,18 @@ export const projects: PortfolioProject[] = [
       },
     ],
   },
+  {
+    slug: "learning-journey",
+    title: { en: "My Journey" },
+    summary: { en: "An open record of what I study, try, correct, and build while learning computer science." },
+    category: { en: "Learning log · In progress" },
+    repositoryUrl: "https://github.com/AdnanNaous/Adnan-Naous-Journey",
+    sections: [
+      { title: { en: "The idea" }, body: { en: "I wanted a place to show the steps behind my learning, including mistakes and revisions, rather than only finished results." } },
+      { title: { en: "What is inside" }, body: { en: "Notes and experiments span Java, Python, computing fundamentals, software engineering, and AI-assisted development." } },
+      { title: { en: "Current status" }, body: { en: "This is a developing learning record. It does not claim finished expertise or completed featured projects." } },
+    ],
+  },
 ];
 
 export const copy = {

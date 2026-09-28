@@ -23,7 +23,7 @@ export function CodexSection() {
   }, []);
   useEffect(() => {
     if (!visible || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const timer = window.setTimeout(() => { firstCycle.current = false; setSelected(index => (index + 1) % 3); }, firstCycle.current ? 2600 : 6000);
+    const timer = window.setTimeout(() => { firstCycle.current = false; setSelected(index => (index + 1) % 3); }, firstCycle.current ? 1700 : 3600);
     return () => window.clearTimeout(timer);
   }, [visible, selected]);
   const objectives = [
@@ -85,7 +85,7 @@ export function AboutSection() {
       {copy.en.story.map((beat, index) => <div className={`story-panel${step === index ? " is-active" : ""}`} key={index}><span className="story-marker">0{index + 1} / {labels[index]}</span><p>{beat}</p></div>)}
       <span className="story-count" aria-hidden="true">0{step + 1} / 04</span>
     </div></div>
-    <div className="about-actions reveal"><a className="command-action command-action-quiet cv-command" href="/documents/adnan-naous-cv.pdf" target="_blank" rel="noreferrer"><span>&gt; open_cv.pdf</span><span className="action-tail">↗</span></a><span className="cv-note">{"// the paper version of my story"}</span></div>
+    <div className="about-actions reveal"><button className="command-action command-action-quiet cv-command" type="button" onClick={() => window.dispatchEvent(new CustomEvent("an-os-open-terminal", { detail: "cv" }))}><span>&gt; read_cv.txt</span><span className="action-tail">↗</span></button><span className="cv-note">{"// read the document in the terminal"}</span></div>
   </section>;
 }
 
@@ -113,7 +113,7 @@ export function ContactSection() {
   }, [signal]);
 
   return <section id="contact" ref={section} className="content-section contact-section" aria-labelledby="contact-title">
-    <div className="contact-content reveal"><p className="section-index">06 / CONTACT</p><h2 id="contact-title" className="section-title">Let’s talk.</h2>
+    <div className="contact-content reveal"><p className="section-index">07 / CONTACT</p><h2 id="contact-title" className="section-title">Let’s talk.</h2>
       <div className="contact-transmission"><div className="transmission-head"><span>AN / FINAL TRANSMISSION</span><span>{signal === "ready" ? "CHANNEL OPEN" : "SIGNAL PAUSED"}</span></div>
         <div className="transmission-slot">{signal === "ready" ? <a className="contact-action" href={contact.href} onClick={event => { event.preventDefault(); setIncidentOpen(true); }}><span className="contact-action-copy"><small>01 / NEW MESSAGE</small><strong className="contact-glitch">Write an email</strong></span><span className="contact-action-arrow" aria-hidden="true">↗</span></a> : <button className="contact-recall" type="button" onClick={() => setSignal("ready")}><span className="contact-action-copy"><small>01 / CHANNEL PAUSED</small><strong>Reopen email</strong></span><span className="contact-action-arrow" aria-hidden="true">↻</span></button>}</div>
         <div className="transmission-foot"><span>A note from you starts the next conversation.</span><span>MAIL CHANNEL / OPEN</span></div>

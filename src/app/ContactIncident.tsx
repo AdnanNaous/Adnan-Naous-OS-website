@@ -13,10 +13,7 @@ export default function ContactIncident({ emailHref, onClose, onFix }: {
 }) {
   const [portal] = useState<HTMLDivElement | null>(() => typeof document === "undefined" ? null : document.createElement("div"));
   const [phase, setPhase] = useState<Phase>("confirm");
-  const [command, setCommand] = useState("");
-  const [error, setError] = useState("");
   const dialog = useRef<HTMLDivElement>(null);
-  const commandInput = useRef<HTMLInputElement>(null);
   const phaseRef = useRef(phase);
   const closeRef = useRef(onClose);
 
@@ -39,7 +36,7 @@ export default function ContactIncident({ emailHref, onClose, onFix }: {
 
     const keepFocus = (event: FocusEvent) => {
       if (event.target instanceof Node && !portal.contains(event.target)) {
-        (commandInput.current ?? dialog.current)?.focus();
+        dialog.current?.focus();
       }
     };
     const trapKeys = (event: KeyboardEvent) => {
@@ -49,7 +46,7 @@ export default function ContactIncident({ emailHref, onClose, onFix }: {
         return;
       }
       if (event.key !== "Tab" || !dialog.current) return;
-      const focusable = Array.from(dialog.current.querySelectorAll<HTMLElement>("button:not([disabled]), input:not([disabled])"));
+      const focusable = Array.from(dialog.current.querySelectorAll<HTMLElement>("button:not([disabled])"));
       if (!focusable.length) { event.preventDefault(); dialog.current.focus(); return; }
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
@@ -72,8 +69,7 @@ export default function ContactIncident({ emailHref, onClose, onFix }: {
 
   useEffect(() => {
     if (!portal) return;
-    if (phase === "incident") commandInput.current?.focus();
-    else dialog.current?.focus();
+    dialog.current?.focus();
   }, [portal, phase]);
 
   useEffect(() => {
@@ -82,18 +78,11 @@ export default function ContactIncident({ emailHref, onClose, onFix }: {
     return () => window.clearTimeout(timer);
   }, [phase]);
 
-  const runCommand = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const value = command.trim().toLowerCase().replace(/\s+/g, " ");
-    if (value === "fix the website") { onFix(); return; }
-    if (value === "hack me") { setPhase("destroying"); return; }
-    setError("COMMAND NOT RECOGNIZED. TYPE ONE OF THE TWO COMMANDS SHOWN ABOVE.");
-  };
-
   if (!portal) return null;
   return createPortal(<div data-phase={phase} className={`${styles.overlay} ${phase === "confirm" ? styles.confirmOverlay : styles.incidentOverlay}`}>
     <div className={styles.scanlines} aria-hidden="true" />
     {phase !== "confirm" && <div className={styles.faultField} aria-hidden="true"><span>AN/OS // SIGNAL LOST<br />FRAME 001—404<br />MEMORY DESYNC</span><span>01001011 00110110<br />NO CARRIER / NO RESPONSE<br />RECOVERY MODE ACTIVE</span></div>}
+    {phase !== "confirm" && <div className={styles.radar} aria-hidden="true"><span /><span /><span /><span /></div>}
     <div ref={dialog} className={`${styles.panel} ${phase === "confirm" ? styles.confirmPanel : styles.incidentPanel} ${phase === "destroying" ? styles.destroying : ""}`} role="dialog" aria-modal="true" aria-labelledby="contact-incident-title" aria-describedby="contact-incident-description" tabIndex={-1}>
       {phase === "confirm" ? <>
         <p className={styles.eyebrow}>AN / MAIL CHANNEL</p>
@@ -107,10 +96,8 @@ export default function ContactIncident({ emailHref, onClose, onFix }: {
       </> : phase === "incident" ? <>
         <p className={styles.eyebrow}>AN / SYSTEM OVERRIDE · 01</p>
         <h2 id="contact-incident-title">You are inside the system.</h2>
-        <p id="contact-incident-description">The site is waiting for a command. Type exactly one of these:</p>
-        <ul className={styles.commands}><li><code>fix the website</code><span>restore the site and return home</span></li><li><code>hack me</code><span>trigger a simulated shutdown</span></li></ul>
-        <form className={styles.form} onSubmit={runCommand}><label htmlFor="contact-incident-command">SYSTEM COMMAND</label><div className={styles.inputLine}><span aria-hidden="true">&gt;</span><input ref={commandInput} id="contact-incident-command" autoComplete="off" autoCapitalize="off" spellCheck={false} value={command} onChange={event => { setCommand(event.target.value); setError(""); }} /><button type="submit">Enter ↵</button></div></form>
-        {error && <p className={styles.error} role="status">{error}</p>}
+        <p id="contact-incident-description">The channel fractured. Choose a route to continue.</p>
+        <div className={styles.routeChoices}><button type="button" onClick={onFix}><span>01 / RECOVERY</span><strong>Fix the website</strong><small>Restore the signal and return home ↗</small></button><button type="button" onClick={() => setPhase("destroying")}><span>02 / OVERRIDE</span><strong>Hack me</strong><small>Trigger a simulated shutdown ↗</small></button></div>
       </> : phase === "destroying" ? <>
         <p className={styles.eyebrow}>AN / SYSTEM OVERRIDE · 02</p>
         <h2 id="contact-incident-title">Self-destruct sequence</h2>
@@ -119,7 +106,8 @@ export default function ContactIncident({ emailHref, onClose, onFix }: {
       </> : <>
         <p className={styles.eyebrow}>AN / SIGNAL TERMINATED</p>
         <h2 id="contact-incident-title" className={styles.errorCode}>404</h2>
-        <p id="contact-incident-description">System unavailable. Refresh the page to start a new session.</p>
+        <p id="contact-incident-description">Signal terminated. This session has ended.</p>
+        <button className={styles.reboot} type="button" onClick={() => window.location.reload()}>↻ Refresh to reboot</button>
       </>}
     </div>
   </div>, portal);

@@ -41,7 +41,7 @@ try {
   assert.equal(await page.evaluate(() => document.activeElement?.id), "terminal-input", "Session clock must not steal terminal focus");
   await page.locator("#terminal-input").press("Escape");
   assert.equal(await page.getByRole("dialog", { name: "AN/OS terminal" }).count(), 0);
-  assert.equal(await page.locator(".timeline-rail a").count(), 6);
+  assert.equal(await page.locator(".timeline-rail a").count(), 7);
   assert.equal(await page.locator("#codex").count(), 1);
   assert.equal(await page.locator("a[href*='kanz-ai']").count(), 0);
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
@@ -94,7 +94,7 @@ try {
   await page.waitForFunction(() => document.querySelector(".work-v2-ready") !== null);
   assert.notEqual(await page.locator(".work-command").textContent(), midTrace);
   assert.equal(await page.locator(".work-compiler .script-button").count(), 0);
-  assert((await page.locator(".work-compile-control").textContent()).includes("Two projects ready"));
+  assert((await page.locator(".work-compile-control").textContent()).includes("Three projects ready"));
   await page.evaluate(() => { const track = document.querySelector(".work-build-track"); scrollTo({ top: track.getBoundingClientRect().top + scrollY + track.offsetHeight * .35, behavior: "instant" }); });
   await page.waitForFunction(() => Number(document.querySelector(".work-build-progress")?.getAttribute("aria-valuenow")) < 100);
   await page.evaluate(() => { const track = document.querySelector(".work-build-track"); scrollTo({ top: track.getBoundingClientRect().top + scrollY + track.offsetHeight * .67, behavior: "instant" }); });

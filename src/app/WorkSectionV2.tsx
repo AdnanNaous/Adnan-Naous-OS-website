@@ -7,6 +7,7 @@ const trace = [
   "> select --work",
   "01 index windows-maintenance",
   "02 index personal-portfolio",
+  "03 index learning-journey",
 ] as const;
 
 export function WorkSectionV2() {
@@ -44,7 +45,7 @@ export function WorkSectionV2() {
     <div className="section-head reveal">
       <p className="section-index">02 / SELECTED WORK</p>
       <h2 id="work-title" className="section-title">Built, tested, revised.</h2>
-      <p className="section-lead">Two projects in progress. A short index trace introduces them below.</p>
+      <p className="section-lead">Three projects in progress. A short index trace introduces them below.</p>
     </div>
     <div className="work-build-track" ref={track}><div className="work-compiler" aria-label="Project index trace">
       <div className="work-command" dir="ltr" lang="en" aria-hidden="true">
@@ -56,7 +57,7 @@ export function WorkSectionV2() {
         })}
       </div>
       <div className="work-compile-control">
-        <span role="status" aria-live="polite">{phase === "ready" ? "Two projects ready" : "Building index"}<span aria-hidden="true"> · {Math.round(progress * 100)}%</span></span>
+        <span role="status" aria-live="polite">{phase === "ready" ? "Three projects ready" : "Building index"}<span aria-hidden="true"> · {Math.round(progress * 100)}%</span></span>
         <div className="work-v2-actions">
           {phase !== "ready" && <button className="work-v2-skip" type="button" onClick={skip}>Skip to projects ↓</button>}
         </div>
@@ -64,7 +65,7 @@ export function WorkSectionV2() {
       <div className="work-build-progress" role="progressbar" aria-label="Project index build" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)}><span style={{ width: `${progress * 100}%` }} /></div>
     </div></div>
     <div id="work-projects" className="project-list" inert={phase !== "ready"}>
-      {projects.map((project, index) => <article className="project-entry reveal" key={project.slug}>
+      {projects.map((project, index) => <article className="project-entry reveal" key={project.slug} style={{ "--build-order": index } as React.CSSProperties}>
         <button className="project-trigger" type="button" aria-expanded={expanded === index} aria-controls={`project-detail-${index}`} onClick={() => setExpanded(expanded === index ? null : index)}>
           <span className="project-number">0{index + 1} / {project.category.en}</span>
           <span className="project-main"><strong>{project.title.en}</strong><span>{project.summary.en}</span></span>
