@@ -1,0 +1,8 @@
+AN/OS // FICTIONAL EASTER EGG
+MEMORY ARRAY 04
+
+The observer opened the file.
+Expected behavior.
+
+Cross-reference: /an-os/signal-archive.txt
+This is a fictional story fragment, not an operational record.

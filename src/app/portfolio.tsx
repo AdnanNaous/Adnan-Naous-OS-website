@@ -8,6 +8,7 @@ import { AboutSection, CodexSection, ContactSection } from "./ExperienceSections
 import { WorkSectionV2 } from "./WorkSectionV2";
 import { NowSectionV2 } from "./NowSectionV2";
 import { BrainSection } from "./BrainSection";
+import { installConsoleEasterEggs } from "./consoleEasterEggs";
 
 const destinations = ["home", "work", "now", "codex", "about", "brain", "contact"] as const;
 
@@ -19,6 +20,8 @@ export default function Portfolio() {
   const [terminalDocument, setTerminalDocument] = useState<string | undefined>();
   const [secondsHere, setSecondsHere] = useState(0);
   const closeTerminal = useCallback(() => setSecretOpen(false), []);
+
+  useEffect(() => installConsoleEasterEggs(), []);
 
   useEffect(() => {
     const openFromAction = (event: Event) => { setTerminalDocument((event as CustomEvent<string>).detail); setSecretOpen(true); };
