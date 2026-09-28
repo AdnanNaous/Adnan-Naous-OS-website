@@ -34,7 +34,7 @@ export default function LiveWorld() {
       const resources: Array<{ dispose: () => void }> = [];
       const scene = new THREE.Scene();
       scene.background = new THREE.Color(0x090909);
-      scene.fog = new THREE.FogExp2(0x090909, 0.013);
+      scene.fog = new THREE.FogExp2(0x090909, 0.017);
       const camera = new THREE.PerspectiveCamera(49, 1, 0.1, 140);
       const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
       const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 12);
@@ -304,7 +304,9 @@ export default function LiveWorld() {
         while (index < anchors.length - 2 && scrollY >= anchors[index + 1]) index++;
         progress = Math.min(CHAPTERS.length - 1, index + THREE.MathUtils.clamp((scrollY - anchors[index]) / (anchors[index + 1] - anchors[index]), 0, 1));
         host.dataset.chapter = CHAPTERS[Math.round(progress)];
-        if (Math.abs(progress - previous) > 0.0001) schedule();
+        // The door projection is viewport-relative even after the final camera stop.
+        // Keep its light spill aligned while the contact section and footer scroll.
+        if (Math.abs(progress - previous) > 0.0001 || progress > 4.55) schedule();
       };
       const render = (damping: number) => {
         const chapter = Math.min(shots.length - 2, Math.floor(progress));

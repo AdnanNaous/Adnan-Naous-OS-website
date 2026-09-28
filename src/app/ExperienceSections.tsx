@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { contact, copy, socials } from "@/data/portfolio";
+import ContactIncident from "./ContactIncident";
 
 export function CodexSection() {
   const [selected, setSelected] = useState(0);
@@ -91,6 +92,7 @@ export function AboutSection() {
 export function ContactSection() {
   const section = useRef<HTMLElement>(null);
   const [signal, setSignal] = useState<"ready" | "lost">("ready");
+  const [incidentOpen, setIncidentOpen] = useState(false);
 
   useEffect(() => {
     const node = section.current;
@@ -113,10 +115,20 @@ export function ContactSection() {
   return <section id="contact" ref={section} className="content-section contact-section" aria-labelledby="contact-title">
     <div className="contact-content reveal"><p className="section-index">06 / CONTACT</p><h2 id="contact-title" className="section-title">Let’s talk.</h2>
       <div className="contact-transmission"><div className="transmission-head"><span>AN / FINAL TRANSMISSION</span><span>{signal === "ready" ? "CHANNEL OPEN" : "SIGNAL PAUSED"}</span></div>
-        <div className="transmission-slot">{signal === "ready" ? <a className="contact-action" href={contact.href}><span className="contact-action-copy"><small>01 / NEW MESSAGE</small><strong className="contact-glitch">Write an email</strong></span><span className="contact-action-arrow" aria-hidden="true">↗</span></a> : <button className="contact-recall" type="button" onClick={() => setSignal("ready")}><span className="contact-action-copy"><small>01 / CHANNEL PAUSED</small><strong>Reopen email</strong></span><span className="contact-action-arrow" aria-hidden="true">↻</span></button>}</div>
+        <div className="transmission-slot">{signal === "ready" ? <a className="contact-action" href={contact.href} onClick={event => { event.preventDefault(); setIncidentOpen(true); }}><span className="contact-action-copy"><small>01 / NEW MESSAGE</small><strong className="contact-glitch">Write an email</strong></span><span className="contact-action-arrow" aria-hidden="true">↗</span></a> : <button className="contact-recall" type="button" onClick={() => setSignal("ready")}><span className="contact-action-copy"><small>01 / CHANNEL PAUSED</small><strong>Reopen email</strong></span><span className="contact-action-arrow" aria-hidden="true">↻</span></button>}</div>
         <div className="transmission-foot"><span>A note from you starts the next conversation.</span><span>MAIL CHANNEL / OPEN</span></div>
       </div>
       <div className="social-line">{socials.map((social, index) => <a key={social.id} href={social.url} target="_blank" rel="noreferrer"><span className="social-number">0{index + 1}</span><span className="social-name">{social.label}</span><span aria-hidden="true">↗</span></a>)}</div>
     </div>
+    {incidentOpen && <ContactIncident emailHref={contact.href} onClose={() => setIncidentOpen(false)} onFix={() => {
+      setSignal("ready");
+      setIncidentOpen(false);
+      window.history.replaceState(window.history.state, "", window.location.pathname + window.location.search);
+      window.requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: "instant" });
+        const homeTitle = document.getElementById("hero-title");
+        if (homeTitle) { homeTitle.tabIndex = -1; homeTitle.focus({ preventScroll: true }); }
+      });
+    }} />}
   </section>;
 }

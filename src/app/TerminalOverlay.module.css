@@ -1,0 +1,17 @@
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;padding:12px clamp(18px,4vw,54px);border-bottom:1px solid #c7e6ca48;background:#09150fbb}
+.toolbar button,.submit,.runCode{border:1px solid #aad9ae70;background:#abd9b212;color:#e8ffeb;font:inherit;cursor:pointer}
+.toolbar button{min-height:38px;padding:8px 13px;font-size:11px;letter-spacing:.08em}
+.toolbar button:hover,.toolbar button:focus-visible,.submit:hover,.runCode:hover{background:#b5f4be2b;border-color:#d7ffdc}
+.submit{align-self:center;min-width:36px;min-height:36px;font-size:18px;line-height:1}
+.playground{position:relative;z-index:1;display:flex;flex-direction:column;max-height:48%;min-height:220px;border-top:1px solid #c7e6ca70;background:#07120bdc}
+.playgroundHead{display:flex;align-items:center;gap:16px;padding:9px 17px;border-bottom:1px solid #c7e6ca35;font-size:10px;letter-spacing:.09em}
+.playgroundHead span{color:#a7caaa;letter-spacing:0}
+.playgroundHead button{margin-left:auto;border:0;background:none;color:#e8ffeb;font-size:24px;cursor:pointer}
+.playgroundBody{display:grid;grid-template-columns:1fr 1fr;gap:12px;min-height:0;flex:1;padding:12px 16px}
+.editorLabel{display:flex;flex-direction:column;gap:6px;min-height:0;font-size:10px;letter-spacing:.08em;color:#a7caaa}
+.editorLabel textarea{flex:1;min-height:90px;resize:vertical;border:1px solid #b5d7b753;background:#020804;color:#effff0;padding:10px;font:12px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;outline:none}
+.editorLabel textarea:focus-visible{border-color:#c4f8ca}
+.output{min-height:0;overflow:auto;border:1px solid #b5d7b753;background:#020804;padding:10px;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace}
+.output span{display:block;margin-bottom:8px;color:#a7caaa;font-size:10px;letter-spacing:.08em}
+.runCode{align-self:flex-start;margin:0 16px 12px;padding:8px 13px;font-size:11px}
+@media(max-width:700px){.toolbar{padding:9px 12px;gap:6px}.toolbar button{flex:1 1 42%;min-height:44px;padding:7px;font-size:10px}.playground{max-height:55%;min-height:270px}.playgroundHead{flex-wrap:wrap;gap:5px 10px;padding:7px 12px}.playgroundBody{grid-template-columns:1fr;grid-template-rows:minmax(100px,1fr) minmax(65px,.65fr);padding:8px 12px}.editorLabel textarea{min-height:70px}.runCode{min-height:40px;margin:0 12px 8px}}

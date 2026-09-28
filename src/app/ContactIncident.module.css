@@ -1,0 +1,31 @@
+.overlay{position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;padding:clamp(16px,4vw,48px);overflow:auto;background:#010101;color:#ededed;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;isolation:isolate}
+.confirmOverlay{background:#050505ed}
+.incidentOverlay{background:radial-gradient(ellipse at 50% 35%,#141414 0%,#050505 48%,#000 100%)}
+.scanlines{position:absolute;inset:0;z-index:-1;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,#ffffff09 4px 5px);opacity:.7}
+.panel{position:relative;width:min(100%,760px);border:1px solid #8d8d8d;padding:clamp(24px,5vw,60px);background:#050505e8;box-shadow:0 0 0 1px #111,0 0 100px #ffffff12;outline:none}
+.panel:before{content:"";position:absolute;inset:9px;border:1px solid #ffffff1a;pointer-events:none}
+.eyebrow{margin:0 0 34px;color:#aaa;font-size:11px;letter-spacing:.2em}
+.panel h2{margin:0 0 18px;font:700 clamp(27px,5vw,51px)/1.08 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:-.04em;text-transform:uppercase}
+.panel p:not(.eyebrow){font-size:clamp(13px,2vw,16px);line-height:1.6;color:#c0c0c0}
+.choices{display:flex;gap:12px;flex-wrap:wrap;margin-top:36px}
+.choices button,.inputLine button{min-height:48px;padding:10px 17px;border:1px solid #aaa;background:#eee;color:#080808;font:700 13px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;cursor:pointer}
+.choices button:last-child{background:transparent;color:#eee}
+.choices button:hover,.inputLine button:hover{background:#bcbcbc;color:#080808}
+.choices button:focus-visible,.inputLine button:focus-visible,.inputLine input:focus-visible{outline:2px solid #fff;outline-offset:4px}
+.commands{display:grid;gap:9px;list-style:none;padding:0;margin:30px 0 38px}
+.commands li{display:flex;justify-content:space-between;gap:15px;border-block-end:1px solid #ffffff32;padding:12px 0;font-size:13px}
+.commands code{color:#fff;font:700 15px/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:nowrap}
+.commands span{color:#888;text-align:right}
+.form label{display:block;margin-bottom:12px;color:#aaa;font-size:11px;letter-spacing:.17em}
+.inputLine{display:flex;align-items:center;gap:12px;border:1px solid #888;padding:7px 7px 7px 18px}
+.inputLine>span{font-size:22px;color:#eee}
+.inputLine input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:#fff;font:500 clamp(14px,3vw,20px)/1.3 ui-monospace,SFMono-Regular,Consolas,monospace}
+.error{margin-top:17px!important;color:#fff!important;font-size:12px!important}
+.shutdownBar{height:12px;margin-top:35px;border:1px solid #aaa;overflow:hidden}
+.shutdownBar span{display:block;height:100%;width:100%;transform-origin:left;background:#e4e4e4;animation:drain 1.15s steps(14,end) forwards}
+.destroying{animation:shake .25s steps(2,end) 3}
+.errorCode{font-size:clamp(90px,22vw,190px)!important;line-height:.9!important}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(7px)}}
+@keyframes drain{to{transform:scaleX(0)}}
+@media(max-width:600px){.overlay{align-items:center}.panel{padding:28px 23px}.eyebrow{margin-bottom:22px}.commands li{display:grid;gap:4px}.commands span{text-align:left}.inputLine{gap:8px;padding-left:11px}.inputLine button{min-height:42px;padding:7px 10px}}
+@media(prefers-reduced-motion:reduce){.destroying,.shutdownBar span{animation:none}.shutdownBar span{transform:scaleX(0)}}

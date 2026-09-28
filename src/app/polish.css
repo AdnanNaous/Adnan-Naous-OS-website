@@ -106,3 +106,42 @@
   .now-v2-readout p{margin-top:7px;font-size:13px;line-height:1.5}
 }
 @media(prefers-reduced-motion:reduce){.timeline-progress,.timeline-dot,.work-v2 .project-entry:before,.work-v2 .project-main strong{transition:none}.story-track{height:auto}}
+
+/* Keep the skill map in the site's neutral silver palette. */
+.now-v2-map{color:#f4f4f4;background:radial-gradient(ellipse 65% 40% at 50% 9%,#aaaaaa1f,transparent 76%),linear-gradient(180deg,#101010df,#090909da);border-block-color:#ffffff59;-webkit-backdrop-filter:none;backdrop-filter:none}
+.now-v2-origin{border-bottom-color:#ffffff60;-webkit-backdrop-filter:none;backdrop-filter:none}
+.now-v2-kicker,.now-v2-path-count,.now-v2-node-body>span,.now-v2-readout-label{color:#c6c6c6}
+.now-v2-origin-copy small,.now-v2-node{color:#dedede}
+.now-v2-node-glyph{border-color:#d6d6d6;background:#4a4a4a}
+.now-v2-node-glyph span{background:#ededed}
+.now-v2-node.is-selected .now-v2-node-glyph{background:#efefef;box-shadow:0 0 0 5px #ffffff18,0 0 15px #ffffff62}
+.now-v2-node.is-selected .now-v2-node-glyph span{background:#343434}
+.now-v2-path-heading:before{background:#929292;box-shadow:0 0 10px #ffffff57}
+.now-v2-node:hover,.now-v2-node.is-selected{background:linear-gradient(90deg,#ffffff13,transparent 75%)}
+.now-v2-readout{border-left-color:#ffffffbd;background:linear-gradient(90deg,#ffffff14,transparent);-webkit-backdrop-filter:none;backdrop-filter:none}
+.now-v2-readout p{color:#ededed}
+.now-v2-node:focus-visible{outline-color:#fff}
+
+/* A quiet instrument track keeps the original 70% reading prominent. */
+.now-v2-energy-bar{height:10px;overflow:visible;border:1px solid #ffffff72;border-radius:999px;background:linear-gradient(#ffffff0b,#ffffff0b),repeating-linear-gradient(90deg,transparent 0 24px,#ffffff1b 25px 26px),#111}
+.now-v2-energy-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#969696,#f0f0f0);box-shadow:0 0 12px #ffffff48;overflow:visible}
+.now-v2-energy-fill:after{content:"";position:absolute;right:-2px;top:50%;width:4px;height:18px;border-radius:2px;background:#fff;box-shadow:0 0 9px #ffffff91;transform:translateY(-50%)}
+.now-v2-energy-bar:after,.now-v2-heatwave{display:none}
+
+/* Shorten the closing plate while keeping its existing three-column layout. */
+.site-footer{min-height:88px;padding-block:18px;background:linear-gradient(180deg,#0b0d0de8,#080909e8)}
+.site-footer strong{font-size:16px}.site-footer small{font-size:10px}.site-footer p{font-size:13px}.site-footer a{font-size:11px}
+@media(max-width:700px){
+  .now-v2-map{background:none}
+  .now-v2-origin-mark{border-color:#e4e4e4;box-shadow:0 0 10px #ffffff52}
+  .now-v2-origin-copy small{color:#c9c9c9}
+  .now-v2-path-heading:before{background:#dedede;box-shadow:0 0 8px #ffffff70}
+  .now-v2-node:hover,.now-v2-node.is-selected{background:none}
+  .now-v2-node-glyph{background:#303030}
+  .now-v2-node.is-selected .now-v2-node-glyph{background:#efefef;box-shadow:0 0 10px #ffffff75}
+  .now-v2-node-body>span,.now-v2-readout-label{color:#bcbcbc}
+  .now-v2-readout{background:linear-gradient(90deg,#ffffff12,transparent 82%)}
+  .now-v2-energy-bar{height:10px}
+  .site-footer{min-height:104px;padding:17px 20px}
+  .site-footer strong{font-size:14px}.site-footer p{font-size:12px}
+}

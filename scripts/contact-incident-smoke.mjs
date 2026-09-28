@@ -1,0 +1,66 @@
+import assert from "node:assert/strict";
+import { chromium } from "playwright";
+
+const browser = await chromium.launch({ channel: "chrome" });
+const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+const errors = [];
+page.on("pageerror", error => errors.push(error.message));
+
+try {
+  await page.goto(process.env.BASE_URL || "http://localhost:3000");
+  await page.locator(".intro").waitFor({ state: "hidden" });
+  await page.getByRole("link", { name: /write an email/i }).click();
+  let modal = page.getByRole("dialog", { name: "Open your email app?" });
+  assert(await modal.isVisible());
+  assert(await page.locator("main").evaluate(node => node.inert), "Background should be inert");
+  await modal.getByRole("button", { name: "No" }).click();
+  await page.getByRole("dialog", { name: "You are inside the system." }).waitFor({ timeout: 3000 });
+  await page.keyboard.press("Escape");
+  assert(await page.getByRole("dialog", { name: "You are inside the system." }).isVisible());
+  await page.keyboard.press("/");
+  assert.equal(await page.getByRole("dialog", { name: "AN/OS terminal" }).count(), 0);
+  const command = page.getByLabel("SYSTEM COMMAND");
+  assert(await command.evaluate(node => document.activeElement === node));
+  await command.fill("invalid");
+  await command.press("Enter");
+  assert(await page.getByRole("dialog").getByRole("status").isVisible());
+  await command.fill("  Fix   the website  ");
+  await command.press("Enter");
+  await page.getByRole("dialog").waitFor({ state: "detached" });
+  await page.waitForFunction(() => scrollY === 0);
+  assert(await page.locator("#hero-title").evaluate(node => document.activeElement === node));
+  assert.equal(await page.locator("main").evaluate(node => node.inert), false);
+  await page.getByRole("link", { name: /write an email/i }).click();
+  modal = page.getByRole("dialog", { name: "Open your email app?" });
+  await modal.getByRole("button", { name: "No" }).click();
+  await command.waitFor({ state: "visible" });
+  await command.fill("hack me");
+  await command.press("Enter");
+  await page.getByRole("dialog", { name: "404" }).waitFor({ timeout: 3000 });
+  await page.keyboard.press("Escape");
+  assert(await page.getByRole("dialog", { name: "404" }).isVisible());
+  assert(await page.locator("main").evaluate(node => node.inert));
+  await page.reload();
+  assert.equal(await page.getByRole("dialog").count(), 0);
+  const mobile = await browser.newPage({ viewport: { width: 375, height: 667 }, reducedMotion: "reduce" });
+  await mobile.goto(process.env.BASE_URL || "http://localhost:3000");
+  await mobile.locator(".intro").waitFor({ state: "hidden" });
+  await mobile.getByRole("link", { name: /write an email/i }).click();
+  assert.equal(await mobile.getByRole("dialog", { name: "Open your email app?" }).count(), 1);
+  await mobile.keyboard.press("Escape");
+  assert.equal(await mobile.getByRole("dialog").count(), 0);
+  await mobile.getByRole("link", { name: /write an email/i }).click();
+  await mobile.getByRole("button", { name: "No" }).click();
+  await mobile.getByLabel("SYSTEM COMMAND").waitFor();
+  assert(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+  await mobile.close();
+  await page.locator(".intro").waitFor({ state: "hidden" });
+  await page.getByRole("link", { name: /write an email/i }).click();
+  assert((await page.getByRole("link", { name: /write an email/i }).getAttribute("href")).startsWith("mailto:"));
+  await page.getByRole("dialog", { name: "Open your email app?" }).getByRole("button", { name: "Yes, write an email" }).click();
+  assert.equal(await page.getByRole("dialog").count(), 0);
+  assert.deepEqual(errors, []);
+  console.log("Contact incident flow passed");
+} finally {
+  await browser.close();
+}

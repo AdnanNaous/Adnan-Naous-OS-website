@@ -25,6 +25,18 @@ export default function Portfolio() {
   }, []);
 
   useEffect(() => {
+    const openFromKeyboard = (event: KeyboardEvent) => {
+      if (event.key !== "/" || event.altKey || event.ctrlKey || event.metaKey) return;
+      const target = event.target instanceof HTMLElement ? event.target : null;
+      if (target?.closest("input,textarea,[contenteditable='true']") || document.querySelector("[aria-modal='true']")) return;
+      event.preventDefault();
+      setSecretOpen(true);
+    };
+    addEventListener("keydown", openFromKeyboard);
+    return () => removeEventListener("keydown", openFromKeyboard);
+  }, []);
+
+  useEffect(() => {
     const sections = destinations.map(id => document.getElementById(id)).filter((section): section is HTMLElement => !!section);
     let lastScroll = scrollY;
     let upwardTravel = 0;
@@ -139,7 +151,7 @@ export default function Portfolio() {
           <div className="hero-terminal" aria-label="Welcome message">
             <div className="terminal-head"><span>AN // VISITOR CHANNEL</span><span>● LIVE</span></div>
             <p><span aria-hidden="true">&gt; </span>Welcome. Follow the signal.<span className="terminal-cursor" aria-hidden="true">_</span></p>
-            <button type="button" className="terminal-secret" onClick={() => setSecretOpen(true)} aria-expanded={secretOpen} aria-haspopup="dialog">[ ? ] OPEN TERMINAL</button>
+            <button type="button" className="terminal-secret" onClick={() => setSecretOpen(true)} aria-expanded={secretOpen} aria-haspopup="dialog" aria-keyshortcuts="/" aria-label="Open AN/OS terminal workspace"><span aria-hidden="true">[ / ]</span><strong>OPEN TERMINAL</strong><span aria-hidden="true">↗</span></button>
           </div>
         </div>
         <div className="hero-coordinate" aria-hidden="true"><span>AN / 2026</span></div>
