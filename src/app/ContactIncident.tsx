@@ -91,8 +91,9 @@ export default function ContactIncident({ emailHref, onClose, onFix }: {
   };
 
   if (!portal) return null;
-  return createPortal(<div className={`${styles.overlay} ${phase === "confirm" ? styles.confirmOverlay : styles.incidentOverlay}`}>
+  return createPortal(<div data-phase={phase} className={`${styles.overlay} ${phase === "confirm" ? styles.confirmOverlay : styles.incidentOverlay}`}>
     <div className={styles.scanlines} aria-hidden="true" />
+    {phase !== "confirm" && <div className={styles.faultField} aria-hidden="true"><span>AN/OS // SIGNAL LOST<br />FRAME 001—404<br />MEMORY DESYNC</span><span>01001011 00110110<br />NO CARRIER / NO RESPONSE<br />RECOVERY MODE ACTIVE</span></div>}
     <div ref={dialog} className={`${styles.panel} ${phase === "confirm" ? styles.confirmPanel : styles.incidentPanel} ${phase === "destroying" ? styles.destroying : ""}`} role="dialog" aria-modal="true" aria-labelledby="contact-incident-title" aria-describedby="contact-incident-description" tabIndex={-1}>
       {phase === "confirm" ? <>
         <p className={styles.eyebrow}>AN / MAIL CHANNEL</p>

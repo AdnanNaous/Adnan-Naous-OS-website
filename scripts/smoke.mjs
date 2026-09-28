@@ -9,6 +9,10 @@ try {
   page.on("pageerror", error => errors.push(error.message));
   await page.goto(base);
   assert(await page.locator(".intro-retro-screen").isVisible());
+  assert.deepEqual(await page.locator(".intro-retro-screen").evaluate(screen => {
+    const style = getComputedStyle(screen);
+    return [style.animationName, style.clipPath, style.filter];
+  }), ["none", "none", "none"], "Intro first frame should not animate a clipped or blurred full screen");
   const fillsViewport = () => page.locator(".intro-retro-screen").evaluate(screen => {
     const bounds = screen.getBoundingClientRect();
     return bounds.left <= 20 && bounds.top <= 20 && bounds.right >= innerWidth - 20 && bounds.bottom >= innerHeight - 20;

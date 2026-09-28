@@ -1,42 +1,37 @@
-.intro.intro-retro{display:block;padding:0;background:#030504;isolation:isolate;transition:opacity .24s ease,visibility .24s}
+.intro.intro-retro{display:block;padding:0;background:#030303;isolation:isolate;transition:opacity .34s ease,visibility .34s}
 .intro.intro-retro:before{content:none}
 .intro.intro-retro[data-state=done],.intro.intro-retro[data-state=skip]{opacity:0;visibility:hidden;pointer-events:none}
 .intro-retro-set{position:absolute;inset:0;width:100%;height:100%;height:100dvh;pointer-events:none}
-.intro-retro-screen{position:relative;display:flex;flex-direction:column;justify-content:space-between;width:100%;height:100%;min-height:0;overflow:hidden;padding:clamp(36px,5.8vw,88px) clamp(38px,7.5vw,120px);background:radial-gradient(ellipse 77% 74% at 50% 47%,#28302e 0%,#191f1d 42%,#0b0f0e 74%,#020303 100%);color:#e3e9e4;text-shadow:0 0 4px #b9dcc65e,0 0 18px #aecbb547;animation:intro-retro-power .85s cubic-bezier(.18,.8,.3,1) both}
-.intro-retro-screen:before{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse 70% 70% at 50% 49%,transparent 46%,#05070678 78%,#010201ed 100%),linear-gradient(90deg,#0009,transparent 7%,transparent 93%,#0009);box-shadow:inset 0 0 55px 18px #020403,inset 0 0 130px 35px #010201c7}
-.intro-retro-screen:after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;opacity:.36;background:repeating-linear-gradient(0deg,#0000 0px,#0000 2px,#01030296 3px,#01030296 4px),repeating-linear-gradient(90deg,#b4ffe30c 0px,#b4ffe30c 1px,#ffb9b907 1px,#ffb9b907 2px,#9ebaff0a 2px,#9ebaff0a 3px);mix-blend-mode:multiply}
-.intro-retro-glass{position:absolute;inset:-20%;z-index:1;pointer-events:none;opacity:.24;transform:rotate(-11deg);background:linear-gradient(108deg,transparent 25%,#d8ffef09 38%,#ddffec21 42%,transparent 52%,transparent 78%,#d8ffef0b 83%,transparent 88%);filter:blur(24px);animation:intro-retro-reflection 2.25s ease-out both}
-.intro-retro-top,.intro-retro-bottom{position:relative;z-index:5;display:flex;justify-content:space-between;gap:12px;font:600 clamp(9px,.9vw,12px)/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em;color:#aebcb3;text-shadow:0 0 7px #bfe8c284}
-.intro-retro-led{color:#d4f0db;text-shadow:0 0 7px #e7fff0,0 0 19px #c6f6d5;animation:intro-retro-led .8s steps(1,end) 2}
-.intro-retro-bottom{padding-top:13px;border-top:1px solid #9db4a44a;color:#99a99e}
-.intro-retro-bottom span:last-child{color:#cee2d1}
-.intro-retro-content{position:relative;z-index:5;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;gap:clamp(10px,1.6vw,22px);width:100%;padding:20px 0 28px;animation:intro-retro-content-in .55s .2s ease-out both}
-.intro-retro-signal{font:500 clamp(9px,.83vw,11px)/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.24em;color:#a2b6a7;opacity:.75}
-.intro-retro-prompt{padding:7px 12px;border:0;background:transparent;font:700 clamp(11px,1.2vw,15px)/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.2em;color:#e5f0e7;text-shadow:0 0 8px #d3f7dcaf;cursor:pointer;pointer-events:auto}
-.intro-retro-prompt:hover,.intro-retro-prompt:focus-visible{background:#d9f4e41b;outline:1px solid #daefe1a6;outline-offset:2px}
-.intro-retro-caret{display:inline-block;animation:intro-retro-blink .55s steps(1,end) 3}
-.intro-retro-name{display:block;font-family:var(--font-interface),sans-serif;font-size:clamp(82px,min(14.6vw,22vh),230px);font-weight:700;line-height:.82;letter-spacing:-.065em;color:#e9f0e9;text-shadow:0 0 1px #f8fff7,0 0 6px #d5f7df70,1px 0 14px #bce8cb38;animation:intro-retro-focus .65s .2s ease-out both}
-.intro-retro-tagline{font:600 clamp(9px,1vw,13px)/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em;color:#c4d4c8;text-shadow:0 0 7px #bfe8c284}
-.intro-retro-skip{position:absolute;z-index:6;inset-inline-end:clamp(38px,7.5vw,120px);bottom:clamp(107px,14vh,150px);border:0;border-bottom:1px solid #a7bbaa90;background:#1019149c;color:#d6e5d9;padding:9px 4px;font:600 11px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em;cursor:pointer;transition:color .2s,border-color .2s,background .2s}
-.intro-retro-skip:hover,.intro-retro-skip:focus-visible{color:#fff;border-color:#fff;background:#d8f4e421;outline:1px solid #daefe1a6;outline-offset:3px}
-@keyframes intro-retro-blink{50%{opacity:0}}
-@keyframes intro-retro-led{50%{opacity:.3}}
-@keyframes intro-retro-power{0%{opacity:0;filter:brightness(2.1);clip-path:inset(49.7% 0)}38%{opacity:1;filter:brightness(1.6);clip-path:inset(46% 0)}72%{clip-path:inset(0);filter:brightness(1.18)}100%{opacity:1;filter:brightness(1);clip-path:inset(0)}}
-@keyframes intro-retro-content-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-@keyframes intro-retro-focus{0%{opacity:0;filter:blur(16px);text-shadow:0 0 35px #e8ffea}55%{opacity:1;filter:blur(2px)}100%{filter:blur(.28px)}}
-@keyframes intro-retro-reflection{from{opacity:0;transform:translateX(-12%) rotate(-11deg)}to{opacity:.24;transform:translateX(0) rotate(-11deg)}}
+/* The first painted frame is complete. No full-screen clip-path or animated blur. */
+.intro-retro-screen{position:relative;display:flex;flex-direction:column;justify-content:space-between;width:100%;height:100%;min-height:0;overflow:hidden;padding:clamp(36px,5.8vw,88px) clamp(38px,7.5vw,120px);background:radial-gradient(ellipse 80% 76% at 50% 47%,#303030 0%,#191919 44%,#090909 78%,#020202 100%);color:#f1f1f1;text-shadow:0 0 8px #ffffff38}
+.intro-retro-screen:before{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse 73% 73% at 50% 47%,transparent 48%,#0008 83%,#000e 100%),linear-gradient(90deg,#0009,transparent 8%,transparent 92%,#0009);box-shadow:inset 0 0 80px 20px #0008}
+.intro-retro-screen:after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;opacity:.25;background:repeating-linear-gradient(0deg,transparent 0 2px,#000b 3px 4px),repeating-linear-gradient(90deg,#ffffff09 0 1px,transparent 1px 3px);mix-blend-mode:multiply}
+.intro-retro-glass{position:absolute;inset:-20%;z-index:1;pointer-events:none;opacity:.5;transform:rotate(-10deg);background:linear-gradient(106deg,transparent 29%,#ffffff04 37%,#ffffff17 41%,transparent 50%,transparent 79%,#ffffff08 83%,transparent 88%)}
+.intro-retro-top,.intro-retro-bottom{position:relative;z-index:5;display:flex;justify-content:space-between;gap:12px;font:600 clamp(9px,.9vw,12px)/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em;color:#c3c3c3;text-shadow:0 0 7px #ffffff39}
+.intro-retro-led{color:#fff;text-shadow:0 0 8px #ffffffa0}
+.intro-retro-bottom{padding-top:13px;border-top:1px solid #ffffff55;color:#b7b7b7}
+.intro-retro-bottom span:last-child{color:#e7e7e7}
+.intro-retro-content{position:relative;z-index:5;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;gap:clamp(10px,1.6vw,22px);width:100%;padding:20px 0 28px}
+.intro-retro-signal{font:500 clamp(9px,.83vw,11px)/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.24em;color:#c3c3c3}
+.intro-retro-prompt{padding:7px 12px;border:0;background:transparent;font:700 clamp(11px,1.2vw,15px)/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.2em;color:#fff;text-shadow:0 0 8px #ffffff75;cursor:pointer;pointer-events:auto}
+.intro-retro-prompt:hover,.intro-retro-prompt:focus-visible{background:#ffffff1c;outline:1px solid #ffffffa8;outline-offset:2px}
+.intro-retro-caret{display:inline-block}
+.intro-retro-name{display:block;font-family:var(--font-interface),sans-serif;font-size:clamp(82px,min(14.6vw,22vh),230px);font-weight:700;line-height:.82;letter-spacing:-.065em;color:#f4f4f4;text-shadow:0 0 2px #fff,0 0 18px #ffffff46}
+.intro-retro-tagline{font:600 clamp(9px,1vw,13px)/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em;color:#d4d4d4;text-shadow:0 0 7px #ffffff35}
+.intro-retro-skip{position:absolute;z-index:6;inset-inline-end:clamp(38px,7.5vw,120px);bottom:clamp(107px,14vh,150px);border:0;border-bottom:1px solid #ffffff90;background:#101010ab;color:#e6e6e6;padding:9px 4px;font:600 11px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em;cursor:pointer;transition:color .2s,border-color .2s,background .2s}
+.intro-retro-skip:hover,.intro-retro-skip:focus-visible{color:#fff;border-color:#fff;background:#ffffff28;outline:1px solid #fff;outline-offset:3px}
 @media(max-width:580px){.intro-retro-screen{padding:clamp(32px,7vw,45px) clamp(28px,7vw,38px)}.intro-retro-name{font-size:clamp(67px,19.5vw,112px)}.intro-retro-tagline{max-width:310px}.intro-retro-top,.intro-retro-bottom{font-size:9px;letter-spacing:.07em}.intro-retro-skip{bottom:clamp(103px,13vh,132px);inset-inline-end:clamp(28px,7vw,38px)}}
 @media(max-height:500px){.intro-retro-screen{padding-block:clamp(20px,5vh,30px)}.intro-retro-content{gap:5px;padding:0}.intro-retro-signal{display:none}.intro-retro-name{font-size:clamp(48px,min(12vw,25vh),105px)}.intro-retro-bottom{padding-top:6px}.intro-retro-skip{bottom:57px}}
-/* The existing hero resolves as the CRT clears, without changing its geometry. */
+/* Hand the image to Home with a quiet fade, keeping the heading readable throughout. */
 .intro.intro-retro[data-state=loading] ~ main #home .hero-content{opacity:0;transform:none;transition:none}
 .intro.intro-retro[data-state=done] ~ main #home .hero-content{opacity:1;transform:none;transition:none}
-.intro.intro-retro[data-state=loading] ~ main #home .hero-content.in-view .hero-name-line{animation:none;opacity:0}
-.intro.intro-retro[data-state=done] ~ main #home .hero-content.in-view .hero-name-line{animation:intro-hero-title .28s ease-out .18s both}
-.intro.intro-retro[data-state=done] ~ main #home .hero-content.in-view .hero-name-line + .hero-name-line{animation-delay:.22s}
-.intro.intro-retro[data-state=done] ~ main #home .hero-content > .section-index{animation:intro-hero-fade .25s .16s both}
-.intro.intro-retro[data-state=done] ~ main #home .hero-statement{animation:intro-hero-fade .28s .22s both}
-.intro.intro-retro[data-state=done] ~ main #home .hero-intro{animation:intro-hero-fade .28s .26s both}
-.intro.intro-retro[data-state=done] ~ main #home .hero-terminal{animation:intro-hero-fade .3s .28s both}
-@keyframes intro-hero-title{from{opacity:0;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
+.intro.intro-retro[data-state=loading] ~ main #home .hero-content.in-view .hero-name-line{opacity:0}
+.intro.intro-retro[data-state=done] ~ main #home .hero-content.in-view .hero-name-line{animation:intro-hero-enter .48s ease-out .08s both}
+.intro.intro-retro[data-state=done] ~ main #home .hero-content.in-view .hero-name-line + .hero-name-line{animation-delay:.14s}
+.intro.intro-retro[data-state=done] ~ main #home .hero-content > .section-index{animation:intro-hero-fade .4s .09s both}
+.intro.intro-retro[data-state=done] ~ main #home .hero-statement{animation:intro-hero-fade .4s .14s both}
+.intro.intro-retro[data-state=done] ~ main #home .hero-intro{animation:intro-hero-fade .4s .18s both}
+.intro.intro-retro[data-state=done] ~ main #home .hero-terminal{animation:intro-hero-fade .4s .22s both}
+@keyframes intro-hero-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes intro-hero-fade{from{opacity:0}to{opacity:1}}
-@media(prefers-reduced-motion:reduce){.intro.intro-retro{display:none}.intro-retro-screen,.intro-retro-led,.intro-retro-caret,.intro-retro-content,.intro-retro-name,.intro-retro-glass{animation:none}.intro.intro-retro ~ main #home .hero-content,.intro.intro-retro ~ main #home .hero-content > .section-index,.intro.intro-retro ~ main #home .hero-content .hero-name-line,.intro.intro-retro ~ main #home .hero-statement,.intro.intro-retro ~ main #home .hero-intro,.intro.intro-retro ~ main #home .hero-terminal{opacity:1;animation:none;transition:none;transform:none;clip-path:none}}
+@media(prefers-reduced-motion:reduce){.intro.intro-retro{display:none}.intro.intro-retro ~ main #home .hero-content,.intro.intro-retro ~ main #home .hero-content > .section-index,.intro.intro-retro ~ main #home .hero-content .hero-name-line,.intro.intro-retro ~ main #home .hero-statement,.intro.intro-retro ~ main #home .hero-intro,.intro.intro-retro ~ main #home .hero-terminal{opacity:1;animation:none;transition:none;transform:none;clip-path:none}}

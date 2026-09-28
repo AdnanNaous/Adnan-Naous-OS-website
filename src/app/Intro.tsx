@@ -20,8 +20,9 @@ export default function Intro() {
       return;
     }
 
-    // Count from navigation so hydration never adds another wait to the entrance.
-    const closeTimer = window.setTimeout(close, Math.max(0, 950 - performance.now()));
+    // Keep the already-visible first frame on screen long enough after hydration.
+    // A slow device should never jump straight from the opening frame to Home.
+    const closeTimer = window.setTimeout(close, Math.max(900, 1500 - performance.now()));
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") close();
     };

@@ -125,6 +125,20 @@ export default function Portfolio() {
       <span>route.compute(learning);</span><span>01 00 11 10 · 01 01 11</span>
       <svg viewBox="0 0 1480 760" preserveAspectRatio="none"><path d="M0 565H170L275 450H415M1480 225H1310L1200 360H1060M0 610H235L358 510H480M1480 180H1285L1180 310H1030"/><circle cx="415" cy="450" r="3"/><circle cx="1060" cy="360" r="3"/></svg>
     </div>
+    <div className="world-manga" aria-hidden="true">
+      <svg viewBox="0 0 1280 800" preserveAspectRatio="none">
+        <g className="manga-speed-lines">
+          <path d="M1280 47 899 228M1280 89 946 242M1280 124 983 254M1280 657 917 529M1280 698 961 545M1280 737 1004 560" />
+          <path d="M0 88 278 236M0 121 242 252M0 678 258 564M0 716 308 546" />
+        </g>
+        <g className="manga-ink-edges">
+          <path d="M1248 0 1165 154 1280 129M0 692 115 613 42 800M1025 0 962 94M1280 408 1175 435" />
+          <path d="M1190 163 1219 157M84 628 110 622M956 98 972 82" />
+        </g>
+      </svg>
+      <span className="manga-flare manga-flare-primary" />
+      <span className="manga-flare manga-flare-secondary" />
+    </div>
     <Intro />
     <a className="skip-link" href="#main">Skip to content</a>
     <header className={`site-nav${navHidden ? " nav-hidden" : ""}${scrolled ? " nav-scrolled" : ""}`} style={scrolled ? { backdropFilter: "blur(22px) saturate(.55)" } : undefined}>
