@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import "./experience.css";
 import "./revision.css";
@@ -19,5 +20,5 @@ export const metadata: Metadata = {
   twitter: { card: "summary", creator: "@vc_351" },
 };
 export default function Layout({children}: {children: React.ReactNode}) {
-  return <html lang="en" dir="ltr" style={{ "--font-interface": '"SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' } as React.CSSProperties}><body>{children}</body></html>;
+  return <html lang="en" dir="ltr" style={{ "--font-interface": '"SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' } as React.CSSProperties}><body>{children}<SpeedInsights /></body></html>;
 }
