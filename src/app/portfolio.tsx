@@ -49,7 +49,7 @@ export default function Portfolio() {
     const openFromKeyboard = (event: KeyboardEvent) => {
       if (event.key !== "/" || event.altKey || event.ctrlKey || event.metaKey) return;
       const target = event.target instanceof HTMLElement ? event.target : null;
-      if (target?.closest("input,textarea,[contenteditable='true']") || document.querySelector("[aria-modal='true']")) return;
+      if (target?.closest("input,textarea,[contenteditable='true']") || document.querySelector("[aria-modal='true']") || document.querySelector(".intro[data-state='loading']")) return;
       event.preventDefault();
       setSecretOpen(true);
     };

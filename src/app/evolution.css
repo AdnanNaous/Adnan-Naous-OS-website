@@ -18,6 +18,7 @@ body{background:#080808}
 .hero-content{width:min(740px,66%);z-index:2}
 .hero-content .section-index{margin-bottom:42px}
 .hero-title{font-size:clamp(86px,12.3vw,192px);font-weight:590;letter-spacing:-.078em;line-height:.83;margin-bottom:38px;overflow:visible}
+.hero-title:focus{outline:none}
 .hero-name-line{display:block;position:relative;overflow:visible;animation:none!important;clip-path:none!important}
 .hero-name-line:nth-child(2){margin-left:7.5%}
 .hero-name-line:after{content:"";position:absolute;left:-5%;top:60%;width:110%;height:1px;background:#ffffff50;opacity:0;pointer-events:none}

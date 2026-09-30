@@ -20,6 +20,8 @@ try {
     await page.goto(base);
     if(!reduced && await page.locator(".intro").getAttribute("data-state")==="loading") {
       assert(await page.locator("main").evaluate(node=>node.inert),"Boot blocks background focus");
+      await page.keyboard.press("/");
+      assert.equal(await page.getByRole("dialog",{name:"AN/OS terminal"}).count(),0,"Boot defers workspace shortcuts");
       await page.locator(".intro-retro-start").click();
     }
     await page.locator(".intro").waitFor({state:"hidden"});
