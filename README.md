@@ -24,7 +24,13 @@ The terminal runs JavaScript and dot scripts in a restricted browser sandbox. Ja
 
 Brain Q&A is a local, curated question collection. It uses no AI provider, API route, or database. `src/data/brainPromptSampling.ts` selects three unique questions and avoids the current group when enough alternatives exist. Add source-linked questions to small `brainPromptChunk*.ts` files (about 100 per chunk), then register each chunk's count and import in `src/data/brainPrompts.ts`. Only selected chunks load; the sampler supports a 10,000-question collection without rendering or loading all answers at once. The current collection contains six questions.
 
-Interface typography uses self-hosted Inter Variable; its license is in `public/fonts/Inter-OFL.txt`. Terminal text retains its monospace face.
+Typography is self-hosted in `src/app/typography.css`: Source Serif 4 gives Home/Brain an editorial voice and About/Contact an italic voice; Roboto Condensed gives Work an industrial voice; IBM Plex Mono gives Codex a precise voice; Inter stays on body text and the learning map. Only used Latin faces load. All four SIL OFL notices are in `public/fonts/`.
+
+`src/graphics/optics/` captures real heading line breaks and renders a bounded traveling deformation front in one WebGL canvas. Wavelength samples follow warped glyph edges; the scene canvas supplies refraction. DOM headings stay semantic and immediately regain their paint on graphics failure/context loss. Reduced motion uses stable glyphs. The rasterizer caches geometry and recaptures after font, layout or viewport changes.
+
+`src/motion/transition.ts` is the reversible black shutter controller. Semantic navigation follows scrolling immediately; `visualChapter` changes only after a full covered frame, and stays covered for the first frame of the new environment. Repeated destinations/reversals coalesce. All motion uses the shared adaptive clock; pointer velocity is bounded and position/force damp back to rest.
+
+Seven cached perspective environments live in `src/graphics/scenes/environment.ts`. Mesh faces are depth sorted with deterministic surface detail; mobile selects fewer, larger forms. About reuses the same shutter controller inside three separate environmental/narrative/navigation regions. Contact uses an explicit full-width grid with left-aligned bounded transmission rows, replacing automatic left margins. No external reference media or models are shipped.
 
 ## Run locally
 
@@ -48,6 +54,8 @@ With the server running, in another terminal:
 ```sh
 pnpm test:browser
 node scripts/ratios.mjs
+node scripts/materials-smoke.mjs
+node --test scripts/scene-transition.test.mjs scripts/motion-runtime.test.mjs
 ```
 
 The browser checks default to `http://127.0.0.1:3000`; set `BASE_URL` for another address.

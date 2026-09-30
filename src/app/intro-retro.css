@@ -29,9 +29,6 @@
 .intro.intro-retro[data-state=loading] ~ main #home .hero-content{opacity:0;transform:none;transition:none}
 .intro.intro-retro[data-state=done] ~ main #home .hero-content,html[data-an-boot=skip] .intro.intro-retro ~ main #home .hero-content{opacity:1;transform:none;transition:none}
 .intro.intro-retro[data-state=loading] ~ main #home .hero-content.in-view .hero-name-line{opacity:0}
-.intro.intro-retro[data-state=done] ~ main #home .hero-content.in-view .hero-name-line{animation:intro-hero-enter .7s cubic-bezier(.18,.82,.18,1) .04s both}
-.intro.intro-retro[data-state=done] ~ main #home .hero-content.in-view .hero-name-line+.hero-name-line{animation-delay:.13s}
-@keyframes intro-hero-enter{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
 @media(max-width:700px){.intro-retro-beat{padding:0 25px 9vh}.intro-retro-beat strong{font-size:clamp(90px,27vw,190px)}.intro-retro-beat-signal strong,.intro-retro-beat-ready strong{font-size:clamp(58px,16.5vw,125px)}.intro-retro-bottom{display:none}.intro-retro-actions{gap:20px}.intro-retro-start{min-width:142px;gap:26px}.intro-retro-frame{font-size:8px}.intro-retro-overline,.intro-retro-under{font-size:9px;letter-spacing:.13em}}
 @media(max-height:520px){.intro-retro-beat{padding-top:10vh;padding-bottom:10vh}.intro-retro-beat strong{font-size:min(19vw,33vh)}.intro-retro-beat-signal strong,.intro-retro-beat-ready strong{font-size:min(14vw,26vh)}.intro-retro-overline{margin-bottom:12px}.intro-retro-under{margin-top:13px}.intro-retro-rail{bottom:68px}.intro-retro-actions{bottom:16px}}
 @media(prefers-reduced-motion:reduce){.intro.intro-retro{display:none}.intro.intro-retro ~ main #home .hero-content,.intro.intro-retro ~ main #home .hero-content .hero-name-line{opacity:1!important;animation:none!important;transform:none!important;transition:none!important}}

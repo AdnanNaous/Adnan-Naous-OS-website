@@ -143,3 +143,20 @@
   .brain-section .brain-depth-word,.brain-section .brain-window{transition:none}
   .brain-section .brain-window-thought{animation:none}
 }
+
+/* Memory is a spatial threshold, not a surrounding card. Opening the index exposes its lower plane. */
+.brain-section .brain-entry{border:0;background:transparent;overflow:hidden;min-height:clamp(440px,68svh,740px)}
+.brain-section .brain-entry:before{content:none}
+.brain-section .brain-entry-content{padding:85px 20px 95px}
+.brain-section .brain-seam{display:none}
+.brain-section .brain-depth-word{font-family:var(--font-industrial);font-size:clamp(130px,27vw,430px);opacity:.1;transform:translate(-50%,-50%) rotate(-4deg);transition:opacity .65s,letter-spacing .8s}
+.brain-section.is-entered .brain-depth-word{transform:translate(-50%,-50%) rotate(-4deg);opacity:.12}
+.brain-section.is-archive-open .brain-depth-word{opacity:.035;letter-spacing:.035em}
+.brain-section.is-archive-open .brain-memory-trace{opacity:.1}
+.brain-section .brain-workspace.has-windows{border:0;background:transparent;box-shadow:none}
+.brain-section .brain-workspace.has-windows:before{content:none}
+.brain-section .brain-workspace-architecture{border-color:#ffffff45}
+.brain-section .brain-window-archive{transform:none;border-width:1px 0;box-shadow:0 35px 70px #0009}
+.brain-section .brain-window-bar{background:#151515}
+.brain-section .brain-ask{border:0;border-block:1px solid #ffffff35;background:transparent;box-shadow:none;padding-inline:0}
+@media(max-width:700px){.brain-section .brain-entry{min-height:360px}.brain-section .brain-entry-content{padding-block:65px}.brain-section .brain-workspace.has-windows{height:auto}}

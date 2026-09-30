@@ -76,7 +76,7 @@ export function BrainSection() {
     requestAnimationFrame(() => openerRef.current?.focus({ preventScroll: true }));
   }
 
-  return <section ref={sectionRef} id="brain" className={`content-section brain-section${entered ? " is-entered" : ""}${activeId ? " is-reading" : ""}`} aria-labelledby="brain-title">
+  return <section ref={sectionRef} id="brain" className={`content-section brain-section${entered ? " is-entered" : ""}${open ? " is-archive-open" : ""}${activeId ? " is-reading" : ""}`} aria-labelledby="brain-title">
     <div className="brain-entry">
       <span className="brain-seam brain-seam-left" aria-hidden="true" />
       <span className="brain-seam brain-seam-right" aria-hidden="true" />

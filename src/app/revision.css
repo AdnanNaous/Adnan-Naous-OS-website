@@ -3,9 +3,6 @@
 .hero-content{flex:none}
 .hero-title{overflow:visible;line-height:.91}
 .hero-name-line{display:block;white-space:nowrap}
-.hero-content.in-view .hero-name-line{animation:hero-resolve .8s steps(10,end) both}
-.hero-content.in-view .hero-name-line+ .hero-name-line{animation-delay:.15s}
-@keyframes hero-resolve{from{opacity:.15;clip-path:inset(0 100% 0 0);transform:translateY(10px)}to{opacity:1;clip-path:inset(0 0 0 0);transform:none}}
 .hero-coordinate{position:relative;inset:auto;bottom:auto;width:100%;margin-top:28px;padding-top:13px}
 .work-section,.now-section,.codex-section,.about-section{padding-top:88px;padding-bottom:90px}
 .work-section .section-head,.now-section .section-head,.codex-section .codex-top,.about-section .section-head{margin-bottom:38px}

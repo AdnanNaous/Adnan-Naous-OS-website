@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { contact, copy, socials } from "@/data/portfolio";
-import { getRangeProgress, subscribeMotion } from "@/motion/runtime";
+import { getRangeProgress, invalidateMotion, subscribeMotion } from "@/motion/runtime";
+import { createSceneTransition } from "@/motion/transition";
 import ContactIncident from "./ContactIncident";
 
 const objectives = [
@@ -47,25 +48,29 @@ const storyLabels = ["THE FIRST PATH", "THE TURN", "THE FIRST BUILD", "THE THREA
 const storyCoordinates = ["2023 / MEDICINE", "2025 / COMPUTING", "BUILD / ADNAN OS", "NOW / KEEP GOING"];
 
 export function AboutSection() {
-  const [step, setStep] = useState(0);
-  const [manual, setManual] = useState<number | null>(null);
+  const [active, setActive] = useState(0);
+  const manual = useRef<number | null>(null);
   const [reduced, setReduced] = useState(false);
   const track = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const lastScroll = useRef(0);
+  const historyMaterial = useRef(createSceneTransition<string>("0", ["0", "1", "2", "3"]));
   useEffect(() => subscribeMotion(frame => {
     if (!track.current || !stage.current) return;
     setReduced(frame.reduced);
     const progress = getRangeProgress(track.current);
-    setStep(Math.min(3, Math.floor(progress * 4)));
-    if (Math.abs(frame.scrollY - lastScroll.current) > 6) setManual(null);
+    if (Math.abs(frame.scrollY - lastScroll.current) > 6) manual.current = null;
     lastScroll.current = frame.scrollY;
+    const destination = String(manual.current ?? Math.min(3, Math.floor(progress * 4)));
+    const history = historyMaterial.current.advance(destination, frame.delta, frame.reduced);
+    setActive(frame.reduced ? Number(destination) : Number(history.visualChapter));
+    stage.current.style.setProperty("--history-cover", frame.reduced ? "0" : String(history.transitionState.coverage));
+    stage.current.dataset.historyPhase = history.transitionState.phase;
     stage.current.style.setProperty("--story-fill", `${progress * 100}%`);
     stage.current.style.setProperty("--beacon-position", `${8 + progress * 84}%`);
     stage.current.style.setProperty("--story-code-opacity", `${Math.max(0, .22 * (1 - progress * 1.5))}`);
     stage.current.style.setProperty("--story-code-shift", `${progress * -40}px`);
-  }), []);
-  const active = manual ?? step;
+  }, { continuous: true }), []);
   return <section id="about" className={`content-section about-section${reduced ? " story-reduced" : ""}`} aria-labelledby="about-title">
     <div className="section-head reveal"><p className="section-index">06 / BACKGROUND</p><h2 id="about-title" className="section-title">How I got here.</h2><p className="section-lead">The field changed. The curiosity stayed.</p></div>
     <div className="story-track" ref={track}><div className="story-stage" ref={stage} data-story={active}>
@@ -79,9 +84,9 @@ export function AboutSection() {
       ].map((line, index) => <span key={index}>{line}</span>)}</div>
       <div className="story-memory" aria-hidden="true"><span>{storyCoordinates[active]}</span><svg viewBox="0 0 600 110" preserveAspectRatio="none"><path className="story-pulse" d="M0 58H80L100 58L117 28L133 86L150 8L171 101L192 58H257L283 58L308 44L331 58H400L430 58L445 32L468 82L489 58H600"/><path className="story-route" d="M0 58H80L117 58L150 8H230V58H308V90H400V32H489V58H600"/></svg></div>
       <div className="story-progress" aria-hidden="true"><span/></div>
-      {copy.en.story.map((beat, index) => <div className={`story-panel${active === index ? " is-active" : ""}`} key={index} aria-hidden={!reduced && active !== index}><span className="story-marker">0{index + 1} / {storyLabels[index]}</span><p>{beat}</p></div>)}
-      <div className="story-controls" aria-label="Story chapters">{storyLabels.map((label, index) => <button key={label} type="button" aria-label={`Read chapter ${index + 1}: ${label}`} aria-pressed={active === index} onClick={() => { lastScroll.current = window.scrollY; setManual(index); }}>0{index + 1}</button>)}</div>
-      <span className="story-count" aria-hidden="true">0{active + 1} / 04</span>
+      <div className="story-narrative">{copy.en.story.map((beat, index) => <div className={`story-panel${active === index ? " is-active" : ""}`} key={index} aria-hidden={!reduced && active !== index}><span className="story-marker">0{index + 1} / {storyLabels[index]}</span><p>{beat}</p></div>)}<div className="story-history-mask" aria-hidden="true"><i/><i/></div></div>
+      <div className="story-navigation"><div className="story-controls" aria-label="Story chapters">{storyLabels.map((label, index) => <button key={label} type="button" aria-label={`Read chapter ${index + 1}: ${label}`} aria-pressed={active === index} onClick={() => { lastScroll.current = window.scrollY; manual.current = index; invalidateMotion(); }}>0{index + 1}</button>)}</div>
+      <span className="story-count" aria-hidden="true">0{active + 1} / 04</span></div>
     </div></div>
     <div className="about-actions reveal"><button className="command-action command-action-quiet cv-command" type="button" onClick={() => window.dispatchEvent(new CustomEvent("an-os-open-terminal", { detail: "cv" }))}><span>&gt; read_cv.txt</span><span className="action-tail">↗</span></button><span className="cv-note">{"// read the document in the terminal"}</span></div>
   </section>;

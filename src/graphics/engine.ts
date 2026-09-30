@@ -1,16 +1,13 @@
-import { chapterIds, invalidateMotion, setMotionQuiet, subscribeMotion, type Chapter, type MotionFrame } from "../motion/runtime";
+import { invalidateMotion, setMotionQuiet, setMotionVisualChapter, subscribeMotion, type MotionFrame } from "../motion/runtime";
 import { VISUAL_STATE_EVENT, type VisualState } from "./state";
-import { paintChapter, paintFinish, paintOpening, paintSignal, type SceneInput } from "./scenes";
-
-const clamp = (n: number) => Math.max(0, Math.min(1, n));
-const smooth = (n: number) => { const v = clamp(n); return v * v * (3 - 2 * v); };
+import { paintChapter, paintFinish, paintSignal, type SceneInput } from "./scenes";
 
 /** The canvas is a film set behind HTML. Every frame comes from the shared motion clock. */
 export function mountEngine(host: HTMLElement, canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext("2d", { alpha: false, desynchronized: true });
   if (!ctx) { host.dataset.fallback = "true"; return () => {}; }
   let width = 0, height = 0, dpr = 1, override: VisualState | null = null;
-  let failed = false, lastChapter: Chapter = "home", transition = 0;
+  let failed = false;
   let grain: CanvasPattern | null = null;
   const noise = document.createElement("canvas");
   noise.width = noise.height = 96;
@@ -35,29 +32,25 @@ export function mountEngine(host: HTMLElement, canvas: HTMLCanvasElement) {
         canvas.width = Math.ceil(width * dpr); canvas.height = Math.ceil(height * dpr);
         canvas.style.width = `${width}px`; canvas.style.height = `${height}px`;
       }
-      const chapter = override === "home" ? "home" : override === "brain" || override === "reading" ? "brain" : frame.chapter;
-      if (chapter !== lastChapter) { lastChapter = chapter; transition = 1; }
-      transition *= frame.reduced ? 0 : Math.exp(-frame.delta / 380);
+      const chapter = frame.visualChapter;
       host.dataset.chapter = chapter;
       host.dataset.state = override || chapter;
       host.dataset.quality = frame.reduced ? "reduced" : constrained ? "low" : frame.mobile ? "mobile" : "desktop";
       host.dataset.renderer = "canvas2d";
       const input: SceneInput = {
         time: frame.reduced || override === "reading" ? 0 : frame.time,
-        progress: frame.chapterProgress, velocity: frame.reduced ? 0 : frame.velocity,
+        progress: chapter === frame.chapter ? frame.chapterProgress : 0, velocity: frame.reduced ? 0 : frame.velocity,
         pointerX: frame.reduced || frame.mobile ? 0 : frame.pointerX * 18,
         pointerY: frame.reduced || frame.mobile ? 0 : frame.pointerY * 12,
-        mobile: frame.mobile, reduced: frame.reduced, quiet: override === "reading",
+        pointerForce: frame.pointerForce, pointerVelocityX: frame.pointerVelocityX, pointerVelocityY: frame.pointerVelocityY,
+        viewportAspect: width / Math.max(1, height),
+        mobile: frame.mobile, reduced: frame.reduced, quiet: frame.quiet,
       };
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx!.fillStyle = "#070808"; ctx!.fillRect(0, 0, width, height);
       ctx!.save(); ctx!.scale(width / 1200, height / 800);
-      const index = chapterIds.indexOf(chapter);
-      const outgoing = override ? 0 : smooth((frame.chapterProgress - .68) / .28);
-      paintChapter(ctx!, chapter, input, 1 - outgoing);
-      if (outgoing && index < chapterIds.length - 1) paintChapter(ctx!, chapterIds[index + 1], { ...input, progress: 0 }, outgoing);
-      paintOpening(ctx!, chapter, input, transition);
-      paintSignal(ctx!, input, outgoing);
+      paintChapter(ctx!, chapter, input, 1);
+      paintSignal(ctx!, input, 0);
       paintFinish(ctx!, input);
       ctx!.restore();
       if (grain) { ctx!.globalAlpha = frame.reduced ? .18 : .4; ctx!.fillStyle = grain; ctx!.fillRect(0, 0, width, height); ctx!.globalAlpha = 1; }
@@ -69,11 +62,12 @@ export function mountEngine(host: HTMLElement, canvas: HTMLCanvasElement) {
     const value = (event as CustomEvent<unknown>).detail;
     if (value === null || value === "home" || value === "brain" || value === "reading") {
       override = value;
+      setMotionVisualChapter(value === "home" ? "home" : value === "brain" || value === "reading" ? "brain" : null);
       setMotionQuiet(value === "reading");
       invalidateMotion();
     }
   }
   window.addEventListener(VISUAL_STATE_EVENT, visualState);
   const unsubscribe = subscribeMotion(render, { continuous: true });
-  return () => { unsubscribe(); setMotionQuiet(false); window.removeEventListener(VISUAL_STATE_EVENT, visualState); noise.width = noise.height = 0; grain = null; canvas.width = canvas.height = 0; };
+  return () => { unsubscribe(); setMotionQuiet(false); setMotionVisualChapter(null); window.removeEventListener(VISUAL_STATE_EVENT, visualState); noise.width = noise.height = 0; grain = null; canvas.width = canvas.height = 0; };
 }

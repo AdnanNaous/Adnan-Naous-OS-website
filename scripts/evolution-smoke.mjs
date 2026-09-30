@@ -70,6 +70,7 @@ try {
     if(reduced)assert.equal(await page.locator(".story-panel:visible").count(),4,"Reduced motion exposes all factual story content");
     else{
       await page.getByRole("button",{name:"Read chapter 3: THE FIRST BUILD"}).click();
+      await page.waitForFunction(()=>document.querySelector(".story-panel.is-active")?.textContent?.includes("Adnan OS"));
       assert((await page.locator(".story-panel.is-active").textContent()).includes("Adnan OS"));
       await page.evaluate(()=>{const track=document.querySelector(".story-track");scrollTo({top:track.getBoundingClientRect().top+scrollY+(track.offsetHeight-innerHeight)*.9,behavior:"instant"});});
       await page.waitForFunction(()=>document.querySelector(".story-panel.is-active")?.textContent?.includes("portfolio"));

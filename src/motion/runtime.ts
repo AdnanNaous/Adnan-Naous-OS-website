@@ -1,23 +1,33 @@
+import { createSceneTransition, type TransitionState } from "./transition";
+
 /** One clock and one cached view of the page for DOM and canvas motion. */
 export const chapterIds = ["home", "brain", "work", "now", "codex", "about", "contact"] as const;
 export type Chapter = (typeof chapterIds)[number];
 export type MotionFrame = {
   time: number; delta: number; scrollY: number; width: number; height: number;
-  velocity: number; pointerX: number; pointerY: number; reduced: boolean;
-  mobile: boolean; chapter: Chapter; chapterProgress: number;
+  velocity: number; pointerX: number; pointerY: number;
+  pointerVelocityX: number; pointerVelocityY: number; pointerForce: number;
+  reduced: boolean; quiet: boolean; mobile: boolean; chapter: Chapter; chapterProgress: number;
+  visualChapter: Chapter; transitionState: TransitionState<Chapter>;
 };
 type Subscriber = { callback: (frame: MotionFrame) => void; continuous: boolean; foreground: boolean };
 type Bounds = { id: Chapter; top: number; height: number; node: HTMLElement };
 const clamp = (n: number) => Math.max(0, Math.min(1, n));
 const subscribers = new Set<Subscriber>();
+let transition = createSceneTransition<Chapter>("home", chapterIds);
+let visualOverride: Chapter | null = null;
 let bounds: Bounds[] = [];
 let frame: MotionFrame = {
   time: 0, delta: 0, scrollY: 0, width: 0, height: 0, velocity: 0,
-  pointerX: 0, pointerY: 0, reduced: false, mobile: false,
-  chapter: "home", chapterProgress: 0,
+  pointerX: 0, pointerY: 0, pointerVelocityX: 0, pointerVelocityY: 0, pointerForce: 0,
+  reduced: false, quiet: false, mobile: false, chapter: "home", chapterProgress: 0,
+  ...transition.snapshot(),
 };
 let active = false, dirty = true, raf = 0, paceTimer = 0, lastTick = 0, lastScrollTime = 0;
-let pointerX = 0, pointerY = 0, cost = 0, downgrade = 0, quiet = false;
+let pointerTargetX = 0, pointerTargetY = 0, pointerInputVelocityX = 0, pointerInputVelocityY = 0;
+let lastPointerTime = 0, pointerInside = false;
+let cost = 0, downgrade = 0, quiet = false;
+const pointerPhysics = { positionDamping: 115, velocityDamping: 90, forceAttack: 65, forceRelease: 260, restDelay: 1300, restDamping: 700 };
 const ranges = new Map<HTMLElement, { top: number; height: number }>();
 const observedNodes = new Set<HTMLElement>();
 let tickCount = 0, callbackCount = 0;
@@ -69,28 +79,41 @@ function tick(now: number) {
   const reduced = !!reducedQuery?.matches;
   const continuous = !reduced && [...subscribers].some(subscriber => subscriber.continuous && (!quiet || subscriber.foreground));
   const interval = (mobile ? 50 : 33.3) * (downgrade ? 1.5 : 1);
-  if (!dirty && (!continuous || now - lastTick < interval)) {
-    if (continuous) schedulePaced(Math.max(1, interval - (now - lastTick)));
+  // Input bursts still share the capped clock; the shutter must advance even in quiet/reduced modes.
+  if (lastTick && now - lastTick < interval) {
+    schedulePaced(Math.max(1, interval - (now - lastTick)));
+    return;
+  }
+  if (!dirty && !continuous && !transition.active && !pointerNeedsFrame(now) && Math.abs(frame.velocity) <= .025) {
     return;
   }
   const started = performance.now();
   const delta = lastTick ? Math.min(80, now - lastTick) : 16;
   const y = window.scrollY;
   const chapter = deriveChapter(y, window.innerHeight);
+  const scene = transition.advance(visualOverride ?? chapter.chapter, delta, reduced);
+  const pointer = advancePointer(now, delta, reduced || mobile);
   const rawVelocity = (y - frame.scrollY) / Math.max(16, now - (lastScrollTime || now - 16));
   const velocity = Math.abs(y - frame.scrollY) > .5 ? Math.max(-3, Math.min(3, rawVelocity)) : frame.velocity * Math.exp(-delta / 95);
   const next: MotionFrame = {
     time: now / 1000, delta, scrollY: y, width: window.innerWidth, height: window.innerHeight,
-    velocity, pointerX, pointerY, reduced, mobile,
+    velocity, ...pointer, reduced, quiet, mobile, ...scene,
     chapter: chapter.chapter, chapterProgress: chapter.progress,
   };
-  const changed = dirty || chapter.chapter !== frame.chapter || Math.abs(y - frame.scrollY) > .5 || Math.abs(velocity - frame.velocity) > .02;
+  const changed = dirty || chapter.chapter !== frame.chapter || Math.abs(y - frame.scrollY) > .5 || Math.abs(velocity - frame.velocity) > .02
+    || scene.visualChapter !== frame.visualChapter || scene.transitionState.phase !== frame.transitionState.phase
+    || scene.transitionState.coverage !== frame.transitionState.coverage
+    || pointer.pointerX !== frame.pointerX || pointer.pointerY !== frame.pointerY
+    || pointer.pointerVelocityX !== frame.pointerVelocityX || pointer.pointerVelocityY !== frame.pointerVelocityY
+    || pointer.pointerForce !== frame.pointerForce;
   frame = next;
   lastTick = now;
   tickCount++;
   dirty = false;
   const root = document.documentElement;
   if (root.dataset.chapter !== next.chapter) root.dataset.chapter = next.chapter;
+  root.dataset.visualChapter = next.visualChapter;
+  root.dataset.transition = next.transitionState.phase;
   if (changed) {
     root.style.setProperty("--scene-progress", next.chapterProgress.toFixed(4));
     root.style.setProperty("--scene-velocity", next.velocity.toFixed(3));
@@ -105,7 +128,7 @@ function tick(now: number) {
   }
   cost = cost * .9 + (performance.now() - started) * .1;
   downgrade = cost > 24 ? 1 : cost < 13 ? 0 : downgrade;
-  if (continuous) schedulePaced(interval);
+  if (continuous || transition.active || pointerNeedsFrame(now)) schedulePaced(interval);
   else if (Math.abs(velocity) > .025) schedulePaced(33);
 }
 
@@ -119,16 +142,56 @@ function schedulePaced(delay: number) {
   paceTimer = window.setTimeout(() => { paceTimer = 0; schedule(); }, delay);
 }
 function onScroll() { lastScrollTime = performance.now(); dirty = true; schedule(); }
+function pointerNeedsFrame(now: number) {
+  if (frame.reduced || frame.mobile) return false;
+  const resting = !pointerInside || now - lastPointerTime > pointerPhysics.restDelay;
+  return (!resting && (frame.pointerX !== 0 || frame.pointerY !== 0))
+    || frame.pointerForce !== 0 || frame.pointerVelocityX !== 0 || frame.pointerVelocityY !== 0
+    || Math.abs(frame.pointerX - (resting ? 0 : pointerTargetX)) + Math.abs(frame.pointerY - (resting ? 0 : pointerTargetY)) > .00005;
+}
+function advancePointer(now: number, delta: number, disabled: boolean) {
+  if (disabled) return { pointerX: 0, pointerY: 0, pointerVelocityX: 0, pointerVelocityY: 0, pointerForce: 0 };
+  const age = now - lastPointerTime;
+  const relaxation = pointerInside ? Math.exp(-Math.max(0, age - pointerPhysics.restDelay) / pointerPhysics.restDamping) : 0;
+  const positionMix = 1 - Math.exp(-delta / pointerPhysics.positionDamping);
+  const velocityMix = 1 - Math.exp(-delta / pointerPhysics.velocityDamping);
+  const impulseDecay = pointerInside ? Math.exp(-Math.max(0, age - 35) / 90) : 0;
+  const vx = pointerInputVelocityX * impulseDecay;
+  const vy = pointerInputVelocityY * impulseDecay;
+  const force = clamp(Math.hypot(vx, vy) / 3.5);
+  const forceMix = 1 - Math.exp(-delta / (force > frame.pointerForce ? pointerPhysics.forceAttack : pointerPhysics.forceRelease));
+  const settle = (value: number) => Math.abs(value) < .00005 ? 0 : value;
+  return {
+    pointerX: settle(frame.pointerX + (pointerTargetX * relaxation - frame.pointerX) * positionMix),
+    pointerY: settle(frame.pointerY + (pointerTargetY * relaxation - frame.pointerY) * positionMix),
+    pointerVelocityX: settle(frame.pointerVelocityX + (vx - frame.pointerVelocityX) * velocityMix),
+    pointerVelocityY: settle(frame.pointerVelocityY + (vy - frame.pointerVelocityY) * velocityMix),
+    pointerForce: settle(frame.pointerForce + (force - frame.pointerForce) * forceMix),
+  };
+}
 function onPointer(event: PointerEvent) {
   if (event.pointerType !== "mouse") return;
-  pointerX = (event.clientX / Math.max(1, window.innerWidth) - .5) * 2;
-  pointerY = (event.clientY / Math.max(1, window.innerHeight) - .5) * 2;
-  if ([...subscribers].some(subscriber => subscriber.continuous)) schedule();
+  const now = performance.now();
+  const x = Math.max(-1, Math.min(1, (event.clientX / Math.max(1, window.innerWidth) - .5) * 2));
+  const y = Math.max(-1, Math.min(1, (event.clientY / Math.max(1, window.innerHeight) - .5) * 2));
+  const elapsed = Math.max(8, now - lastPointerTime) / 1000;
+  // Re-entry establishes position without turning time spent outside the viewport into an impulse.
+  pointerInputVelocityX = pointerInside ? Math.max(-4, Math.min(4, (x - pointerTargetX) / elapsed)) : 0;
+  pointerInputVelocityY = pointerInside ? Math.max(-4, Math.min(4, (y - pointerTargetY) / elapsed)) : 0;
+  pointerTargetX = x; pointerTargetY = y; lastPointerTime = now; pointerInside = true;
+  dirty = true;
+  schedule();
 }
-function onVisibility() { if (document.hidden) { cancelAnimationFrame(raf); clearTimeout(paceTimer); raf = paceTimer = 0; } else { lastTick = 0; invalidateMotion(); } }
+function onPointerLeave() { pointerInside = false; pointerInputVelocityX = pointerInputVelocityY = 0; dirty = true; schedule(); }
+function onPointerOut(event: PointerEvent) { if (!event.relatedTarget) onPointerLeave(); }
+function onVisibility() {
+  if (document.hidden) { cancelAnimationFrame(raf); clearTimeout(paceTimer); raf = paceTimer = 0; onPointerLeave(); }
+  else { lastTick = 0; invalidateMotion(); }
+}
 function start() {
   if (active || typeof window === "undefined") return;
   active = true;
+  lastTick = 0;
   reducedQuery = matchMedia("(prefers-reduced-motion: reduce)");
   coarseQuery = matchMedia("(pointer: coarse)");
   sectionObserver = new ResizeObserver(measure);
@@ -137,6 +200,8 @@ function start() {
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", measure, { passive: true });
   window.addEventListener("pointermove", onPointer, { passive: true });
+  window.addEventListener("pointerout", onPointerOut, { passive: true });
+  window.addEventListener("blur", onPointerLeave);
   document.addEventListener("visibilitychange", onVisibility);
   reducedQuery.addEventListener("change", invalidateMotion);
   coarseQuery.addEventListener("change", invalidateMotion);
@@ -150,11 +215,16 @@ function stop() {
   window.removeEventListener("scroll", onScroll);
   window.removeEventListener("resize", measure);
   window.removeEventListener("pointermove", onPointer);
+  window.removeEventListener("pointerout", onPointerOut);
+  window.removeEventListener("blur", onPointerLeave);
   document.removeEventListener("visibilitychange", onVisibility);
   reducedQuery?.removeEventListener("change", invalidateMotion);
   coarseQuery?.removeEventListener("change", invalidateMotion);
   bounds = [];
   ranges.clear();
+  pointerInside = false; pointerInputVelocityX = pointerInputVelocityY = 0;
+  transition = createSceneTransition(frame.visualChapter, chapterIds);
+  visualOverride = null;
 }
 
 export function subscribeMotion(callback: (frame: MotionFrame) => void, options: { continuous?: boolean; foreground?: boolean } = {}) {
@@ -191,9 +261,16 @@ export function setMotionQuiet(value: boolean) {
   quiet = value;
   invalidateMotion();
 }
+/** Archive intent uses the same protected commit as scroll navigation. Null restores scroll intent. */
+export function setMotionVisualChapter(value: Chapter | null) {
+  if (visualOverride === value) return;
+  visualOverride = value;
+  invalidateMotion();
+}
 /** Read-only counters for checking cadence and that hidden tabs stop work. */
 export function getMotionDiagnostics() {
   return { active, hidden: typeof document === "undefined" ? true : document.hidden,
     quiet, ticks: tickCount, callbacks: callbackCount, lastFrameTime: lastTick,
-    targetFps: frame.reduced || quiet ? 0 : frame.mobile ? (downgrade ? 13 : 20) : (downgrade ? 20 : 30) };
+    transition: frame.transitionState.phase, visualChapter: frame.visualChapter,
+    targetFps: (frame.reduced || quiet) && !transition.active && !pointerNeedsFrame(performance.now()) ? 0 : frame.mobile ? (downgrade ? 13 : 20) : (downgrade ? 20 : 30) };
 }

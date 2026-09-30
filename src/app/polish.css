@@ -4,12 +4,6 @@
 .visitor-clock{justify-self:end;display:grid;grid-template-columns:auto auto;gap:8px;align-items:baseline;white-space:nowrap;font:600 10px/1.1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.08em;color:#b6c2ba}
 .visitor-clock strong{font-size:13px;font-weight:600;color:#edf4ef;font-variant-numeric:tabular-nums;text-shadow:0 0 11px #d1f8d65c}
 .hero-content{width:min(570px,52%);isolation:isolate}
-.world-schematic{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:.22;color:#c7ddce;mask-image:radial-gradient(ellipse 90% 88% at center,#0006,#0007 58%,transparent 100%);transition:opacity .9s ease}
-.world-schematic svg{position:absolute;inset:0;width:100%;height:100%;fill:none;stroke:#d9f4df;stroke-width:1;opacity:.28;filter:blur(.4px)}
-.world-schematic circle{fill:#f3fff3;stroke:none;filter:drop-shadow(0 0 7px #e4ffe5)}
-.world-schematic span{position:absolute;font:600 clamp(9px,.8vw,12px)/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.19em;text-shadow:0 0 12px #ccebcf7a;filter:blur(.6px)}
-.world-schematic span:nth-child(1){top:18%;left:3%}.world-schematic span:nth-child(2){top:31%;right:2%}.world-schematic span:nth-child(3){bottom:22%;left:4%}.world-schematic span:nth-child(4){bottom:15%;right:2%}
-.live-world[data-chapter="about"]~.world-schematic,.live-world[data-chapter="contact"]~.world-schematic{opacity:0}
 .hero-content:before{content:"";position:absolute;z-index:-1;inset:-18% -15%;background:radial-gradient(ellipse at 35% 50%,#080c0bc4 0%,#080c0b9e 35%,transparent 73%);filter:blur(22px);pointer-events:none}
 .hero-title{font-size:clamp(72px,8.1vw,120px);text-shadow:0 0 14px #e5eee527,0 3px 35px #0009}
 .hero-statement{font-size:clamp(22px,2vw,29px)}
@@ -63,7 +57,6 @@
 @media(max-width:1100px){.section-head:before,.codex-top:before,.contact-content:before,.site-footer:before{inset-inline:0}}
 @media(max-width:700px){.visitor-clock{font-size:9px}.visitor-clock strong{font-size:11px}.hero-content{width:100%}.hero-title{font-size:clamp(62px,15vw,86px)}.hero-content:before{inset:-8% -5%;filter:blur(16px)}.section-head:before,.codex-top:before{inset:-28px -8px -25px -8px;mask-image:radial-gradient(ellipse 90% 90% at 35% 50%,#000 20%,transparent 100%)}.story-track{height:200svh}.timeline-rail{display:none}.work-v2 .project-entry,.work-v2 .project-trigger{min-height:0}.contact-content:before{inset-inline:-20px}.site-footer:before{inset-inline:0}.terminal-overlay{padding:0}.terminal-window{width:100%;height:100dvh;border:0;box-shadow:inset 0 0 70px #000}.terminal-window-head,.terminal-window-foot{padding:13px 14px;font-size:8px}.terminal-window-screen{padding:20px 15px}.terminal-window-foot span:last-child{display:none}}
 @media(max-width:700px){.hero-content:before{inset-inline:0}.section-head:before,.codex-top:before,.contact-content:before{inset-inline:0}}
-@media(max-width:700px){.world-schematic{display:none}}
 @media(max-width:700px){.site-footer{width:100%;min-height:132px;padding:22px 20px}.site-footer strong{font-size:15px}.site-footer p{font-size:13px}}
 /* On phones, the skill tree is a field note connected by one fine route. */
 @media(max-width:700px){

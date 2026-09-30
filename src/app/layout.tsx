@@ -5,11 +5,11 @@ import "./revision.css";
 import "./polish.css";
 import "./feedback-polish.css";
 import "./brain.css";
-import "./typography.css";
 import "./evolution.css";
 import "./work-v2.css";
 import "./now-v2.css";
 import "./intro-retro.css";
+import "./typography.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://adnannaous.vercel.app"),
