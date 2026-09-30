@@ -4,16 +4,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { brainEntries } from "../data/brain";
 import { AskMyBrain } from "./AskMyBrain";
 
-type BrainWindow = { id: string; slot: number; z: number };
-
 export function BrainSection() {
   const [entered, setEntered] = useState(false);
-  const [windows, setWindows] = useState<BrainWindow[]>([]);
+  const [activeWindow, setActiveWindow] = useState<string | null>(null);
+  const [isLeaving, setIsLeaving] = useState(false);
   const [query, setQuery] = useState("");
   const sectionRef = useRef<HTMLElement>(null);
   const openerRef = useRef<HTMLButtonElement>(null);
-  const windowRefs = useRef<Map<string, HTMLElement>>(new Map());
-  const nextZ = useRef(1);
+  const windowRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -28,28 +26,38 @@ export function BrainSection() {
     return () => observer.disconnect();
   }, []);
 
-  const focusWindow = (id: string) => requestAnimationFrame(() => windowRefs.current.get(id)?.focus({ preventScroll: !matchMedia("(max-width: 700px)").matches }));
-  const raiseWindow = (id: string) => {
-    setWindows(current => current.map(item => item.id === id ? { ...item, z: ++nextZ.current } : item));
-  };
+  useEffect(() => {
+    const window = windowRef.current;
+    if (!activeWindow || !window || typeof IntersectionObserver === "undefined") return;
+
+    let closeTimer: ReturnType<typeof setTimeout> | undefined;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        if (closeTimer) clearTimeout(closeTimer);
+        closeTimer = undefined;
+        setIsLeaving(false);
+      } else if (!closeTimer) {
+        setIsLeaving(true);
+        closeTimer = setTimeout(() => setActiveWindow(null), 5000);
+      }
+    });
+    observer.observe(window);
+    return () => {
+      observer.disconnect();
+      if (closeTimer) clearTimeout(closeTimer);
+    };
+  }, [activeWindow]);
+
   const openWindow = (id: string) => {
     setEntered(true);
-    setWindows(current => {
-      const existing = current.find(item => item.id === id);
-      if (existing) return current.map(item => item.id === id ? { ...item, z: ++nextZ.current } : item);
-      const used = new Set(current.map(item => item.slot));
-      const slot = id === "archive" ? 0 : [1, 2, 3].find(value => !used.has(value)) ?? 1;
-      return [...current, { id, slot, z: ++nextZ.current }];
-    });
-    focusWindow(id);
+    setIsLeaving(false);
+    setActiveWindow(id);
+    requestAnimationFrame(() => windowRef.current?.focus({ preventScroll: !matchMedia("(max-width: 700px)").matches }));
   };
-  const closeWindow = (id: string) => {
-    setWindows(current => {
-      const remaining = current.filter(item => item.id !== id);
-      const next = [...remaining].sort((a, b) => b.z - a.z)[0];
-      requestAnimationFrame(() => (next ? windowRefs.current.get(next.id) : openerRef.current)?.focus({ preventScroll: true }));
-      return remaining;
-    });
+  const closeWindow = () => {
+    setActiveWindow(null);
+    setIsLeaving(false);
+    requestAnimationFrame(() => openerRef.current?.focus({ preventScroll: true }));
   };
 
   const matches = useMemo(() => {
@@ -67,33 +75,31 @@ export function BrainSection() {
         <p className="section-index">06 / PERSONAL ARCHIVE</p>
         <h2 id="brain-title" className="section-title">Brain<span className="brain-title-stop">.</span></h2>
         <p className="brain-subtitle">Personal Thought Archive</p>
-        <button ref={openerRef} type="button" className="brain-open" onClick={() => openWindow("archive")} aria-controls="brain-workspace" aria-expanded={windows.some(item => item.id === "archive")}>[ Open Archive ] <span aria-hidden="true">↗</span></button>
+        <button ref={openerRef} type="button" className="brain-open" onClick={() => openWindow("archive")} aria-controls="brain-workspace" aria-expanded={activeWindow !== null}>[ Open Archive ] <span aria-hidden="true">↗</span></button>
       </div>
       <span className="brain-entry-code" aria-hidden="true">AN/OS · PUBLIC MEMORY</span>
     </div>
 
-    <div id="brain-workspace" className={`brain-workspace${windows.length ? " has-windows" : ""}`} aria-label="Brain archive windows">
-      {windows.length === 0 && <p className="brain-workspace-hint">THREE ENTRIES / 28 SEP 2026</p>}
-      {windows.map(item => {
-        const isArchive = item.id === "archive";
-        const entry = isArchive ? undefined : brainEntries.find(thought => thought.id === item.id);
+    <div id="brain-workspace" className={`brain-workspace${activeWindow ? " has-windows" : ""}`} aria-label="Brain archive window">
+      {!activeWindow && <p className="brain-workspace-hint">THREE ENTRIES / 28 SEP 2026</p>}
+      {activeWindow && (() => {
+        const isArchive = activeWindow === "archive";
+        const entry = isArchive ? undefined : brainEntries.find(thought => thought.id === activeWindow);
         if (!isArchive && !entry) return null;
-        const titleId = `brain-window-title-${item.id}`;
+        const titleId = `brain-window-title-${activeWindow}`;
         return <section
-          key={item.id}
-          ref={node => { if (node) windowRefs.current.set(item.id, node); else windowRefs.current.delete(item.id); }}
-          className={`brain-window brain-window-${isArchive ? "archive" : "thought"} brain-slot-${item.slot}`}
-          style={{ zIndex: item.z, order: item.slot }}
+          key={activeWindow}
+          ref={windowRef}
+          className={`brain-window brain-window-${isArchive ? "archive" : "thought"}${isLeaving ? " is-leaving" : ""}`}
           role="region"
           aria-labelledby={titleId}
           tabIndex={0}
-          onPointerDown={() => raiseWindow(item.id)}
-          onFocusCapture={() => raiseWindow(item.id)}
-          onKeyDown={event => { if (event.key === "Escape") { event.stopPropagation(); closeWindow(item.id); } }}
+          onKeyDown={event => { if (event.key === "Escape") { event.stopPropagation(); closeWindow(); } }}
         >
           <div className="brain-window-bar">
             <span className="brain-window-path">AN/OS / BRAIN / {isArchive ? "ARCHIVE" : entry?.type}</span>
-            <button type="button" className="brain-window-close" onClick={() => closeWindow(item.id)} aria-label={`Close ${isArchive ? "Brain Archive" : entry?.title} window`}>×</button>
+            {!isArchive && <button type="button" className="brain-window-back" onClick={() => openWindow("archive")}>← Archive</button>}
+            <button type="button" className="brain-window-close" onClick={closeWindow} aria-label={`Close ${isArchive ? "Brain Archive" : entry?.title} window`}>×</button>
           </div>
           {isArchive ? <div className="brain-window-body brain-archive-body">
             <div className="brain-window-heading"><p>PUBLIC MEMORY / 2026—</p><h3 id={titleId}>Brain Archive</h3><span>Thoughts kept as they were.</span></div>
@@ -116,7 +122,7 @@ export function BrainSection() {
             <p className="brain-thought-end">END OF ENTRY / {entry.date}</p>
           </div>}
         </section>;
-      })}
+      })()}
     </div>
   </section>;
 }
