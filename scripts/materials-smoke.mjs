@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
 import { chromium } from 'playwright';
-const base=process.env.BASE_URL || 'http://127.0.0.1:3108';
+const base=process.env.BASE_URL || 'http://127.0.0.1:3000';
 const browser=await chromium.launch({channel:'chrome'});
 const dir='.codex/review/physics'; await mkdir(dir,{recursive:true});
 try {
