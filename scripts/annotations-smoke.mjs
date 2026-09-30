@@ -47,6 +47,7 @@ try {
       await page.locator(`.story-chapter-nav a[href="#story-chapter-${i}"]`).click();
       await page.waitForFunction(i => document.querySelector(`#story-chapter-${i}`)?.dataset.arriving==='true',i);
       await page.waitForTimeout(1150);
+      await page.waitForFunction(i=>getComputedStyle(document.querySelector(`#story-chapter-${i} p`)).opacity==='1',i);
       assert.equal(await page.locator(`#story-chapter-${i} p`).evaluate(e=>getComputedStyle(e).opacity),'1');
       assert.notEqual(await page.locator('body').evaluate(e=>getComputedStyle(e).overflow),'hidden');
     }
