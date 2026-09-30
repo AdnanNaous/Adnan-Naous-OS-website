@@ -54,7 +54,7 @@ function browserRuntime({ reduced = false, mobile = false } = {}) {
   return { runtime, window, document, media, run, pending: () => rafs.size + timers.size };
 }
 
-test("quiet and reduced runtimes finish occlusion and then stop scheduling", () => {
+test("quiet and reduced navigation updates the background without queuing a blackout", () => {
   for (const reduced of [false, true]) {
     const browser = browserRuntime({ reduced });
     const frames = [];
@@ -66,8 +66,7 @@ test("quiet and reduced runtimes finish occlusion and then stop scheduling", () 
     browser.run(1800);
     assert.equal(frames.at(-1).chapter, "contact");
     assert.equal(frames.at(-1).visualChapter, "contact");
-    assert.equal(frames.at(-1).transitionState.phase, "idle");
-    assert.equal(frames.at(-1).transitionState.coverage, 0);
+    assert.equal("transitionState" in frames.at(-1), false);
     const ticks = browser.runtime.getMotionDiagnostics().ticks;
     browser.run(1000);
     assert.equal(browser.runtime.getMotionDiagnostics().ticks, ticks);
@@ -76,13 +75,13 @@ test("quiet and reduced runtimes finish occlusion and then stop scheduling", () 
   }
 });
 
-test("hidden tab cancels work and resumes the protected scene commit", () => {
+test("hidden tab cancels work and resumes at the current background destination", () => {
   const browser = browserRuntime();
   const frames = [];
   const dispose = browser.runtime.subscribeMotion(frame => frames.push(frame), { continuous: true });
   browser.run(100);
   browser.window.scrollY = 2300; browser.window.emit("scroll"); browser.run(100);
-  assert.equal(frames.at(-1).transitionState.phase, "closing");
+  assert.equal(frames.at(-1).visualChapter, "work");
   browser.document.hidden = true; browser.document.emit("visibilitychange");
   const paused = browser.runtime.getMotionDiagnostics().ticks;
   browser.run(10_000);
@@ -92,7 +91,6 @@ test("hidden tab cancels work and resumes the protected scene commit", () => {
   browser.document.hidden = false; browser.document.emit("visibilitychange");
   browser.runtime.setMotionQuiet(true); browser.run(1800);
   assert.equal(frames.at(-1).visualChapter, "contact");
-  assert.equal(frames.at(-1).transitionState.phase, "idle");
   dispose();
   assert.equal(browser.window.count(), 0);
   assert.equal(browser.document.count(), 0);
@@ -136,7 +134,6 @@ test("bursts obey one desktop/mobile clock and a visual override preserves seman
     assert.equal(frames.at(-1).visualChapter, "brain");
     browser.runtime.setMotionVisualChapter(null); browser.run(1300);
     assert.equal(frames.at(-1).visualChapter, "contact");
-    assert.equal(frames.at(-1).transitionState.phase, "idle");
     dispose();
     assert.equal(browser.pending(), 0);
   }

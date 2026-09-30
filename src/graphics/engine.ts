@@ -8,6 +8,10 @@ export function mountEngine(host: HTMLElement, canvas: HTMLCanvasElement) {
   if (!ctx) { host.dataset.fallback = "true"; return () => {}; }
   let width = 0, height = 0, dpr = 1, override: VisualState | null = null;
   let failed = false;
+  let paintedChapter: MotionFrame["visualChapter"] | null = null;
+  let blendStarted = 0;
+  const outgoing = document.createElement("canvas");
+  const outgoingContext = outgoing.getContext("2d", { alpha: false });
   let grain: CanvasPattern | null = null;
   const noise = document.createElement("canvas");
   noise.width = noise.height = 96;
@@ -26,13 +30,23 @@ export function mountEngine(host: HTMLElement, canvas: HTMLCanvasElement) {
   function render(frame: MotionFrame) {
     if (failed) return;
     try {
+      const chapter = frame.visualChapter;
+      if (paintedChapter !== null && chapter !== paintedChapter && outgoingContext && !frame.reduced && !frame.quiet) {
+        // Retarget from the currently painted image, including an unfinished dissolve.
+        if (outgoing.width !== canvas.width || outgoing.height !== canvas.height) {
+          outgoing.width = canvas.width; outgoing.height = canvas.height;
+        }
+        outgoingContext.drawImage(canvas, 0, 0);
+        blendStarted = frame.time;
+      }
+      if (frame.reduced || frame.quiet) blendStarted = 0;
+      paintedChapter = chapter;
       const nextDpr = Math.max(.65, Math.min(window.devicePixelRatio || 1, frame.mobile || constrained ? 1 : 1.5, Math.sqrt(3200000 / Math.max(1, frame.width * frame.height))));
       if (frame.width !== width || frame.height !== height || nextDpr !== dpr) {
         width = frame.width; height = frame.height; dpr = nextDpr;
         canvas.width = Math.ceil(width * dpr); canvas.height = Math.ceil(height * dpr);
         canvas.style.width = `${width}px`; canvas.style.height = `${height}px`;
       }
-      const chapter = frame.visualChapter;
       host.dataset.chapter = chapter;
       host.dataset.state = override || chapter;
       host.dataset.quality = frame.reduced ? "reduced" : constrained ? "low" : frame.mobile ? "mobile" : "desktop";
@@ -48,12 +62,17 @@ export function mountEngine(host: HTMLElement, canvas: HTMLCanvasElement) {
       };
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx!.fillStyle = "#070808"; ctx!.fillRect(0, 0, width, height);
+      const elapsed = blendStarted ? Math.max(0, Math.min(1, (frame.time - blendStarted) / .52)) : 1;
+      const blend = elapsed * elapsed * (3 - 2 * elapsed);
+      if (blend < 1 && outgoing.width) ctx!.drawImage(outgoing, 0, 0, width, height);
+      else blendStarted = 0;
       ctx!.save(); ctx!.scale(width / 1200, height / 800);
-      paintChapter(ctx!, chapter, input, 1);
+      paintChapter(ctx!, chapter, input, blend);
+      ctx!.globalAlpha = blend;
       paintSignal(ctx!, input, 0);
       paintFinish(ctx!, input);
       ctx!.restore();
-      if (grain) { ctx!.globalAlpha = frame.reduced ? .18 : .4; ctx!.fillStyle = grain; ctx!.fillRect(0, 0, width, height); ctx!.globalAlpha = 1; }
+      if (grain) { ctx!.globalAlpha = (frame.reduced ? .18 : .4) * blend; ctx!.fillStyle = grain; ctx!.fillRect(0, 0, width, height); ctx!.globalAlpha = 1; }
       host.dataset.ready = "true";
     } catch { failed = true; host.dataset.fallback = "true"; }
   }
@@ -69,5 +88,5 @@ export function mountEngine(host: HTMLElement, canvas: HTMLCanvasElement) {
   }
   window.addEventListener(VISUAL_STATE_EVENT, visualState);
   const unsubscribe = subscribeMotion(render, { continuous: true });
-  return () => { unsubscribe(); setMotionQuiet(false); setMotionVisualChapter(null); window.removeEventListener(VISUAL_STATE_EVENT, visualState); noise.width = noise.height = 0; grain = null; canvas.width = canvas.height = 0; };
+  return () => { unsubscribe(); setMotionQuiet(false); setMotionVisualChapter(null); window.removeEventListener(VISUAL_STATE_EVENT, visualState); outgoing.width = outgoing.height = 0; noise.width = noise.height = 0; grain = null; canvas.width = canvas.height = 0; };
 }

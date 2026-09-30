@@ -66,15 +66,11 @@ try {
     await page.waitForTimeout(6500);
     assert.equal(await page.locator(".codex-menu button").nth(1).getAttribute("aria-pressed"),"true");
     await chapter("about");
-    assert.equal(await page.locator(".story-panel").count(),4);
-    if(reduced)assert.equal(await page.locator(".story-panel:visible").count(),4,"Reduced motion exposes all factual story content");
-    else{
-      await page.getByRole("button",{name:"Read chapter 3: THE FIRST BUILD"}).click();
-      await page.waitForFunction(()=>document.querySelector(".story-panel.is-active")?.textContent?.includes("Adnan OS"));
-      assert((await page.locator(".story-panel.is-active").textContent()).includes("Adnan OS"));
-      await page.evaluate(()=>{const track=document.querySelector(".story-track");scrollTo({top:track.getBoundingClientRect().top+scrollY+(track.offsetHeight-innerHeight)*.9,behavior:"instant"});});
-      await page.waitForFunction(()=>document.querySelector(".story-panel.is-active")?.textContent?.includes("portfolio"));
-    }
+    assert.equal(await page.locator(".story-chapter:visible").count(),4,"All factual chapters remain readable in every motion mode");
+    await page.locator('.story-chapter-nav a[href="#story-chapter-3"]').click();
+    await page.waitForFunction(()=>Math.abs(document.getElementById("story-chapter-3").getBoundingClientRect().top)<200);
+    assert((await page.locator("#story-chapter-3").textContent()).includes("Adnan OS"));
+    assert((await page.locator("#story-chapter-4").textContent()).includes("portfolio"));
     await page.locator(".cv-command").click();
     const terminal=page.getByRole("dialog",{name:"AN/OS terminal"});
     assert((await terminal.textContent()).includes("cat cv.txt"));

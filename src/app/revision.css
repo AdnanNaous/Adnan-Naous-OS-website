@@ -47,15 +47,6 @@
 .codex-section .codex-detail-copy strong{font-size:clamp(34px,3.5vw,52px);line-height:1.28}
 .codex-section .codex-detail-copy p{font-size:clamp(16px,1.7vw,21px);line-height:1.5}
 
-/* A four-beat CV-backed story, carried by a pixel beacon. */
-.story-track{height:300svh}
-.story-stage{top:12svh;height:74svh;min-height:450px}
-.story-orbit{top:15%}
-.story-beacon{width:9px;height:9px;background:#fff;box-shadow:-9px 0 #fff,9px 0 #fff,0 -9px #fff,0 9px #fff,0 0 13px #fff;transform:translate(-50%,-50%);font-size:0;image-rendering:pixelated;animation:pixel-pulse 1.2s steps(2,end) infinite}
-@keyframes pixel-pulse{50%{opacity:.55;box-shadow:-9px 0 #fff,9px 0 #fff,0 -9px #fff,0 9px #fff,0 0 5px #fff}}
-.story-panel{padding-inline:clamp(28px,8vw,120px);padding-block:15px}
-.story-panel p{max-width:1000px;font-size:clamp(30px,3.2vw,47px);line-height:1.37;letter-spacing:-.02em;text-wrap:pretty}
-.story-count{position:absolute;bottom:20px;inset-inline-end:25px;color:#ccc;font:600 11px/1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.15em}
 
 /* The paused transmission occupies exactly the action's slot. */
 .contact-section{background:#08080899}
@@ -96,20 +87,13 @@
   .codex-section .codex-menu button strong{font-size:17px}
   .codex-section .codex-detail{min-height:0;margin-top:25px;padding:25px 0 0;border-inline-start:0;border-top:1px solid #ffffff48}
   .codex-section .codex-detail-copy strong{font-size:clamp(30px,8vw,39px)}
-  .story-track{height:260svh}
-  .story-stage{top:12svh;height:74svh;min-height:450px}
-  .story-panel{padding-inline:16px}
-  .story-panel p{font-size:clamp(24px,6vw,32px);line-height:1.42}
-  .story-beacon{width:6px;height:6px;box-shadow:-6px 0 #fff,6px 0 #fff,0 -6px #fff,0 6px #fff}
   .contact-section .contact-action,.contact-section .contact-recall{min-height:85px;padding:15px;font-size:clamp(19px,5vw,26px)}
   .contact-section .contact-action:hover,.contact-section .contact-recall:hover{padding-inline:15px}
   .transmission-slot{padding:12px;min-height:109px}
 }
 @media(prefers-reduced-motion:reduce){
-  .hero-content.in-view .hero-name-line,.project-schematic path,.project-schematic circle,.story-beacon,.codex-section .codex-detail{animation:none;clip-path:none;opacity:1;transform:none}
+  .hero-content.in-view .hero-name-line,.project-schematic path,.project-schematic circle,.codex-section .codex-detail{animation:none;clip-path:none;opacity:1;transform:none}
   .project-schematic path{stroke-dashoffset:0}
-  .story-track{height:auto}
-  .story-stage{position:relative;top:auto;height:auto;min-height:0}
 }
 
 /* The chapter is readable without a click; selection shows the loop's pace. */
@@ -117,9 +101,6 @@
 .codex-section .codex-menu button.is-selected:after{content:"";position:absolute;bottom:0;inset-inline-start:22px;width:calc(100% - 44px);height:2px;background:#e3e3e3;transform-origin:left;transform:scaleX(0)}
 .codex-section.is-live .codex-menu button.is-selected:after{animation:codex-cycle 6s linear both}
 @keyframes codex-cycle{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-
-/* A smaller story reads like a chapter instead of a billboard. */
-.story-panel p{max-width:940px;font-size:clamp(27px,2.65vw,37px);line-height:1.42}
 
 /* One deliberate mail command replaces the gradient/glitch button treatment. */
 .contact-section .contact-action,.contact-section .contact-recall{min-height:132px;padding:25px 32px;border:1px solid #a9a9a9;clip-path:none;background:#101010;color:#eee;box-shadow:0 16px 45px #0009;transition:background .25s,color .25s,border-color .25s,box-shadow .25s}
@@ -136,7 +117,6 @@
 .contact-section .contact-action:hover .contact-action-copy small,.contact-section .contact-recall:hover .contact-action-copy small{color:#333}
 
 @media(max-width:700px){
-  .story-panel p{font-size:clamp(22px,5.4vw,29px);line-height:1.48}
   .contact-section .contact-action,.contact-section .contact-recall{min-height:105px;padding:16px 18px}
   .contact-section .contact-action:hover,.contact-section .contact-recall:hover{padding-inline:18px}
   .contact-section .contact-action .contact-glitch,.contact-action-copy strong{font-size:clamp(24px,6vw,34px)!important}

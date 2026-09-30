@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { contact, copy, socials } from "@/data/portfolio";
-import { getRangeProgress, invalidateMotion, subscribeMotion } from "@/motion/runtime";
-import { createSceneTransition } from "@/motion/transition";
+import { subscribeMotion } from "@/motion/runtime";
 import ContactIncident from "./ContactIncident";
 
 const objectives = [
@@ -48,46 +47,21 @@ const storyLabels = ["THE FIRST PATH", "THE TURN", "THE FIRST BUILD", "THE THREA
 const storyCoordinates = ["2023 / MEDICINE", "2025 / COMPUTING", "BUILD / ADNAN OS", "NOW / KEEP GOING"];
 
 export function AboutSection() {
-  const [active, setActive] = useState(0);
-  const manual = useRef<number | null>(null);
-  const [reduced, setReduced] = useState(false);
-  const track = useRef<HTMLDivElement>(null);
-  const stage = useRef<HTMLDivElement>(null);
-  const lastScroll = useRef(0);
-  const historyMaterial = useRef(createSceneTransition<string>("0", ["0", "1", "2", "3"]));
-  useEffect(() => subscribeMotion(frame => {
-    if (!track.current || !stage.current) return;
-    setReduced(frame.reduced);
-    const progress = getRangeProgress(track.current);
-    if (Math.abs(frame.scrollY - lastScroll.current) > 6) manual.current = null;
-    lastScroll.current = frame.scrollY;
-    const destination = String(manual.current ?? Math.min(3, Math.floor(progress * 4)));
-    const history = historyMaterial.current.advance(destination, frame.delta, frame.reduced);
-    setActive(frame.reduced ? Number(destination) : Number(history.visualChapter));
-    stage.current.style.setProperty("--history-cover", frame.reduced ? "0" : String(history.transitionState.coverage));
-    stage.current.dataset.historyPhase = history.transitionState.phase;
-    stage.current.style.setProperty("--story-fill", `${progress * 100}%`);
-    stage.current.style.setProperty("--beacon-position", `${8 + progress * 84}%`);
-    stage.current.style.setProperty("--story-code-opacity", `${Math.max(0, .22 * (1 - progress * 1.5))}`);
-    stage.current.style.setProperty("--story-code-shift", `${progress * -40}px`);
-  }, { continuous: true }), []);
-  return <section id="about" className={`content-section about-section${reduced ? " story-reduced" : ""}`} aria-labelledby="about-title">
+  return <section id="about" className="content-section about-section" aria-labelledby="about-title">
     <div className="section-head reveal"><p className="section-index">06 / BACKGROUND</p><h2 id="about-title" className="section-title">How I got here.</h2><p className="section-lead">The field changed. The curiosity stayed.</p></div>
-    <div className="story-track" ref={track}><div className="story-stage" ref={stage} data-story={active}>
-      <div className="story-code-field" aria-hidden="true">{[
-        "const origin = 'medicine';", "observe(signal);", "01 / a new direction", "if (curious) keepBuilding();",
-        "read(path[0]);", "// the first build", "trace(root, next);", "commit('learn by making');",
-        "for (const question of questions)", "  test(question);", "const work = revise(idea);", "signal += practice;",
-        "while (learning) experiment();", "open('new chapter');", "// systems / people / craft", "return usefulSoftware;",
-        "const route = ['learn','make'];", "measure(progress);", "// nothing is finished", "render(nextStep);",
-        "await findOpportunity();", "const path = choose('computing');", "// from one field to another", "continue();",
-      ].map((line, index) => <span key={index}>{line}</span>)}</div>
-      <div className="story-memory" aria-hidden="true"><span>{storyCoordinates[active]}</span><svg viewBox="0 0 600 110" preserveAspectRatio="none"><path className="story-pulse" d="M0 58H80L100 58L117 28L133 86L150 8L171 101L192 58H257L283 58L308 44L331 58H400L430 58L445 32L468 82L489 58H600"/><path className="story-route" d="M0 58H80L117 58L150 8H230V58H308V90H400V32H489V58H600"/></svg></div>
-      <div className="story-progress" aria-hidden="true"><span/></div>
-      <div className="story-narrative">{copy.en.story.map((beat, index) => <div className={`story-panel${active === index ? " is-active" : ""}`} key={index} aria-hidden={!reduced && active !== index}><span className="story-marker">0{index + 1} / {storyLabels[index]}</span><p>{beat}</p></div>)}<div className="story-history-mask" aria-hidden="true"><i/><i/></div></div>
-      <div className="story-navigation"><div className="story-controls" aria-label="Story chapters">{storyLabels.map((label, index) => <button key={label} type="button" aria-label={`Read chapter ${index + 1}: ${label}`} aria-pressed={active === index} onClick={() => { lastScroll.current = window.scrollY; manual.current = index; invalidateMotion(); }}>0{index + 1}</button>)}</div>
-      <span className="story-count" aria-hidden="true">0{active + 1} / 04</span></div>
-    </div></div>
+    <div className="story-environment" aria-hidden="true">
+      <div className="story-environment-code">{[
+        "const origin = 'medicine';", "observe(signal);", "if (curious) keepBuilding();",
+        "commit('learn by making');", "const route = ['learn', 'make'];", "return usefulSoftware;",
+      ].map(line => <span key={line}>{line}</span>)}</div>
+      <svg viewBox="0 0 600 70" preserveAspectRatio="none"><path d="M0 35H80L100 35L117 15L133 55L150 5L171 65L192 35H257L283 35L308 25L331 35H400L430 35L445 15L468 55L489 35H600"/></svg>
+    </div>
+    <nav className="story-chapter-nav" aria-label="Story chapters">
+      {storyLabels.map((label, index) => <a key={label} href={`#story-chapter-${index + 1}`} aria-label={`Read chapter ${index + 1}: ${label}`}><span>0{index + 1}</span><span>{label}</span><span aria-hidden="true">↓</span></a>)}
+    </nav>
+    <div className="story-chapters">{copy.en.story.map((beat, index) => <article id={`story-chapter-${index + 1}`} className="story-chapter" key={storyLabels[index]} aria-labelledby={`story-heading-${index + 1}`} tabIndex={-1}>
+      <div className="story-chapter-heading"><h3 id={`story-heading-${index + 1}`} className="story-marker">0{index + 1} / {storyLabels[index]}</h3><span className="story-coordinate">{storyCoordinates[index]}</span></div><p>{beat}</p>
+    </article>)}</div>
     <div className="about-actions reveal"><button className="command-action command-action-quiet cv-command" type="button" onClick={() => window.dispatchEvent(new CustomEvent("an-os-open-terminal", { detail: "cv" }))}><span>&gt; read_cv.txt</span><span className="action-tail">↗</span></button><span className="cv-note">{"// read the document in the terminal"}</span></div>
   </section>;
 }

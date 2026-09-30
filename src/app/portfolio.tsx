@@ -2,8 +2,6 @@
 
 import { useCallback, useEffect, useState } from "react";
 import VisualEngine from "../graphics/VisualEngine";
-import OpticalTitles from "../graphics/OpticalTitles";
-import SceneTransition from "../graphics/SceneTransition";
 import Intro from "./Intro";
 import TerminalOverlay from "./TerminalOverlay";
 import { AboutSection, CodexSection, ContactSection } from "./ExperienceSections";
@@ -97,8 +95,6 @@ export default function Portfolio() {
 
   return <>
     <VisualEngine />
-    <OpticalTitles />
-    <SceneTransition />
     <div className="world-shade" aria-hidden="true" />
     <Intro />
     <a className="skip-link" href="#main">Skip to content</a>

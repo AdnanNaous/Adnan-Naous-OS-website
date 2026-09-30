@@ -10,12 +10,12 @@ An English-language portfolio about my projects, current learning, and path from
 
 | Chapter | Interaction |
 | --- | --- |
-| Home | A three-beat monochrome boot, kinetic identity, and a terminal with an extracted CV, dot-script animation, and code editors. Repeat visits skip the boot. |
+| Home | A three-beat monochrome boot, clear typography, and a terminal with an extracted CV, dot-script animation, and code editors. Repeat visits skip the boot. |
 | Brain | Layered archive and reading windows on desktop; one panel with page scrolling on phones. Search three dated entries and choose source-linked guided answers. |
 | Work | An assembling project index and three distinct project dossiers, including the public learning journey. Projects are immediately accessible. |
 | Now | Select one of six current learning nodes in an open schematic with a fixed 70% energy motif. |
 | Codex | Read three long-term directions. Pause the cycle or select a chapter to keep it open. |
-| About | Follow four factual memories from medicine to computing, through scrolling or chapter buttons. Reduced motion shows every chapter in order. |
+| About | Follow four factual memories from medicine to computing, in document order, with native chapter links. Every chapter stays readable in all motion modes. |
 | Contact | Confirm an email, explore the optional simulated system incident, or follow GitHub, LinkedIn, X, and Linktree links. |
 
 Seven procedural Canvas2D scenes live in `src/graphics/`: identity blades, memory topology, construction plates, skill routes, a long-range trajectory, an origin waveform, and a final light slit. `src/motion/runtime.ts` provides one animation clock and cached section measurements for canvas, navigation, and scroll-driven content. Rendering adapts its cadence and resolution, pauses in hidden tabs, settles during reading, and has a static CSS fallback. No graphics library or WebGPU requirement is added. The actual content remains semantic HTML.
@@ -24,13 +24,11 @@ The terminal runs JavaScript and dot scripts in a restricted browser sandbox. Ja
 
 Brain Q&A is a local, curated question collection. It uses no AI provider, API route, or database. `src/data/brainPromptSampling.ts` selects three unique questions and avoids the current group when enough alternatives exist. Add source-linked questions to small `brainPromptChunk*.ts` files (about 100 per chunk), then register each chunk's count and import in `src/data/brainPrompts.ts`. Only selected chunks load; the sampler supports a 10,000-question collection without rendering or loading all answers at once. The current collection contains six questions.
 
-Typography is self-hosted in `src/app/typography.css`: Source Serif 4 gives Home/Brain an editorial voice and About/Contact an italic voice; Roboto Condensed gives Work an industrial voice; IBM Plex Mono gives Codex a precise voice; Inter stays on body text and the learning map. Only used Latin faces load. All four SIL OFL notices are in `public/fonts/`.
+Typography is self-hosted in `src/app/typography.css`: Inter covers headings and body text, with IBM Plex Mono reserved for small technical labels. Both SIL OFL notices are in `public/fonts/`. Headings remain semantic HTML with stable glyphs during scrolling and hover.
 
-`src/graphics/optics/` captures real heading line breaks and renders a bounded traveling deformation front in one WebGL canvas. Wavelength samples follow warped glyph edges; the scene canvas supplies refraction. DOM headings stay semantic and immediately regain their paint on graphics failure/context loss. Reduced motion uses stable glyphs. The rasterizer caches geometry and recaptures after font, layout or viewport changes.
+The background alone dissolves between chapters over 520ms, using one reusable Canvas2D snapshot and the shared adaptive clock. Rapid navigation retargets from the current image; there is no full-screen shutter, hidden text, or queued navigation. Reduced motion and quiet reading update immediately.
 
-`src/motion/transition.ts` is the reversible black shutter controller. Semantic navigation follows scrolling immediately; `visualChapter` changes only after a full covered frame, and stays covered for the first frame of the new environment. Repeated destinations/reversals coalesce. All motion uses the shared adaptive clock; pointer velocity is bounded and position/force damp back to rest.
-
-Seven cached perspective environments live in `src/graphics/scenes/environment.ts`. Mesh faces are depth sorted with deterministic surface detail; mobile selects fewer, larger forms. About reuses the same shutter controller inside three separate environmental/narrative/navigation regions. Contact uses an explicit full-width grid with left-aligned bounded transmission rows, replacing automatic left margins. No external reference media or models are shipped.
+Seven cached perspective environments live in `src/graphics/scenes/environment.ts`. Mesh faces are depth sorted with deterministic surface detail; mobile selects fewer, larger forms. About keeps its decorative environment clipped above four normal-flow factual chapters. Contact uses an explicit full-width grid with bounded transmission rows. No external reference media or models are shipped.
 
 ## Run locally
 
@@ -62,4 +60,4 @@ The browser checks default to `http://127.0.0.1:3000`; set `BASE_URL` for anothe
 
 ## Rights
 
-© 2026 Adnan Naous. All rights reserved. The CV in `public/documents/` is a personal document, not a reusable site asset.
+آ© 2026 Adnan Naous. All rights reserved. The CV in `public/documents/` is a personal document, not a reusable site asset.

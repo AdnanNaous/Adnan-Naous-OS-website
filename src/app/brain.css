@@ -74,7 +74,7 @@
 .brain-thought-copy p{line-height:inherit}
 .brain-thought-end{margin-top:28px;padding-top:14px;border-top:1px solid #ffffff35}
 @media(max-width:700px){
-  .brain-section{padding-top:65px;padding-bottom:75px}
+  .brain-section{padding-top:55px;padding-bottom:55px}
   .brain-entry{min-height:280px}
   .brain-entry-code{font-size:7px}
   .brain-workspace.has-windows{height:auto;min-height:0;padding:12px;overflow:visible}
@@ -126,7 +126,7 @@
 .brain-section .brain-ask .brain-search-label{margin-top:18px}
 .brain-section.is-reading .brain-memory-trace{opacity:.08}
 @media(max-width:700px){
-  .brain-section .brain-entry{min-height:360px}
+  .brain-section .brain-entry{min-height:300px}
   .brain-section .brain-depth-word{font-size:30vw}
   .brain-section .brain-entry .section-title{font-size:clamp(84px,24vw,150px)}
   .brain-section .brain-entry-content{padding-block:65px}
@@ -159,4 +159,4 @@
 .brain-section .brain-window-archive{transform:none;border-width:1px 0;box-shadow:0 35px 70px #0009}
 .brain-section .brain-window-bar{background:#151515}
 .brain-section .brain-ask{border:0;border-block:1px solid #ffffff35;background:transparent;box-shadow:none;padding-inline:0}
-@media(max-width:700px){.brain-section .brain-entry{min-height:360px}.brain-section .brain-entry-content{padding-block:65px}.brain-section .brain-workspace.has-windows{height:auto}}
+@media(max-width:700px){.brain-section .brain-entry{min-height:300px}.brain-section .brain-entry-content{padding-block:65px}.brain-section .brain-workspace.has-windows{height:auto}}
