@@ -60,3 +60,20 @@
 @keyframes incident-arrive{from{opacity:0;transform:translateY(34px) scale(.98);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
 @media(max-width:600px){.routeChoices{grid-template-columns:1fr}.routeChoices button{min-height:105px;padding:15px;gap:6px}.incidentPanel{padding:27px 22px}.radar{opacity:.16}}
 @media(prefers-reduced-motion:reduce){.radar span,.incidentPanel{animation:none}}
+
+/* A failed transmission, framed like the rest of the environment. */
+.confirmOverlay{background:#070707b8;backdrop-filter:blur(12px)}
+.panel,.incidentPanel{border:0;border-block:1px solid #ffffff65;background:#080808e8;box-shadow:0 35px 100px #000b;padding:clamp(28px,6vw,70px)}
+.panel:before{content:none}
+.panel h2,.incidentPanel h2{font:550 clamp(38px,6vw,82px)/.98 var(--font-interface),sans-serif;letter-spacing:-.06em;text-shadow:none;text-transform:none}
+.eyebrow{font-size:9px;letter-spacing:.14em;margin-bottom:32px}
+.panel p:not(.eyebrow){font-family:var(--font-interface),sans-serif;font-size:15px;max-width:52ch}
+.choices button{min-width:140px;min-height:52px;font-size:11px}
+.routeChoices button{background:none;box-shadow:none;min-height:150px;transition:background .3s,transform .5s cubic-bezier(.19,1,.22,1)}
+.routeChoices button:hover{background:#ffffff10;box-shadow:none}
+.routeChoices strong{font:550 clamp(22px,3vw,38px)/1 var(--font-interface),sans-serif;letter-spacing:-.05em}
+.radar{opacity:.07}
+.incidentPanel:after{animation:incident-tear 1.2s steps(1,end) 1}
+.incidentOverlay[data-phase="locked"] .incidentPanel{border:0;border-block:1px solid #ffffff50;box-shadow:none}
+.incidentOverlay[data-phase="locked"] .errorCode{font:550 clamp(140px,25vw,290px)/.8 var(--font-interface),sans-serif!important;letter-spacing:-.09em;text-shadow:none}
+@media(max-width:600px){.panel,.incidentPanel{padding:30px 20px}.panel h2,.incidentPanel h2{font-size:41px}.panel p:not(.eyebrow){font-size:13px}.choices{gap:10px}.choices button{min-width:120px}.routeChoices button{min-height:110px}.eyebrow{font-size:8px}}

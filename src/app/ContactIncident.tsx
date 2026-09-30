@@ -16,6 +16,7 @@ export default function ContactIncident({ emailHref, onClose, onFix }: {
   const dialog = useRef<HTMLDivElement>(null);
   const phaseRef = useRef(phase);
   const closeRef = useRef(onClose);
+  const recovering = useRef(false);
 
   useEffect(() => { phaseRef.current = phase; closeRef.current = onClose; }, [phase, onClose]);
 
@@ -63,7 +64,10 @@ export default function ContactIncident({ emailHref, onClose, onFix }: {
       document.removeEventListener("keydown", trapKeys);
       siblings.forEach((node, index) => { (node as HTMLElement).inert = previousInert[index]; });
       document.body.style.overflow = previousOverflow;
-      previousFocus?.focus({ preventScroll: true });
+      if (recovering.current) {
+        const title = document.getElementById("hero-title");
+        if (title) { title.tabIndex = -1; title.focus({ preventScroll: true }); }
+      } else previousFocus?.focus({ preventScroll: true });
     };
   }, [portal]);
 
@@ -97,7 +101,7 @@ export default function ContactIncident({ emailHref, onClose, onFix }: {
         <p className={styles.eyebrow}>AN / SYSTEM OVERRIDE · 01</p>
         <h2 id="contact-incident-title">You are inside the system.</h2>
         <p id="contact-incident-description">The channel fractured. Choose a route to continue.</p>
-        <div className={styles.routeChoices}><button type="button" onClick={onFix}><span>01 / RECOVERY</span><strong>Fix the website</strong><small>Restore the signal and return home ↗</small></button><button type="button" onClick={() => setPhase("destroying")}><span>02 / OVERRIDE</span><strong>Hack me</strong><small>Trigger a simulated shutdown ↗</small></button></div>
+        <div className={styles.routeChoices}><button type="button" onClick={() => { recovering.current = true; onFix(); }}><span>01 / RECOVERY</span><strong>Fix the website</strong><small>Restore the signal and return home ↗</small></button><button type="button" onClick={() => setPhase("destroying")}><span>02 / OVERRIDE</span><strong>Hack me</strong><small>Trigger a simulated shutdown ↗</small></button></div>
       </> : phase === "destroying" ? <>
         <p className={styles.eyebrow}>AN / SYSTEM OVERRIDE · 02</p>
         <h2 id="contact-incident-title">Self-destruct sequence</h2>

@@ -2,15 +2,14 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./experience.css";
 import "./revision.css";
-import "./work-v2.css";
-import "./now-v2.css";
-import "./intro-retro.css";
 import "./polish.css";
-import "./cinematic.css";
-import "./manga-film.css";
 import "./feedback-polish.css";
 import "./brain.css";
 import "./typography.css";
+import "./evolution.css";
+import "./work-v2.css";
+import "./now-v2.css";
+import "./intro-retro.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://adnannaous.vercel.app"),
@@ -20,5 +19,5 @@ export const metadata: Metadata = {
   twitter: { card: "summary", creator: "@vc_351" },
 };
 export default function Layout({children}: {children: React.ReactNode}) {
-  return <html lang="en" dir="ltr" style={{ "--font-interface": '"Inter Variable", "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' } as React.CSSProperties}><body>{children}</body></html>;
+  return <html lang="en" dir="ltr" suppressHydrationWarning style={{ "--font-interface": '"Inter Variable", "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' } as React.CSSProperties}><body>{children}</body></html>;
 }

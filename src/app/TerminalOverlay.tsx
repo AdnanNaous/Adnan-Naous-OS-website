@@ -5,6 +5,7 @@ import { copy, projects } from "@/data/portfolio";
 import { cvText } from "@/data/cvText";
 import { runSandboxedCode, runSandboxedDots } from "./terminalSandbox";
 import styles from "./TerminalOverlay.module.css";
+import { subscribeMotion } from "@/motion/runtime";
 
 type Entry = { command?: string; lines: string[] };
 
@@ -65,8 +66,12 @@ export default function TerminalOverlay({ onClose, initialDocument }: { onClose:
   useEffect(() => () => cleanupRun.current?.(), []);
   useEffect(() => {
     if (!dotsOpen || !dotFrames.length || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const timer = window.setInterval(() => setDotFrame(frame => frame + 1), 75);
-    return () => window.clearInterval(timer);
+    let last = 0;
+    return subscribeMotion(frame => {
+      if (frame.time - last < .075) return;
+      last = frame.time;
+      setDotFrame(value => value + 1);
+    }, { continuous: true, foreground: true });
   }, [dotsOpen, dotFrames.length]);
 
   const executeDots = (source: string) => {

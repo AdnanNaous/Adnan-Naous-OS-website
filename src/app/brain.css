@@ -24,7 +24,6 @@
 .brain-workspace.has-windows:before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 79px,#ffffff05 80px 81px),repeating-linear-gradient(0deg,transparent 0 79px,#ffffff05 80px 81px)}
 .brain-workspace-hint{padding-top:12px;color:#929292;text-align:right;font:600 9px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.13em}
 .brain-window{position:absolute;display:flex;flex-direction:column;width:min(60%,610px);height:470px;border:1px solid #a1a1a19c;background:#101010;box-shadow:0 20px 45px #000b,0 1px 0 #ffffff1e;color:#eee;outline:none;transition:filter .55s ease,opacity .55s ease,transform .55s ease}
-.brain-window.is-leaving{filter:blur(3px);opacity:.35;transform:scale(.985)}
 .brain-window:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .brain-window-archive{left:4%;top:40px;width:min(58%,580px)}
 .brain-window-thought{left:29%;top:87px}
@@ -91,4 +90,56 @@
   .brain-memory-trace{display:none}
   .brain-seam{display:none}
   .brain-entry-content{opacity:1;transform:none}
+}
+
+/* The archive is the set; each thought moves forward as a quiet reading layer. */
+.brain-section .brain-entry{min-height:clamp(440px,68svh,740px);background:radial-gradient(ellipse at 50% 50%,#1b1b1bea,#070707f0 66%);perspective:800px}
+.brain-section .brain-depth-word{position:absolute;left:50%;top:50%;z-index:-1;width:max-content;transform:translate(-50%,-48%) scale(1.35);opacity:.12;color:#f5f5f5;font-size:clamp(130px,23vw,380px);font-weight:800;letter-spacing:-.11em;line-height:.7;pointer-events:none;transition:transform 1.4s cubic-bezier(.16,1,.3,1),opacity 1s ease}
+.brain-section.is-entered .brain-depth-word{transform:translate(-50%,-50%) scale(1);opacity:.16}
+.brain-section .brain-memory-trace{inset:0;width:100%;height:100%;stroke-width:.7;opacity:0}
+.brain-section.is-entered .brain-memory-trace{opacity:.62}
+.brain-section .brain-entry-content{padding-block:85px 95px}
+.brain-section .brain-entry .section-title{font-size:clamp(90px,16vw,230px);letter-spacing:-.105em;line-height:.8;text-shadow:0 26px 65px #000}
+.brain-section .brain-entry-signal{letter-spacing:.34em}
+.brain-section .brain-open{margin-top:40px;min-width:194px}
+.brain-section .brain-workspace.has-windows{height:clamp(690px,85svh,900px);margin-top:32px;overflow:hidden;border-color:#ffffff34;background:radial-gradient(ellipse at 70% 45%,#232323c4,#080808f3 75%);box-shadow:inset 0 0 100px #000b}
+.brain-section .brain-workspace-architecture{position:absolute;inset:24px 25px auto;display:flex;justify-content:space-between;border-bottom:1px solid #ffffff22;padding-bottom:8px;color:#ffffff66;font:600 9px ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.18em}
+.brain-section .brain-window{height:calc(100% - 125px);max-height:none;transition:transform .65s cubic-bezier(.16,1,.3,1),filter .6s ease,opacity .6s ease}
+.brain-section .brain-window-archive{top:75px;left:4%;width:min(60%,640px);transform:rotate(-1.2deg);box-shadow:0 35px 80px #000c,0 0 0 1px #ffffff18}
+.brain-section .brain-window-thought{top:102px;left:auto;right:4%;width:min(58%,680px);height:calc(100% - 140px);transform:translateY(30px) rotate(.7deg);animation:brain-thought-arrive .8s cubic-bezier(.16,1,.3,1) both;box-shadow:-28px 28px 90px #000e,0 0 0 1px #ffffff26}
+@keyframes brain-thought-arrive{from{opacity:0;transform:translateY(55px) rotate(2deg) scale(.94)}to{opacity:1;transform:translateY(0) rotate(.7deg) scale(1)}}
+.brain-section .brain-workspace.has-thought .brain-window-archive{transform:translate(-3%,-4%) rotate(-2.4deg) scale(.94);filter:brightness(.46);pointer-events:none}
+.brain-section .brain-window-bar{min-height:42px}
+.brain-section .brain-window-body{padding:clamp(25px,3.4vw,46px)}
+.brain-section .brain-window-heading h3{font-size:clamp(32px,4vw,56px);line-height:.92}
+.brain-section .brain-thought-body{background:linear-gradient(115deg,#181818,#0b0b0b 70%)}
+.brain-section .brain-thought-body h3{max-width:550px;margin-block:20px 32px;font-size:clamp(36px,4.6vw,66px);line-height:1.02}
+.brain-section .brain-thought-copy{max-width:54ch;gap:20px;color:#ededed;font-size:clamp(15px,1.2vw,17px);line-height:1.78}
+.brain-section .brain-entry-row{min-height:66px}
+.brain-section .brain-entry-row:hover,.brain-section .brain-entry-row:focus-visible{background:#ffffff16;padding-inline:10px}
+.brain-section .brain-ask-retrieval{margin-top:14px;border-top:1px solid #ffffff35;padding-top:12px}
+.brain-section .brain-ask-retrieval-label{display:block;margin-bottom:8px;color:#cfcecc;font:600 9px ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.12em}
+.brain-section .brain-ask-retrieval button{display:flex;justify-content:space-between;gap:15px;width:100%;min-height:36px;padding:9px 6px;border:0;border-bottom:1px solid #ffffff21;background:transparent;color:#f5f5f5;text-align:left}
+.brain-section .brain-ask-retrieval button:hover,.brain-section .brain-ask-retrieval button:focus-visible{background:#ffffff16}
+.brain-section .brain-ask-retrieval button span{color:#aaa;font:600 9px ui-monospace,SFMono-Regular,Consolas,monospace}
+.brain-section .brain-ask-retrieval p{color:#aaa;font-size:12px}
+.brain-section .brain-ask .brain-search-label{margin-top:18px}
+.brain-section.is-reading .brain-memory-trace{opacity:.08}
+@media(max-width:700px){
+  .brain-section .brain-entry{min-height:360px}
+  .brain-section .brain-depth-word{font-size:30vw}
+  .brain-section .brain-entry .section-title{font-size:clamp(84px,24vw,150px)}
+  .brain-section .brain-entry-content{padding-block:65px}
+  .brain-section .brain-workspace.has-windows{height:auto;margin-top:20px;padding:34px 10px 10px;overflow:visible}
+  .brain-section .brain-workspace-architecture{inset:12px 12px auto;font-size:7px}
+  .brain-section .brain-window,.brain-section .brain-window-archive,.brain-section .brain-window-thought{position:relative;inset:auto;width:100%;height:auto;min-height:0;max-height:none;transform:none;animation:none;filter:none;box-shadow:0 15px 35px #000b}
+  .brain-section .brain-workspace.has-thought .brain-window-archive{display:none}
+  .brain-section .brain-window-body{padding:24px 17px;overflow:visible}
+  .brain-section .brain-thought-body h3{font-size:clamp(33px,9vw,52px)}
+  .brain-section .brain-thought-copy{font-size:15px}
+  .brain-section .brain-ask-retrieval button{display:grid;gap:4px}
+}
+@media(prefers-reduced-motion:reduce){
+  .brain-section .brain-depth-word,.brain-section .brain-window{transition:none}
+  .brain-section .brain-window-thought{animation:none}
 }

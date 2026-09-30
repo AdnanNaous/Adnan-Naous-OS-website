@@ -10,15 +10,17 @@ An English-language portfolio about my projects, current learning, and path from
 
 | Chapter | Interaction |
 | --- | --- |
-| Home | Full-screen CRT introduction, a layered memory environment, and a monochrome terminal with an extracted CV, dot-script animation, and code editors. |
-| Brain | Open one archive or thought window at a time, search three dated entries, and choose source-linked guided questions. |
-| Work | Scroll through a pinned project-index build, then open three project dossiers, including the public learning journey. |
-| Now | Select one of six learning nodes beside a 70% progress meter. |
-| Codex | Read three long-term directions as the selection cycles or choose one manually. |
-| About | Scroll through four chapters as a field of blurred code fades away. |
+| Home | A three-beat monochrome boot, kinetic identity, and a terminal with an extracted CV, dot-script animation, and code editors. Repeat visits skip the boot. |
+| Brain | Layered archive and reading windows on desktop; one panel with page scrolling on phones. Search three dated entries and choose source-linked guided answers. |
+| Work | An assembling project index and three distinct project dossiers, including the public learning journey. Projects are immediately accessible. |
+| Now | Select one of six current learning nodes in an open schematic with a fixed 70% energy motif. |
+| Codex | Read three long-term directions. Pause the cycle or select a chapter to keep it open. |
+| About | Follow four factual memories from medicine to computing, through scrolling or chapter buttons. Reduced motion shows every chapter in order. |
 | Contact | Confirm an email, explore the optional simulated system incident, or follow GitHub, LinkedIn, X, and Linktree links. |
 
-The background is a layered Canvas2D illustration in `src/graphics/`, with section-aware depth, a static CSS fallback, capped resolution, and reduced-motion support. Its renderer is separate from the Brain content and UI; `src/graphics/state.ts` carries the reading-state signal. No WebGL or WebGPU path is required. The interface keeps HTML content accessible and includes keyboard navigation and responsive layouts. The terminal runs JavaScript and dot scripts in a restricted browser sandbox. Java and Python use an embedded [OneCompiler](https://onecompiler.com/apis/embed-editor) editor; code entered there is sent to that service. The visitor shell has no administrator access.
+Seven procedural Canvas2D scenes live in `src/graphics/`: identity blades, memory topology, construction plates, skill routes, a long-range trajectory, an origin waveform, and a final light slit. `src/motion/runtime.ts` provides one animation clock and cached section measurements for canvas, navigation, and scroll-driven content. Rendering adapts its cadence and resolution, pauses in hidden tabs, settles during reading, and has a static CSS fallback. No graphics library or WebGPU requirement is added. The actual content remains semantic HTML.
+
+The terminal runs JavaScript and dot scripts in a restricted browser sandbox. Java and Python use an embedded [OneCompiler](https://onecompiler.com/apis/embed-editor) editor; code entered there is sent to that service. The visitor shell has no administrator access.
 
 Brain Q&A is a local, curated question collection. It uses no AI provider, API route, or database. `src/data/brainPromptSampling.ts` selects three unique questions and avoids the current group when enough alternatives exist. Add source-linked questions to small `brainPromptChunk*.ts` files (about 100 per chunk), then register each chunk's count and import in `src/data/brainPrompts.ts`. Only selected chunks load; the sampler supports a 10,000-question collection without rendering or loading all answers at once. The current collection contains six questions.
 

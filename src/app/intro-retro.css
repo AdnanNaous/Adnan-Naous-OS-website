@@ -1,37 +1,37 @@
-.intro.intro-retro{display:block;padding:0;background:#030303;isolation:isolate;transition:opacity .34s ease,visibility .34s}
+.intro.intro-retro{display:block;padding:0;isolation:isolate;background:#050505;color:#f4f4f2;transition:opacity .38s cubic-bezier(.7,0,.2,1),visibility .38s}
 .intro.intro-retro:before{content:none}
-.intro.intro-retro[data-state=done],.intro.intro-retro[data-state=skip]{opacity:0;visibility:hidden;pointer-events:none}
-.intro-retro-set{position:absolute;inset:0;width:100%;height:100%;height:100dvh;pointer-events:none}
-/* The first painted frame is complete. No full-screen clip-path or animated blur. */
-.intro-retro-screen{position:relative;display:flex;flex-direction:column;justify-content:space-between;width:100%;height:100%;min-height:0;overflow:hidden;padding:clamp(36px,5.8vw,88px) clamp(38px,7.5vw,120px);background:radial-gradient(ellipse 80% 76% at 50% 47%,#303030 0%,#191919 44%,#090909 78%,#020202 100%);color:#f1f1f1;text-shadow:0 0 8px #ffffff38}
-.intro-retro-screen:before{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse 73% 73% at 50% 47%,transparent 48%,#0008 83%,#000e 100%),linear-gradient(90deg,#0009,transparent 8%,transparent 92%,#0009);box-shadow:inset 0 0 80px 20px #0008}
-.intro-retro-screen:after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;opacity:.25;background:repeating-linear-gradient(0deg,transparent 0 2px,#000b 3px 4px),repeating-linear-gradient(90deg,#ffffff09 0 1px,transparent 1px 3px);mix-blend-mode:multiply}
-.intro-retro-glass{position:absolute;inset:-20%;z-index:1;pointer-events:none;opacity:.5;transform:rotate(-10deg);background:linear-gradient(106deg,transparent 29%,#ffffff04 37%,#ffffff17 41%,transparent 50%,transparent 79%,#ffffff08 83%,transparent 88%)}
-.intro-retro-top,.intro-retro-bottom{position:relative;z-index:5;display:flex;justify-content:space-between;gap:12px;font:600 clamp(9px,.9vw,12px)/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em;color:#c3c3c3;text-shadow:0 0 7px #ffffff39}
-.intro-retro-led{color:#fff;text-shadow:0 0 8px #ffffffa0}
-.intro-retro-bottom{padding-top:13px;border-top:1px solid #ffffff55;color:#b7b7b7}
-.intro-retro-bottom span:last-child{color:#e7e7e7}
-.intro-retro-content{position:relative;z-index:5;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;gap:clamp(10px,1.6vw,22px);width:100%;padding:20px 0 28px}
-.intro-retro-signal{font:500 clamp(9px,.83vw,11px)/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.24em;color:#c3c3c3}
-.intro-retro-prompt{padding:7px 12px;border:0;background:transparent;font:700 clamp(11px,1.2vw,15px)/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.2em;color:#fff;text-shadow:0 0 8px #ffffff75;cursor:pointer;pointer-events:auto}
-.intro-retro-prompt:hover,.intro-retro-prompt:focus-visible{background:#ffffff1c;outline:1px solid #ffffffa8;outline-offset:2px}
-.intro-retro-caret{display:inline-block}
-.intro-retro-name{display:block;font-family:var(--font-interface),sans-serif;font-size:clamp(82px,min(14.6vw,22vh),230px);font-weight:700;line-height:.82;letter-spacing:-.065em;color:#f4f4f4;text-shadow:0 0 2px #fff,0 0 18px #ffffff46}
-.intro-retro-tagline{font:600 clamp(9px,1vw,13px)/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em;color:#d4d4d4;text-shadow:0 0 7px #ffffff35}
-.intro-retro-skip{position:absolute;z-index:6;inset-inline-end:clamp(38px,7.5vw,120px);bottom:clamp(107px,14vh,150px);border:0;border-bottom:1px solid #ffffff90;background:#101010ab;color:#e6e6e6;padding:9px 4px;font:600 11px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em;cursor:pointer;transition:color .2s,border-color .2s,background .2s}
-.intro-retro-skip:hover,.intro-retro-skip:focus-visible{color:#fff;border-color:#fff;background:#ffffff28;outline:1px solid #fff;outline-offset:3px}
-@media(max-width:580px){.intro-retro-screen{padding:clamp(32px,7vw,45px) clamp(28px,7vw,38px)}.intro-retro-name{font-size:clamp(67px,19.5vw,112px)}.intro-retro-tagline{max-width:310px}.intro-retro-top,.intro-retro-bottom{font-size:9px;letter-spacing:.07em}.intro-retro-skip{bottom:clamp(103px,13vh,132px);inset-inline-end:clamp(28px,7vw,38px)}}
-@media(max-height:500px){.intro-retro-screen{padding-block:clamp(20px,5vh,30px)}.intro-retro-content{gap:5px;padding:0}.intro-retro-signal{display:none}.intro-retro-name{font-size:clamp(48px,min(12vw,25vh),105px)}.intro-retro-bottom{padding-top:6px}.intro-retro-skip{bottom:57px}}
-/* Hand the image to Home with a quiet fade, keeping the heading readable throughout. */
+.intro.intro-retro[data-state=done],html[data-an-boot=skip] .intro.intro-retro{opacity:0;visibility:hidden;pointer-events:none}
+.intro-retro-frame{position:absolute;z-index:3;inset:clamp(25px,4vw,60px) clamp(25px,4.5vw,70px) auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:17px;border-bottom:1px solid #ffffff68;font:600 10px/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.15em}
+.intro-retro-frame span:first-child{font-size:14px;letter-spacing:-.04em}
+.intro-retro-stage{position:absolute;inset:0;overflow:hidden}
+.intro-retro-stage:after{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px solid #ffffff17;pointer-events:none}
+.intro-retro-beat{position:absolute;inset:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:7vh clamp(25px,8vw,140px) 9vh;opacity:0;visibility:hidden;transform:translate3d(0,8vh,0);transition:transform .6s cubic-bezier(.18,.82,.18,1),opacity .24s ease,visibility .24s}
+.intro-retro-beat-memory,.intro-retro[data-stage=signal] .intro-retro-beat-signal,.intro-retro[data-stage=ready] .intro-retro-beat-ready{opacity:1;visibility:visible;transform:none}
+.intro-retro[data-stage=signal] .intro-retro-beat-memory,.intro-retro[data-stage=ready] .intro-retro-beat-memory,.intro-retro[data-stage=ready] .intro-retro-beat-signal{opacity:0;visibility:hidden;transform:translate3d(0,-12vh,0)}
+.intro-retro-overline,.intro-retro-under{position:relative;z-index:2;font:600 clamp(10px,.9vw,13px)/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.2em;color:#dededb}
+.intro-retro-overline{margin-bottom:clamp(18px,4vh,52px)}
+.intro-retro-under{margin-top:clamp(22px,4vh,48px)}
+.intro-retro-beat strong{position:relative;z-index:2;display:block;max-width:100%;font-family:var(--font-interface),Arial,sans-serif;font-size:clamp(94px,22vw,360px);font-weight:760;line-height:.72;letter-spacing:-.095em;white-space:nowrap}
+.intro-retro-beat strong span{color:#777}
+.intro-retro-beat-signal strong,.intro-retro-beat-ready strong{font-size:clamp(64px,15vw,235px);line-height:.78;letter-spacing:-.085em}
+.intro-retro-beat-signal:before,.intro-retro-beat-ready:before{content:"";position:absolute;right:-8vw;top:15%;width:34vw;height:70%;border:1px solid #ffffff27;transform:rotate(-15deg);pointer-events:none}
+.intro-retro-rail{position:absolute;z-index:3;left:clamp(25px,4.5vw,70px);right:clamp(25px,4.5vw,70px);bottom:clamp(88px,12vh,136px);display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.intro-retro-rail i{height:2px;background:#ffffff3d;transition:background .2s}
+.intro-retro-rail i:first-child,.intro-retro[data-stage=signal] .intro-retro-rail i:nth-child(-n+2),.intro-retro[data-stage=ready] .intro-retro-rail i{background:#f2f2ef}
+.intro-retro-actions{position:absolute;z-index:5;left:clamp(25px,4.5vw,70px);right:clamp(25px,4.5vw,70px);bottom:clamp(35px,5.8vh,65px);display:flex;align-items:center;gap:24px}
+.intro-retro-actions button{border:0;background:none;color:#f7f7f5;cursor:pointer;font:650 11px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em}
+.intro-retro-actions button:focus-visible{outline:2px solid #fff;outline-offset:6px}
+.intro-retro-start{display:flex;align-items:center;justify-content:space-between;gap:60px;min-width:180px;padding:10px 12px!important;background:#f1f1ef!important;color:#050505!important;transition:background .2s,transform .2s}
+.intro-retro-start:hover{transform:translateY(-3px);background:#d0d0ce!important}
+.intro-retro-skip{padding:10px 0!important;border-bottom:1px solid #ffffff7c!important;transition:border-color .2s,color .2s}
+.intro-retro-skip:hover{border-color:#fff!important;color:#fff}
+.intro-retro-bottom{position:absolute;z-index:3;right:clamp(25px,4.5vw,70px);bottom:clamp(42px,6.3vh,72px);font:500 9px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.14em;color:#aaa}
 .intro.intro-retro[data-state=loading] ~ main #home .hero-content{opacity:0;transform:none;transition:none}
-.intro.intro-retro[data-state=done] ~ main #home .hero-content{opacity:1;transform:none;transition:none}
+.intro.intro-retro[data-state=done] ~ main #home .hero-content,html[data-an-boot=skip] .intro.intro-retro ~ main #home .hero-content{opacity:1;transform:none;transition:none}
 .intro.intro-retro[data-state=loading] ~ main #home .hero-content.in-view .hero-name-line{opacity:0}
-.intro.intro-retro[data-state=done] ~ main #home .hero-content.in-view .hero-name-line{animation:intro-hero-enter .48s ease-out .08s both}
-.intro.intro-retro[data-state=done] ~ main #home .hero-content.in-view .hero-name-line + .hero-name-line{animation-delay:.14s}
-.intro.intro-retro[data-state=done] ~ main #home .hero-content > .section-index{animation:intro-hero-fade .4s .09s both}
-.intro.intro-retro[data-state=done] ~ main #home .hero-statement{animation:intro-hero-fade .4s .14s both}
-.intro.intro-retro[data-state=done] ~ main #home .hero-intro{animation:intro-hero-fade .4s .18s both}
-.intro.intro-retro[data-state=done] ~ main #home .hero-terminal{animation:intro-hero-fade .4s .22s both}
-@keyframes intro-hero-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-@keyframes intro-hero-fade{from{opacity:0}to{opacity:1}}
-@media(prefers-reduced-motion:reduce){.intro.intro-retro{display:none}.intro.intro-retro ~ main #home .hero-content,.intro.intro-retro ~ main #home .hero-content > .section-index,.intro.intro-retro ~ main #home .hero-content .hero-name-line,.intro.intro-retro ~ main #home .hero-statement,.intro.intro-retro ~ main #home .hero-intro,.intro.intro-retro ~ main #home .hero-terminal{opacity:1;animation:none;transition:none;transform:none;clip-path:none}}
+.intro.intro-retro[data-state=done] ~ main #home .hero-content.in-view .hero-name-line{animation:intro-hero-enter .7s cubic-bezier(.18,.82,.18,1) .04s both}
+.intro.intro-retro[data-state=done] ~ main #home .hero-content.in-view .hero-name-line+.hero-name-line{animation-delay:.13s}
+@keyframes intro-hero-enter{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@media(max-width:700px){.intro-retro-beat{padding:0 25px 9vh}.intro-retro-beat strong{font-size:clamp(90px,27vw,190px)}.intro-retro-beat-signal strong,.intro-retro-beat-ready strong{font-size:clamp(58px,16.5vw,125px)}.intro-retro-bottom{display:none}.intro-retro-actions{gap:20px}.intro-retro-start{min-width:142px;gap:26px}.intro-retro-frame{font-size:8px}.intro-retro-overline,.intro-retro-under{font-size:9px;letter-spacing:.13em}}
+@media(max-height:520px){.intro-retro-beat{padding-top:10vh;padding-bottom:10vh}.intro-retro-beat strong{font-size:min(19vw,33vh)}.intro-retro-beat-signal strong,.intro-retro-beat-ready strong{font-size:min(14vw,26vh)}.intro-retro-overline{margin-bottom:12px}.intro-retro-under{margin-top:13px}.intro-retro-rail{bottom:68px}.intro-retro-actions{bottom:16px}}
+@media(prefers-reduced-motion:reduce){.intro.intro-retro{display:none}.intro.intro-retro ~ main #home .hero-content,.intro.intro-retro ~ main #home .hero-content .hero-name-line{opacity:1!important;animation:none!important;transform:none!important;transition:none!important}}

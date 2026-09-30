@@ -15,6 +15,7 @@ try {
     for (const [width, height] of [[320, 700], [360, 780], [390, 844], [430, 932], [700, 900], [768, 1024], [1024, 768], [1280, 800], [1440, 900], [1920, 1080]]) {
       await page.setViewportSize({ width, height });
       await page.evaluate(() => scrollTo(0, 0));
+      if (width <= 700) await page.locator(".nav-toggle").click();
       const layout = await page.evaluate(() => ({
         overflow: document.documentElement.scrollWidth - innerWidth,
         nav: [...document.querySelectorAll(".site-nav nav a")].every(element => element.getBoundingClientRect().width > 15),
@@ -23,6 +24,7 @@ try {
         font: getComputedStyle(document.body).fontFamily,
       }));
       if (layout.overflow > 1 || !layout.nav || !layout.mobileTapTargets || !layout.cta || !layout.font.includes("Inter Variable")) failures.push({ language, width, height, layout });
+      if (width <= 700) await page.locator(".nav-toggle").click();
     }
     if (errors.length) failures.push({ language, errors });
     await page.close();
