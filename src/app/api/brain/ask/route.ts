@@ -74,16 +74,21 @@ export async function POST(request: Request) {
         cache: "no-store",
         signal: AbortSignal.timeout(12000),
       });
-      if (!response.ok) throw new Error("AI unavailable");
+      if (!response.ok) {
+        console.warn("Ask My Brain provider returned HTTP", response.status);
+        throw new Error("AI unavailable");
+      }
       const data = await response.json() as { output?: { content?: { type?: string; text?: string }[] }[] };
       const answer = data.output?.flatMap(item => item.content ?? []).filter(item => item.type === "output_text").map(item => item.text ?? "").join(" ").trim().slice(0, 700);
       if (!answer) throw new Error("AI unavailable");
       return Response.json({ answer, sources: answer.includes("That thought isn't in my Brain yet.") ? [] : sources.map(({ id, title }) => ({ id, title })), remaining: wish.remaining, resetAt: wish.resetAt }, { headers });
     } catch {
+      console.warn("Ask My Brain provider request failed");
       await wish.refund().catch(() => undefined);
       return unavailable();
     }
   } catch {
+    console.warn("Ask My Brain wish store unavailable");
     return unavailable();
   }
 }
