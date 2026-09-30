@@ -216,8 +216,8 @@ function build(chapter: Chapter): Set {
 function project(object: Mesh, s: SceneInput, chapter: Chapter) {
     const p = object.projected;
     const time = s.reduced || s.quiet ? 0 : s.time;
-    const cameraX = s.quiet ? 0 : s.pointerX * 1.65;
-    const cameraY = s.quiet ? 0 : s.pointerY * 1.5;
+    const cameraX = s.quiet || s.reduced ? 0 : s.pointerX * 1.65 + Math.sin(time * .19) * 2;
+    const cameraY = s.quiet || s.reduced ? 0 : s.pointerY * 1.5 + Math.sin(time * .13) * 1.2;
     const travel = s.quiet ? 0 : s.progress * (chapter === "codex" ? 100 : chapter === "work" ? 55 : chapter === "about" ? 42 : 34);
     const aspect = s.viewportAspect || (s.mobile ? .58 : 1.5);
     const lensX = 1.5 / aspect;
@@ -226,12 +226,14 @@ function project(object: Mesh, s: SceneInput, chapter: Chapter) {
     // Small mechanical movements are separated by long resting intervals.
     const cycle = (time + object.phase * .7) % 16;
     const wake = cycle < 4 ? Math.sin(cycle / 4 * Math.PI) ** 2 : 0;
-    const drift = Math.sin(time * (chapter === "now" ? .63 : .16) + object.phase) * object.motion * 2.2 * wake;
+    const drift = Math.sin(time * (chapter === "now" ? .63 : .16) + object.phase) * object.motion * (s.mobile ? 2.6 : 4.2) * wake;
     for (let i = 0; i < object.vertices.length; i++) {
         const v = object.vertices[i], depth = Math.max(140, v[2] + 540 - travel);
         const scale = focal / depth;
         p[i * 3] = anchor + (v[0] - cameraX + drift) * scale * lensX;
-        p[i * 3 + 1] = 390 + (v[1] - cameraY + travel * .22) * scale;
+        const wave = chapter === "about" && object.vertices.length > 100 && !s.reduced && !s.quiet
+            ? Math.sin(time * .62 + v[0] * .006 + object.phase) * (s.mobile ? 3 : 5) : 0;
+        p[i * 3 + 1] = 390 + (v[1] - cameraY + travel * .22 + wave) * scale;
         p[i * 3 + 2] = scale;
     }
 }
@@ -328,13 +330,23 @@ function paintMesh(c: C, object: Mesh, tint: Set["tint"], s: SceneInput, chapter
 export function drawEnvironment(c: C, chapter: Chapter, s: SceneInput) {
     const set = sets.get(chapter) || build(chapter);
     const still = s.reduced || s.quiet;
-    const lightX = still ? 0 : Math.sin(s.time * .14) * 12 + s.pointerX * 12;
-    const lightY = still ? 0 : Math.sin(s.time * .14) * 7 + s.pointerY * 5;
+    const lightX = still ? 0 : Math.sin(s.time * .14) * 24 + s.pointerX * 12;
+    const lightY = still ? 0 : Math.sin(s.time * .14) * 13 + s.pointerY * 5;
     const light = c.createRadialGradient(965 + lightX, 355 + lightY, 20, 925 + lightX, 415 + lightY, 700);
     light.addColorStop(0, "#4444443d");
     light.addColorStop(1, "#080a0b00");
     c.fillStyle = light;
     c.fillRect(0, 0, 1200, 800);
+    // Slow neutral atmosphere lives behind the existing objects and reading shade.
+    const hazeTime = still ? 0 : s.time;
+    for (let layer = 0; layer < 2; layer++) {
+        const x = 920 + Math.sin(hazeTime * .11 + layer * 2.4) * 55;
+        const y = 260 + layer * 200 + Math.cos(hazeTime * .09 + layer) * 24;
+        const fog = c.createRadialGradient(x, y, 12, x, y, 330 + layer * 80);
+        fog.addColorStop(0, `rgba(205,205,205,${.035 + layer * .012})`);
+        fog.addColorStop(1, "rgba(205,205,205,0)");
+        c.fillStyle = fog; c.fillRect(620, 0, 580, 800);
+    }
     c.strokeStyle = "#b2bec229";
     c.lineWidth = .6;
     c.beginPath();
@@ -346,6 +358,12 @@ export function drawEnvironment(c: C, chapter: Chapter, s: SceneInput) {
     for (const object of set.meshes)
         if (!s.mobile || object.mobile)
             paintMesh(c, object, set.tint, s, chapter);
+    c.fillStyle = "rgba(220,220,220,.18)";
+    for (let i = 0; i < (s.mobile ? 6 : 12); i++) {
+        const x = 735 + surfaceGrain[i * 2] * 440 + Math.sin(hazeTime * .15 + i) * 8;
+        const y = (surfaceGrain[i * 2 + 1] * 850 - hazeTime * (1.2 + i % 3) % 850 + 850) % 850 - 25;
+        c.fillRect(x, y, .75, .75);
+    }
     if (chapter === "home") {
         c.save();
         c.fillStyle = "#d6d5c018";

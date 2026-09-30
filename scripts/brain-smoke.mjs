@@ -14,6 +14,12 @@ try{
     const archive=brain.locator(".brain-window-archive");
     await archive.waitFor();assert.equal(await brain.locator(".brain-window").count(),1);
     const prompts=archive.locator(".brain-ask-prompt");
+    assert.equal(await prompts.count(),0,"Guided questions stay hidden before searching");
+    assert.equal(await archive.locator('.brain-ask-another').count(),0);
+    const ask=archive.getByLabel("ASK THE ARCHIVE");
+    await ask.fill('learning');
+    await ask.focus();await ask.press('Control+a');
+    assert.equal(await ask.evaluate(e=>e.selectionEnd-e.selectionStart),8,"Native input selection remains available");
     await page.waitForFunction(()=>document.querySelectorAll(".brain-ask-prompt").length===3);
     const first=await prompts.allTextContents();assert.equal(new Set(first).size,3);
     await prompts.first().click();assert(await archive.locator(".brain-ask-response").isVisible());
@@ -22,6 +28,11 @@ try{
     await page.waitForFunction(()=>document.querySelectorAll(".brain-ask-prompt").length===3);
     const second=await prompts.allTextContents();assert.equal(new Set(second).size,3);
     assert(second.every(q=>!first.includes(q)));assert.deepEqual(apiRequests,[]);
+    await ask.fill('');
+    assert.equal(await prompts.count(),0);
+    assert.equal(await archive.locator('.brain-ask-response,.brain-ask-another').count(),0);
+    await ask.fill('rapid');await ask.fill('');await page.waitForTimeout(250);
+    assert.equal(await prompts.count(),0,"Late prompt loading cannot restore cleared suggestions");
     await archive.getByLabel("ASK THE ARCHIVE").fill("successor");
     assert((await archive.locator(".brain-ask-retrieval").textContent()).includes("What If AI Starts Developing Itself?"));
     await archive.getByLabel("ASK THE ARCHIVE").fill("qwertyunknownnoentry");

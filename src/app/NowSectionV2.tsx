@@ -60,7 +60,6 @@ export function NowSectionV2() {
     <div ref={mapRef} data-path={Math.floor(selected / 2)} className="now-v2-map">
       <div className="now-v2-topline"><span>AN.OS / 04</span><span>CURRENT PATH</span><span>SELECT A NODE / 01—06</span></div>
       <div className="now-v2-origin">
-        <span className="now-v2-origin-mark" aria-hidden="true">✳</span>
         <div><span className="now-v2-kicker">SOURCE / STUDY & PRACTICE</span><strong>Computer Science + AI</strong><small>Arab Open University · Jeddah</small></div>
       </div>
       <div className="now-v2-stage">

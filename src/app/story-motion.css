@@ -1,4 +1,44 @@
 /* Motion belongs to the existing marks. All chapters keep their natural flow. */
+.about-section .story-chapter {
+  min-height: 64svh;
+  align-content: center;
+  scroll-margin-top: 20px;
+}
+.about-section[data-story-motion="active"] .story-chapter[data-arriving="true"] .story-chapter-heading {
+  animation: story-arrival .75s var(--ease-out) both;
+}
+.about-section[data-story-motion="active"] .story-chapter[data-arriving="true"] > p {
+  animation: story-arrival .95s var(--ease-out) .09s both;
+}
+@keyframes story-arrival {
+  from { opacity: .55; transform: translateY(18px); clip-path: inset(0 0 2% 0); }
+  to { opacity: 1; transform: none; clip-path: inset(0); }
+}
+/* The existing code and signal breathe, pause, then return to their marks. */
+.about-section .story-environment-code span {
+  animation: story-code-breathe 12s ease-in-out infinite;
+  animation-play-state: paused;
+}
+.about-section .story-environment-code span:nth-child(even) { animation-delay: -4s; }
+.about-section .story-environment path {
+  animation: story-signal-breathe 14s ease-in-out infinite;
+  animation-play-state: paused;
+}
+.about-section[data-story-motion="active"][data-story-visible="true"][data-story-quiet="false"] .story-environment-code span,
+.about-section[data-story-motion="active"][data-story-visible="true"][data-story-quiet="false"] .story-environment path {
+  animation-play-state: running;
+}
+@keyframes story-code-breathe {
+  0%, 24%, 100% { transform: translateX(0); }
+  46%, 64% { transform: translateX(7px); }
+}
+@keyframes story-signal-breathe {
+  0%, 25%, 100% { transform: translateY(0); }
+  48%, 68% { transform: translateY(-3px); }
+}
+@media (max-width: 700px) {
+  .about-section .story-chapter { min-height: 48svh; padding-block: 42px; }
+}
 .about-section[data-story-motion="active"] .story-chapter {
   background-image: linear-gradient(90deg, #e6dfd2a8, #e6dfd240);
   background-repeat: no-repeat;
@@ -75,6 +115,10 @@
   to { opacity: 1; transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .about-section .story-chapter[data-arriving="true"] .story-chapter-heading,
+  .about-section .story-chapter[data-arriving="true"] > p,
+  .about-section .story-environment-code span,
+  .about-section .story-environment path { animation: none !important; transform: none; clip-path: none; opacity: 1; }
   .about-section .story-chapter p { color: #e3e3e3; }
   .about-section .story-coordinate,
   .about-section .story-chapter-nav a > span:last-child,

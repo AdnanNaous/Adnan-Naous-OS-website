@@ -21,6 +21,7 @@ try {
     for(const id of ['home','brain','work','now','codex','about','contact']){
       await jump(id);
       await page.waitForTimeout(1000);
+      await page.waitForFunction(id=>getComputedStyle(document.querySelector(`#${id} h1,#${id} h2`)).opacity==='1',id);
       const health=await page.evaluate(id=>{
         const title=document.querySelector(`#${id} h1,#${id} h2`),r=title.getBoundingClientRect(),s=getComputedStyle(title);
         return {overflow:document.documentElement.scrollWidth-innerWidth,left:r.left,right:r.right,font:s.fontFamily,style:s.fontStyle,paint:s.color,opacity:s.opacity,mask:document.querySelectorAll('.scene-transition,.optical-titles,.story-mask').length};
@@ -39,6 +40,8 @@ try {
     for(let i=1;i<=4;i++){
       await page.locator(`.story-chapter-nav a[href="#story-chapter-${i}"]`).click();
       await page.waitForFunction(i=>{const r=document.getElementById(`story-chapter-${i}`).getBoundingClientRect();return r.top>=0&&r.top<210;},i);
+      await page.waitForFunction(i=>document.getElementById(`story-chapter-${i}`).dataset.arriving==='true',i);
+      await page.waitForFunction(i=>getComputedStyle(document.querySelector(`#story-chapter-${i} p`)).opacity==='1',i);
       const text=await page.locator(`#story-chapter-${i} p`).evaluate(e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return {left:r.left,right:r.right,opacity:s.opacity,font:s.fontFamily};});
       assert(text.left>=0&&text.right<=width+1);assert.equal(text.opacity,'1');assert.match(text.font,/Inter/);
     }

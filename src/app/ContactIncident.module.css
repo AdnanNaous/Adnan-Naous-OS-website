@@ -1,79 +1,78 @@
-.overlay{position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;padding:clamp(16px,4vw,48px);overflow:auto;background:#010101;color:#ededed;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;isolation:isolate}
-.confirmOverlay{background:#050505ed}
-.incidentOverlay{background:radial-gradient(ellipse at 50% 35%,#151515 0%,#050505 48%,#000 100%)}
-.incidentOverlay:before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.3;background:linear-gradient(167deg,transparent 20%,#ffffff0c 33%,transparent 34%,transparent 67%,#ffffff09 73%,transparent 74%),radial-gradient(circle,#ffffff35 0 .7px,transparent 1px) 0 0/8px 8px;mask-image:linear-gradient(90deg,#000,transparent 39%,transparent 66%,#000)}
-.incidentOverlay:after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.15;background:linear-gradient(transparent 46%,#ffffff35 49%,#ffffff12 50%,transparent 53%);transform:translateY(-120%);animation:incident-sweep 5.5s linear infinite}
-.incidentOverlay[data-phase="pending"]:after{opacity:0;background:#fff;transform:none;animation:incident-interrupt 1s steps(1,end) both}
-.incidentOverlay[data-phase="destroying"]:after{background:#fff;transform:none;animation:incident-shutdown 1.2s steps(1,end) both}
-.scanlines{position:absolute;inset:0;z-index:-1;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,#ffffff09 4px 5px);opacity:.7}
-.faultField{position:absolute;inset:clamp(14px,4vw,55px);z-index:0;display:flex;align-items:flex-end;justify-content:space-between;pointer-events:none;color:#aaa;font:600 10px/1.9 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.14em;opacity:.35;text-shadow:1px 0 #fff5}
-.faultField span:last-child{text-align:right}
-.panel{position:relative;z-index:1;width:min(100%,760px);border:1px solid #8d8d8d;padding:clamp(24px,5vw,60px);background:#050505e8;box-shadow:0 0 0 1px #111,0 0 100px #ffffff12;outline:none}
-.panel:before{content:"";position:absolute;inset:9px;border:1px solid #ffffff1a;pointer-events:none}
-.incidentPanel:after{content:"";position:absolute;inset-inline:0;top:12%;height:2px;background:linear-gradient(90deg,transparent,#ffffff95 32%,#ffffff25 70%,transparent);opacity:0;pointer-events:none;animation:incident-tear 5.2s steps(1,end) infinite}
-.incidentPanel h2{text-shadow:-2px 0 #b8d1e94d,2px 0 #e9b8c654}
-.eyebrow{margin:0 0 34px;color:#aaa;font-size:11px;letter-spacing:.2em}
-.panel h2{margin:0 0 18px;font:700 clamp(27px,5vw,51px)/1.08 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:-.04em;text-transform:uppercase}
-.panel p:not(.eyebrow){font-size:clamp(13px,2vw,16px);line-height:1.6;color:#c0c0c0}
-.choices{display:flex;gap:12px;flex-wrap:wrap;margin-top:36px}
-.choices button,.inputLine button{min-height:48px;padding:10px 17px;border:1px solid #aaa;background:#eee;color:#080808;font:700 13px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;cursor:pointer}
-.choices button:last-child{background:transparent;color:#eee}
-.choices button:hover,.inputLine button:hover{background:#bcbcbc;color:#080808}
-.choices button:focus-visible,.inputLine button:focus-visible,.inputLine input:focus-visible{outline:2px solid #fff;outline-offset:4px}
-.commands{display:grid;gap:9px;list-style:none;padding:0;margin:30px 0 38px}
-.commands li{display:flex;justify-content:space-between;gap:15px;border-block-end:1px solid #ffffff32;padding:12px 0;font-size:13px}
-.commands code{color:#fff;font:700 15px/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:nowrap}
-.commands span{color:#888;text-align:right}
-.form label{display:block;margin-bottom:12px;color:#aaa;font-size:11px;letter-spacing:.17em}
-.inputLine{display:flex;align-items:center;gap:12px;border:1px solid #888;padding:7px 7px 7px 18px}
-.inputLine>span{font-size:22px;color:#eee}
-.inputLine input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:#fff;font:500 clamp(14px,3vw,20px)/1.3 ui-monospace,SFMono-Regular,Consolas,monospace}
-.error{margin-top:17px!important;color:#fff!important;font-size:12px!important}
-.shutdownBar{height:12px;margin-top:35px;border:1px solid #aaa;overflow:hidden}
-.shutdownBar span{display:block;height:100%;width:100%;transform-origin:left;background:#e4e4e4;animation:drain 1.15s steps(14,end) forwards}
-.destroying{animation:shake .25s steps(2,end) 3}
-.destroying:after{animation-duration:.32s;opacity:.8}
-.errorCode{font-size:clamp(90px,22vw,190px)!important;line-height:.9!important}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(7px)}}
-@keyframes drain{to{transform:scaleX(0)}}
-@keyframes incident-sweep{to{transform:translateY(120%)}}
-@keyframes incident-interrupt{0%,18%,35%,100%{opacity:0}8%,27%{opacity:.13}}
-@keyframes incident-shutdown{0%,20%,42%,70%,100%{opacity:0}12%,31%,58%{opacity:.19}}
-@keyframes incident-tear{0%,87%,91%,100%{opacity:0;top:12%;transform:none}88%{opacity:.9;top:24%;transform:translateX(-15px)}89%{opacity:.45;top:62%;transform:translateX(12px)}90%{opacity:.75;top:70%;transform:translateX(-6px)}}
-@media(max-width:600px){.overlay{align-items:center}.panel{padding:28px 23px}.eyebrow{margin-bottom:22px}.commands li{display:grid;gap:4px}.commands span{text-align:left}.inputLine{gap:8px;padding-left:11px}.inputLine button{min-height:42px;padding:7px 10px}.faultField{inset:16px;font-size:8px;opacity:.22}.faultField span:last-child{display:none}}
-@media(prefers-reduced-motion:reduce){.destroying,.shutdownBar span,.incidentOverlay:after,.incidentPanel:after{animation:none}.shutdownBar span{transform:scaleX(0)}.incidentOverlay:after,.incidentPanel:after{opacity:0}}
-.radar{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.24;mask-image:linear-gradient(90deg,transparent,#000 28%,#000 72%,transparent)}
-.radar span{position:absolute;left:50%;top:50%;width:65vmin;height:65vmin;border:1px solid #fff;border-radius:50%;transform:translate(-50%,-50%) scale(.5);animation:radar-out 4s ease-out infinite}
-.radar span:nth-child(2){animation-delay:1s}.radar span:nth-child(3){animation-delay:2s}.radar span:nth-child(4){animation-delay:3s}
-.incidentPanel{border-color:#ffffff9e;background:linear-gradient(135deg,#0c0c0cf2,#020202f2);box-shadow:0 0 0 1px #ffffff24,0 0 115px #ffffff16;animation:incident-arrive .65s cubic-bezier(.16,1,.3,1) both}
-.incidentPanel:before{inset:11px;border-color:#ffffff1c}
-.incidentPanel h2{font-size:clamp(29px,5vw,56px);text-shadow:-2px 0 #ffffff39,2px 0 #ffffff2a}
-.routeChoices{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:35px}
-.routeChoices button{display:grid;gap:13px;min-height:145px;padding:20px;border:1px solid #ffffff79;background:linear-gradient(135deg,#ffffff0f,transparent);color:#fff;text-align:left;cursor:pointer;transition:transform .3s ease,background .3s ease,box-shadow .3s ease}
-.routeChoices button:hover,.routeChoices button:focus-visible{transform:translateY(-5px);background:#ffffff22;box-shadow:0 12px 38px #ffffff15}
-.routeChoices span{font-size:10px;letter-spacing:.16em;color:#bbb}.routeChoices strong{font-size:clamp(20px,3vw,29px);line-height:1.1}.routeChoices small{font-size:11px;color:#ccc}
-.reboot{display:block;margin-top:30px;padding:14px 20px;border:1px solid #fff;background:#fff;color:#050505;font:700 13px ui-monospace,Consolas,monospace;cursor:pointer}.reboot:hover{background:#aaa}.reboot:focus-visible,.routeChoices button:focus-visible{outline:2px solid #fff;outline-offset:3px}
-.incidentOverlay[data-phase="locked"]{background:radial-gradient(ellipse at 50% 45%,#111 0%,#000 56%)}
-.incidentOverlay[data-phase="locked"] .incidentPanel{width:min(100%,900px);border-color:#ffffff59;box-shadow:0 0 0 1px #fff2,0 0 120px #fff1}
-.incidentOverlay[data-phase="locked"] .errorCode{font-size:clamp(110px,23vw,230px)!important;letter-spacing:-.13em;text-shadow:-4px 0 #fff5,4px 0 #fff3}
-@keyframes radar-out{0%{opacity:0;transform:translate(-50%,-50%) scale(.15)}25%{opacity:.8}100%{opacity:0;transform:translate(-50%,-50%) scale(2.8)}}
-@keyframes incident-arrive{from{opacity:0;transform:translateY(34px) scale(.98);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
-@media(max-width:600px){.routeChoices{grid-template-columns:1fr}.routeChoices button{min-height:105px;padding:15px;gap:6px}.incidentPanel{padding:27px 22px}.radar{opacity:.16}}
-@media(prefers-reduced-motion:reduce){.radar span,.incidentPanel{animation:none}}
-
-/* A failed transmission, framed like the rest of the environment. */
+.overlay{position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;padding:clamp(16px,4vw,48px);overflow:auto;background:#010101;color:#ededed;font-family:var(--font-interface),sans-serif;isolation:isolate;--terminal-font:var(--font-code,ui-monospace),SFMono-Regular,Consolas,monospace}
 .confirmOverlay{background:#070707b8;backdrop-filter:blur(12px)}
-.panel,.incidentPanel{border:0;border-block:1px solid #ffffff65;background:#080808e8;box-shadow:0 35px 100px #000b;padding:clamp(28px,6vw,70px)}
-.panel:before{content:none}
-.panel h2,.incidentPanel h2{font:550 clamp(38px,6vw,82px)/.98 var(--font-interface),sans-serif;letter-spacing:-.06em;text-shadow:none;text-transform:none}
-.eyebrow{font-size:9px;letter-spacing:.14em;margin-bottom:32px}
-.panel p:not(.eyebrow){font-family:var(--font-interface),sans-serif;font-size:15px;max-width:52ch}
-.choices button{min-width:140px;min-height:52px;font-size:11px}
-.routeChoices button{background:none;box-shadow:none;min-height:150px;transition:background .3s,transform .5s cubic-bezier(.19,1,.22,1)}
-.routeChoices button:hover{background:#ffffff10;box-shadow:none}
+.incidentOverlay{background:radial-gradient(ellipse at 50% 35%,#151515 0%,#050505 48%,#000 100%)}
+.scanlines{position:absolute;inset:0;z-index:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,#ffffff09 4px 5px);opacity:.4}
+.incidentOverlay:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.18;background:radial-gradient(circle,#ffffff35 0 .7px,transparent 1px) 0 0/8px 8px;mask-image:linear-gradient(90deg,#000,transparent 39%,transparent 66%,#000)}
+/* A narrow film tear replaces the previous full-screen white interrupt. */
+.incidentOverlay:after{content:"";position:absolute;inset-inline:8%;top:34%;height:3px;pointer-events:none;opacity:0;background:linear-gradient(90deg,transparent,#aaa6 32%,#ddd4 70%,transparent)}
+.incidentOverlay[data-phase="pending"]:after{animation:signal-cut 1s steps(1,end) both}
+.incidentOverlay[data-phase="destroying"]:after{animation:signal-cut 1.2s steps(1,end) both}
+.faultField{position:absolute;inset:clamp(14px,4vw,55px);display:flex;align-items:flex-end;justify-content:space-between;pointer-events:none;color:#aaa;font:600 10px/1.9 var(--terminal-font);letter-spacing:.14em;opacity:.3}
+.faultField span:last-child{text-align:right}
+.panel{position:relative;z-index:2;width:min(100%,760px);padding:clamp(28px,6vw,70px);border-block:1px solid #ffffff65;background:#080808f2;box-shadow:0 35px 100px #000b;outline:none}
+.panel h2{margin:0 0 18px;font:550 clamp(38px,6vw,82px)/.98 var(--font-interface),sans-serif;letter-spacing:-.06em}
+.panel p:not(.eyebrow){font-size:15px;line-height:1.6;color:#c0c0c0;max-width:52ch}
+.eyebrow{margin:0 0 32px;color:#aaa;font:500 9px/1.5 var(--terminal-font);letter-spacing:.14em}
+.confirmPanel{width:min(100%,620px);border:1px solid #b5b5b5;background:linear-gradient(135deg,#141414,#080808);padding:66px 36px 58px;box-shadow:6px 6px 0 #0008,inset 0 0 0 5px #080808,inset 0 0 0 6px #ffffff26}
+.confirmPanel h2{font-size:clamp(32px,5vw,53px);letter-spacing:-.05em}
+.confirmPanel .eyebrow{margin-bottom:20px}
+.instrumentHeader,.instrumentFooter{position:absolute;inset-inline:6px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 14px;font:500 9px/1.3 var(--terminal-font);letter-spacing:.12em;color:#bbb}
+.instrumentHeader{top:6px;border-bottom:1px solid #ffffff40;background:#ffffff08}
+.instrumentFooter{bottom:6px;border-top:1px solid #ffffff26;font-size:8px}
+.instrumentFooter span:first-child:before{content:"";display:inline-block;width:5px;height:5px;margin-right:9px;background:#c8c8c8}
+.choices{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.choices button{min-width:140px;min-height:52px;padding:12px 17px;border:1px solid #aaa;background:#eee;color:#080808;font:700 11px/1.3 var(--terminal-font);cursor:pointer;box-shadow:inset 0 0 0 3px #080808,inset 0 0 0 4px #aaa}
+.choices button:last-child{background:transparent;color:#eee;box-shadow:inset 0 0 0 3px #080808,inset 0 0 0 4px #ffffff24}
+.choices button:hover{background:#bcbcbc;color:#080808}
+.choices button:focus-visible,.routeChoices button:focus-visible,.reboot:focus-visible{outline:2px solid #fff;outline-offset:4px}
+.incidentPanel:after{content:"";position:absolute;inset-inline:8px;top:12%;height:2px;background:linear-gradient(90deg,transparent,#ffffff85 32%,#ffffff25 70%,transparent);opacity:0;pointer-events:none}
+.destroying:after{animation:panel-tear 1.2s steps(1,end) both}
+.routeChoices{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:35px}
+.routeChoices button{position:relative;display:grid;gap:13px;min-height:170px;padding:20px;border:1px solid #ffffff79;background:none;color:#fff;text-align:left;cursor:pointer;transition:border-color .2s,background .2s;font-family:inherit;overflow:hidden}
+.routeChoices button:hover,.routeChoices button:focus-visible{border-color:#fff;background:#ffffff08}
+.routeChoices span{font:500 10px/1.4 var(--terminal-font);letter-spacing:.16em;color:#bbb}
 .routeChoices strong{font:550 clamp(22px,3vw,38px)/1 var(--font-interface),sans-serif;letter-spacing:-.05em}
-.radar{opacity:.07}
-.incidentPanel:after{animation:incident-tear 1.2s steps(1,end) 1}
-.incidentOverlay[data-phase="locked"] .incidentPanel{border:0;border-block:1px solid #ffffff50;box-shadow:none}
-.incidentOverlay[data-phase="locked"] .errorCode{font:550 clamp(140px,25vw,290px)/.8 var(--font-interface),sans-serif!important;letter-spacing:-.09em;text-shadow:none}
-@media(max-width:600px){.panel,.incidentPanel{padding:30px 20px}.panel h2,.incidentPanel h2{font-size:41px}.panel p:not(.eyebrow){font-size:13px}.choices{gap:10px}.choices button{min-width:120px}.routeChoices button{min-height:110px}.eyebrow{font-size:8px}}
+.routeChoices small{font-size:11px;line-height:1.5;color:#ccc}
+.routeChoices code{display:flex;justify-content:space-between;gap:6px;border-top:1px solid #ffffff26;padding-top:11px;font:500 clamp(9px,1.3vw,11px)/1.5 var(--terminal-font);color:#888;transition:color .2s,border-color .2s}
+.routeChoices code b{font-size:14px;font-weight:400;opacity:0;transform:translateX(-6px);transition:opacity .2s,transform .2s}
+.routeChoices button:hover code,.routeChoices button:focus-visible code{color:#fff;border-color:#ffffff75}
+.routeChoices button:hover code b,.routeChoices button:focus-visible code b{opacity:1;transform:none}
+.overrideButton:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:#ddd;transform:scaleY(0);transform-origin:bottom;transition:transform .3s steps(5,end)}
+.overrideButton:hover:before,.overrideButton:focus-visible:before{transform:scaleY(1)}
+.overrideButton:hover strong,.overrideButton:focus-visible strong{animation:command-register .4s steps(1,end) 1}
+.processLog{display:grid;gap:8px;margin-top:28px;font:500 9px/1.6 var(--terminal-font);letter-spacing:.06em;color:#a0a0a0}
+.processLog span{animation:log-register .25s steps(1,end) both}
+.processLog span:nth-child(2){animation-delay:.3s}.processLog span:nth-child(3){animation-delay:.65s}
+.shutdownBar{height:8px;margin-top:22px;border:1px solid #aaa;overflow:hidden}
+.shutdownBar span{display:block;height:100%;width:100%;transform-origin:left;background:#bbb;animation:drain 1.15s steps(14,end) forwards}
+.terminalWindows{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:3}
+.terminalWindow{position:absolute;width:290px;border:1px solid #666;background:#090909;box-shadow:7px 7px 0 #0009;color:#b7b7b7;font:500 10px/1.8 var(--terminal-font);opacity:0;animation:window-cycle .35s steps(1,end) both}
+.terminalWindow:nth-child(1){left:5%;top:8%;animation-delay:.05s}
+.terminalWindow:nth-child(2){right:3%;top:26%;animation-delay:.4s}
+.terminalWindow:nth-child(3){left:12%;bottom:8%;animation-delay:.75s}
+.windowTitle{display:flex;justify-content:space-between;padding:5px 10px;border-bottom:1px solid #555;background:#ffffff0a;font-size:9px;letter-spacing:.04em}
+.terminalWindow pre{margin:0;padding:12px;font:inherit;white-space:pre-wrap}
+.incidentOverlay[data-phase="pending"] .terminalWindow{animation-duration:.25s}
+.incidentOverlay[data-phase="pending"] .terminalWindow:nth-child(2){animation-delay:.35s}
+.incidentOverlay[data-phase="pending"] .terminalWindow:nth-child(3){animation-delay:.65s}
+.incidentOverlay[data-phase="locked"] .terminalWindow{animation-duration:.5s}
+.incidentOverlay[data-phase="locked"] .terminalWindow:nth-child(1){animation-delay:.15s}
+.incidentOverlay[data-phase="locked"] .terminalWindow:nth-child(2){animation-delay:.8s}
+.incidentOverlay[data-phase="locked"] .terminalWindow:nth-child(3){animation-delay:1.45s}
+.incidentOverlay[data-phase="locked"]{background:radial-gradient(ellipse at 50% 45%,#111 0%,#000 56%)}
+.incidentOverlay[data-phase="locked"] .incidentPanel{width:min(100%,900px);border-color:#ffffff50;box-shadow:none;animation:error-settle .65s steps(1,end) both}
+.errorCode{font:550 clamp(140px,25vw,290px)/.8 var(--font-interface),sans-serif!important;letter-spacing:-.09em!important}
+.errorDetail{display:grid;gap:7px;margin-top:24px;font:500 9px/1.5 var(--terminal-font);letter-spacing:.12em;color:#888}
+.reboot{display:block;min-height:48px;margin-top:30px;padding:14px 20px;border:1px solid #fff;background:#fff;color:#050505;font:700 13px/1.3 var(--terminal-font);cursor:pointer}
+.reboot:hover{background:#aaa}
+@keyframes signal-cut{0%,100%{opacity:0;transform:none}28%{opacity:.55;transform:translateY(55px)}53%{opacity:0}78%{opacity:.35;transform:translateY(120px)}}
+@keyframes panel-tear{0%,100%{opacity:0;transform:none}30%{opacity:.8;top:24%;transform:translateX(-7px)}55%{opacity:0}75%{opacity:.5;top:70%;transform:translateX(6px)}90%{opacity:0}}
+@keyframes window-cycle{0%{opacity:0;transform:translateY(5px)}12%,85%{opacity:.8;transform:none}100%{opacity:0;transform:translateY(-3px)}}
+@keyframes log-register{from{opacity:0}to{opacity:1}}
+@keyframes command-register{0%,100%{transform:none}35%{transform:translateX(2px)}70%{transform:translateX(-1px)}}
+@keyframes error-settle{0%{transform:translateX(-3px);clip-path:inset(0 0 4% 0)}45%{transform:translateX(2px);clip-path:inset(1% 0 0 0)}100%{transform:none;clip-path:none}}
+@keyframes drain{to{transform:scaleX(0)}}
+@media(max-width:600px){.panel{padding:30px 20px}.panel h2{font-size:41px}.panel p:not(.eyebrow){font-size:13px}.eyebrow{font-size:8px;margin-bottom:22px}.confirmPanel{padding:62px 24px 58px}.confirmPanel h2{font-size:36px}.choices{gap:10px}.choices button{min-width:120px}.routeChoices{grid-template-columns:1fr;margin-top:25px}.routeChoices button{min-height:122px;padding:15px;gap:7px}.faultField{inset:16px;font-size:8px;opacity:.22}.faultField span:last-child{display:none}.terminalWindow{width:240px;font-size:9px}.terminalWindow:nth-child(1){left:-20px;top:4%}.terminalWindow:nth-child(2){right:-25px;top:45%}.terminalWindow:nth-child(3){left:15%;bottom:3%}.errorCode{font-size:clamp(125px,32vw,190px)!important}}
+@media(max-height:500px){.overlay{place-items:start center;padding-block:14px}.panel{margin-block:auto;padding:26px}.confirmPanel{padding:58px 24px 50px}.panel h2{font-size:36px}.eyebrow{margin-bottom:16px}.routeChoices{margin-top:18px;grid-template-columns:1fr 1fr}.routeChoices button{min-height:118px;padding:14px;gap:7px}.routeChoices strong{font-size:25px}.errorCode{font-size:130px!important}.reboot{margin-top:18px}.errorDetail{margin-top:16px}.faultField{display:none}}
+@media(max-width:380px){.routeChoices{grid-template-columns:1fr}.instrumentHeader,.instrumentFooter{font-size:7px;letter-spacing:.07em}.confirmPanel{padding-inline:20px}.confirmPanel h2{font-size:32px}}
+@media(prefers-reduced-motion:reduce){.incidentOverlay:after,.incidentPanel:after,.terminalWindow{animation:none;display:none}.shutdownBar span,.processLog span,.overrideButton:hover strong,.overrideButton:focus-visible strong,.incidentOverlay[data-phase="locked"] .incidentPanel{animation:none}.shutdownBar span{transform:scaleX(0)}.processLog span{opacity:1}.routeChoices button,.routeChoices code,.routeChoices code b,.overrideButton:before{transition:none}}

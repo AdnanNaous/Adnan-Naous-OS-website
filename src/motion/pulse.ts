@@ -10,6 +10,20 @@ export function mountObjectPulse() {
   });
   const headings = [...document.querySelectorAll<HTMLElement>("main .section-title")];
   const rail = document.querySelector<HTMLElement>(".timeline-rail");
+  const textSelector = ".hero-title,.section-title,.hero-statement,.hero-intro,.section-lead,.story-chapter > p,.project-main strong,.project-main > span,.now-v2-feature h3,.brain-window-heading h3,.codex-detail-copy strong";
+  const interactiveText = new Set(document.querySelectorAll<HTMLElement>(textSelector));
+  interactiveText.forEach(element => element.classList.add("text-reactive"));
+  let hoveredText: HTMLElement | null = null;
+  const trackText = (event: PointerEvent) => {
+    const target = event.type === "pointerout" ? event.relatedTarget : event.target;
+    const next = target instanceof Element ? target.closest<HTMLElement>(textSelector) : null;
+    if (next === hoveredText) return;
+    if (hoveredText) { delete hoveredText.dataset.textHover; hoveredText.style.removeProperty("--text-energy"); }
+    hoveredText = next;
+    if (next) { next.classList.add("text-reactive"); interactiveText.add(next); next.dataset.textHover = "true"; }
+  };
+  document.addEventListener("pointerover", trackText, { passive: true });
+  document.addEventListener("pointerout", trackText, { passive: true });
   const write = (element: HTMLElement, name: string, value: string) => {
     if (element.style.getPropertyValue(name) !== value) element.style.setProperty(name, value);
   };
@@ -34,6 +48,8 @@ export function mountObjectPulse() {
   visibility();
   const unsubscribe = subscribeMotion(frame => {
     root.dataset.pulseReduced = String(frame.reduced);
+    root.dataset.pulseQuiet = String(frame.quiet);
+    if (hoveredText) write(hoveredText, "--text-energy", frame.reduced || frame.mobile || frame.quiet ? "0" : Math.min(1, frame.pointerForce).toFixed(3));
     for (const { id, element, visible } of sections) {
       if (!visible && id !== frame.chapter) continue;
       const progress = getRangeProgress(element, 1, 0);
@@ -51,7 +67,9 @@ export function mountObjectPulse() {
   });
   return () => {
     unsubscribe(); observer.disconnect(); document.removeEventListener("visibilitychange", visibility);
-    root.classList.remove("pulse-ready"); delete root.dataset.pulsePaused; delete root.dataset.pulseReduced;
+    document.removeEventListener("pointerover", trackText); document.removeEventListener("pointerout", trackText);
+    interactiveText.forEach(element => { element.classList.remove("text-reactive"); delete element.dataset.textHover; element.style.removeProperty("--text-energy"); });
+    root.classList.remove("pulse-ready"); delete root.dataset.pulsePaused; delete root.dataset.pulseReduced; delete root.dataset.pulseQuiet;
     sections.forEach(({ element }) => { delete element.dataset.pulseVisible; });
   };
 }

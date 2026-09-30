@@ -16,13 +16,15 @@ async function loadQuestionGroup(current: readonly number[]): Promise<SelectedPr
 export function AskMyBrain({ onOpenSource }: { onOpenSource: (id: string) => void }) {
   const [questions, setQuestions] = useState<SelectedPrompt[]>([]);
   const [answer, setAnswer] = useState<BrainPrompt | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
   const requestSequence = useRef(0);
+  const activeQuery = query.trim();
 
-  // Randomize only after mount so server and first client render agree.
+  // Prompt chunks are requested only while a visitor is searching.
   useEffect(() => {
+    if (!activeQuery) return;
     let cancelled = false;
     const sequenceRef = requestSequence;
     const sequence = ++requestSequence.current;
@@ -34,10 +36,10 @@ export function AskMyBrain({ onOpenSource }: { onOpenSource: (id: string) => voi
       if (!cancelled && requestSequence.current === sequence) setLoading(false);
     });
     return () => { cancelled = true; sequenceRef.current++; };
-  }, []);
+  }, [activeQuery]);
 
   function showAnotherGroup() {
-    if (loading) return;
+    if (loading || !activeQuery) return;
     const sequence = ++requestSequence.current;
     const current = questions.map(item => item.index);
     setLoading(true);
@@ -51,6 +53,17 @@ export function AskMyBrain({ onOpenSource }: { onOpenSource: (id: string) => voi
     }).finally(() => {
       if (requestSequence.current === sequence) setLoading(false);
     });
+  }
+
+  function updateQuery(value: string) {
+    if (value.trim() !== activeQuery) {
+      requestSequence.current++;
+      setQuestions([]);
+      setError("");
+      setLoading(Boolean(value.trim()));
+    }
+    setQuery(value);
+    setAnswer(null);
   }
 
   const source = answer && brainEntries.find(entry => entry.id === answer.sourceId);
@@ -71,11 +84,12 @@ export function AskMyBrain({ onOpenSource }: { onOpenSource: (id: string) => voi
     </div>
     <p className="brain-ask-label">Search the published thoughts, or choose a guided question.</p>
     <label className="brain-search-label" htmlFor="brain-ask-query">ASK THE ARCHIVE</label>
-    <input id="brain-ask-query" className="brain-search" type="search" value={query} onChange={event => { setQuery(event.target.value); setAnswer(null); }} placeholder="What has Adnan written about…" autoComplete="off" />
+    <input id="brain-ask-query" className="brain-search" type="search" value={query} onChange={event => updateQuery(event.target.value)} placeholder="What has Adnan written about…" autoComplete="off" />
     {query.trim() && <div className="brain-ask-retrieval" role="status">
       <span className="brain-ask-retrieval-label">{retrieved.length ? "RELATED PUBLISHED THOUGHTS" : "NO DIRECT MEMORY FOUND"}</span>
       {retrieved.length ? retrieved.map(({ entry }) => <button type="button" key={entry.id} onClick={() => onOpenSource(entry.id)}>{entry.title}<span>{entry.type} / {entry.category} ↗</span></button>) : <p>The archive has no matching published thought yet.</p>}
     </div>}
+    {activeQuery && <>
     <p className="brain-ask-label">GUIDED QUESTIONS / SOURCED ANSWERS</p>
     {loading && questions.length === 0 && <p className="brain-ask-message" role="status">Finding questions…</p>}
     <div className="brain-ask-prompts">
@@ -87,5 +101,6 @@ export function AskMyBrain({ onOpenSource }: { onOpenSource: (id: string) => voi
       <p>{answer.answer}</p>
       {source && <div className="brain-ask-sources"><span>FROM THE ARCHIVE</span><button type="button" onClick={() => onOpenSource(source.id)}>{source.title} ↗</button></div>}
     </div>}
+    </>}
   </div>;
 }

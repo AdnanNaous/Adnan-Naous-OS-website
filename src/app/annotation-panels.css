@@ -1,0 +1,22 @@
+/* Annotation adjustments use the existing archive and chapter motion cues. */
+.brain-section .brain-entry .section-title{font-size:clamp(92px,10vw,150px);line-height:.9}
+.brain-section.is-entered .brain-memory-trace path{animation:annotation-memory-trace 8s ease-in-out infinite}
+.brain-section.is-entered .brain-depth-word{animation:annotation-memory-depth 12s ease-in-out infinite}
+.brain-section.is-entered .brain-entry-signal{animation:annotation-memory-signal 5s ease-in-out infinite}
+.brain-section:not([data-pulse-visible="true"]) :is(.brain-memory-trace path,.brain-depth-word,.brain-entry-signal),
+html[data-pulse-paused="true"] .brain-section :is(.brain-memory-trace path,.brain-depth-word,.brain-entry-signal),
+html[data-pulse-quiet="true"] .brain-section :is(.brain-memory-trace path,.brain-depth-word,.brain-entry-signal),
+.brain-section.is-archive-open :is(.brain-memory-trace path,.brain-depth-word,.brain-entry-signal){animation-play-state:paused}
+@keyframes annotation-memory-trace{0%,100%{stroke-opacity:.55}50%{stroke-opacity:1}}
+@keyframes annotation-memory-depth{0%,100%{scale:1}50%{scale:1.025}}
+@keyframes annotation-memory-signal{0%,100%{opacity:.6}50%{opacity:1}}
+.now-v2 .now-v2-origin{grid-template-columns:minmax(0,1fr);gap:0}
+.now-v2 .now-v2-origin:after{left:0}
+@media(max-width:700px){
+  .brain-section .brain-entry .section-title{font-size:clamp(76px,20vw,110px)}
+  .work-v2 .project-trigger>.work-motif-diagnostic{width:90px;height:68px;min-height:68px;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;font-size:7px;line-height:9px;letter-spacing:.04em;align-content:center;justify-self:center}
+  .work-v2 .project-trigger>.work-motif-diagnostic span{min-width:0;padding:9px 3px}
+}
+@media(prefers-reduced-motion:reduce){
+  .brain-section.is-entered :is(.brain-memory-trace path,.brain-depth-word,.brain-entry-signal){animation:none}
+}

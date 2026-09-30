@@ -1,4 +1,4 @@
-/** Shared paint filter; the original selectable HTML name remains the only text. */
+/** Shared paint filter; the original semantic HTML name remains the only text. */
 export default function TypeMaterial() {
   return <svg className="type-material-defs" aria-hidden="true" focusable="false" width="0" height="0">
     <defs>
