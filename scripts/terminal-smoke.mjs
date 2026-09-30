@@ -75,6 +75,7 @@ try {
   await mobileTerminal.getByRole("button", { name: "Run command" }).click();
   assert((await mobileTerminal.textContent()).includes("CS + AI student"));
   await mobileTerminal.getByRole("button", { name: /write code/i }).click();
+  await mobile.waitForFunction(() => document.activeElement?.id === "terminal-code");
   assert(await mobileTerminal.getByLabel("Your code").evaluate(node => document.activeElement === node));
   assert(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
   await mobile.close();

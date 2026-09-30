@@ -30,6 +30,7 @@ try {
     await page.locator(".intro").waitFor({ state: "hidden" });
     await page.locator("#brain").getByRole("button", { name: /Open Archive/i }).click();
     await page.locator("#brain").getByRole("button", { name: /Why I Created Brain/i }).click();
+    await page.locator("#brain").getByRole("button", { name: /← Archive/i }).click();
     await page.locator("#brain").getByRole("button", { name: /What If AI Starts Developing Itself/i }).click();
     await page.screenshot({ path: join(tmpdir(), `an-feedback-${width}-brain.png`) });
     await page.locator(".terminal-secret").click();

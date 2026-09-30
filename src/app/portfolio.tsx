@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import LiveWorld from "./LiveWorld";
+import VisualEngine from "../graphics/VisualEngine";
 import Intro from "./Intro";
 import TerminalOverlay from "./TerminalOverlay";
 import { AboutSection, CodexSection, ContactSection } from "./ExperienceSections";
@@ -10,7 +10,7 @@ import { NowSectionV2 } from "./NowSectionV2";
 import { BrainSection } from "./BrainSection";
 import { installConsoleEasterEggs } from "./consoleEasterEggs";
 
-const destinations = ["home", "work", "now", "codex", "about", "brain", "contact"] as const;
+const destinations = ["home", "brain", "work", "now", "codex", "about", "contact"] as const;
 
 export default function Portfolio() {
   const [active, setActive] = useState<(typeof destinations)[number]>("home");
@@ -120,17 +120,17 @@ export default function Portfolio() {
 
   const nav = [
     { id: "home", label: "Home" },
+    { id: "brain", label: "Brain" },
     { id: "work", label: "Work" },
     { id: "now", label: "Now" },
     { id: "codex", label: "Codex" },
     { id: "about", label: "About" },
-    { id: "brain", label: "Brain" },
     { id: "contact", label: "Contact" },
   ] as const;
   const visitorClock = `${String(Math.floor(secondsHere / 60)).padStart(2, "0")}:${String(secondsHere % 60).padStart(2, "0")}`;
 
   return <>
-    <LiveWorld />
+    <VisualEngine />
     <div className="world-shade" aria-hidden="true" />
     <div className="world-schematic" aria-hidden="true">
       <span>AN / MEMORY ARRAY &nbsp; 0001—2048</span><span>CORE 01 · SIGNAL ACTIVE</span>
@@ -183,11 +183,11 @@ export default function Portfolio() {
         <div className="hero-coordinate" aria-hidden="true"><span>AN / 2026</span></div>
       </section>
 
+      <BrainSection />
       <WorkSectionV2 />
       <NowSectionV2 />
       <CodexSection />
       <AboutSection />
-      <BrainSection />
       <ContactSection />
     </main>
 

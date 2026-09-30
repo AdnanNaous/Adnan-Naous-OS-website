@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { brainEntries } from "../data/brain";
 import { AskMyBrain } from "./AskMyBrain";
+import { setVisualState } from "../graphics/state";
 
 export function BrainSection() {
   const [entered, setEntered] = useState(false);
@@ -12,6 +13,11 @@ export function BrainSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const openerRef = useRef<HTMLButtonElement>(null);
   const windowRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    setVisualState(activeWindow && activeWindow !== "archive" ? "reading" : null);
+    return () => setVisualState(null);
+  }, [activeWindow]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -71,8 +77,10 @@ export function BrainSection() {
     <div className="brain-entry">
       <span className="brain-seam brain-seam-left" aria-hidden="true" />
       <span className="brain-seam brain-seam-right" aria-hidden="true" />
+      <svg className="brain-memory-trace" viewBox="0 0 700 280" preserveAspectRatio="none" aria-hidden="true"><path d="M64 208 188 132 328 175 464 82 636 151"/><circle cx="64" cy="208" r="3"/><circle cx="188" cy="132" r="3"/><circle cx="328" cy="175" r="3"/><circle cx="464" cy="82" r="3"/><circle cx="636" cy="151" r="3"/></svg>
       <div className="brain-entry-content">
-        <p className="section-index">06 / PERSONAL ARCHIVE</p>
+        <span className="brain-entry-signal" aria-hidden="true">ENTERING MEMORY ARRAY</span>
+        <p className="section-index">02 / PERSONAL ARCHIVE</p>
         <h2 id="brain-title" className="section-title">Brain<span className="brain-title-stop">.</span></h2>
         <p className="brain-subtitle">Personal Thought Archive</p>
         <button ref={openerRef} type="button" className="brain-open" onClick={() => openWindow("archive")} aria-controls="brain-workspace" aria-expanded={activeWindow !== null}>[ Open Archive ] <span aria-hidden="true">↗</span></button>

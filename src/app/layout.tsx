@@ -10,6 +10,7 @@ import "./cinematic.css";
 import "./manga-film.css";
 import "./feedback-polish.css";
 import "./brain.css";
+import "./typography.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://adnannaous.vercel.app"),
@@ -19,5 +20,5 @@ export const metadata: Metadata = {
   twitter: { card: "summary", creator: "@vc_351" },
 };
 export default function Layout({children}: {children: React.ReactNode}) {
-  return <html lang="en" dir="ltr" style={{ "--font-interface": '"SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' } as React.CSSProperties}><body>{children}</body></html>;
+  return <html lang="en" dir="ltr" style={{ "--font-interface": '"Inter Variable", "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' } as React.CSSProperties}><body>{children}</body></html>;
 }

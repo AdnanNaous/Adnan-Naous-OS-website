@@ -101,7 +101,8 @@ try {
   await page.waitForFunction(() => document.querySelector(".work-v2-ready") !== null);
   assert.equal(await page.locator(".contact-section .contact-action").getAttribute("href"), "mailto:Adnan.Naous@outlook.com");
   assert(!(await page.locator("#contact").textContent()).includes("Adnan.Naous@outlook.com"));
-  assert.equal(await page.locator(".social-name small").count(), 0);
+  assert.equal(await page.locator(".social-name small").count(), 1);
+  assert.equal(await page.locator(".social-name small").textContent(), "Linktree");
   await page.mouse.move(0, 0);
   await page.locator("#contact").scrollIntoViewIfNeeded();
   await page.locator(".contact-recall").waitFor({ state: "visible", timeout: 16000 });

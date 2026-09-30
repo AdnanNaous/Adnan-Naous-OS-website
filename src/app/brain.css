@@ -1,6 +1,10 @@
 .brain-section{padding-top:95px;padding-bottom:105px;min-height:0;scroll-margin-top:80px}
 .brain-entry{position:relative;isolation:isolate;display:grid;place-items:center;min-height:300px;overflow:hidden;border-block:1px solid #ffffff38;background:linear-gradient(90deg,#070707e8,#141414e8 50%,#070707e8);text-align:center}
 .brain-entry:before{content:"";position:absolute;inset:0;z-index:-2;background:repeating-linear-gradient(0deg,transparent 0 21px,#ffffff06 22px 23px)}
+.brain-memory-trace{position:absolute;inset:8% 8%;width:84%;height:84%;fill:none;stroke:#ffffff4a;stroke-width:1;opacity:0;transform:scale(.96);transition:opacity .45s ease,transform .7s ease;pointer-events:none}
+.brain-memory-trace circle{fill:#d6d0c3;stroke:none}
+.brain-section.is-entered .brain-memory-trace{opacity:.35;transform:none}
+.brain-entry-signal{display:block;margin-bottom:12px;color:#aaa;font:600 8px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.2em}
 .brain-seam{position:absolute;inset-block:0;width:50%;z-index:-1;background:#0c0c0c;transition:transform .85s cubic-bezier(.22,.8,.2,1);pointer-events:none}
 .brain-seam-left{left:0;border-right:1px solid #ffffff54;transform-origin:left}
 .brain-seam-right{right:0;border-left:1px solid #ffffff54;transform-origin:right}
@@ -40,11 +44,12 @@
 .brain-ask-top h4{font-size:16px;font-weight:650;letter-spacing:-.02em}
 .brain-ask-wishes,.brain-ask-label,.brain-ask-sources>span{color:#bcbcbc;font:600 9px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.09em}
 .brain-ask-wishes{color:#e4dbbd}
-.brain-ask-retry{margin-top:8px;padding:2px 0;border:0;background:transparent;color:#e4dbbd;font:600 10px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;text-decoration:underline;text-underline-offset:3px}
-.brain-ask-retry:hover{color:#fff}
+.brain-ask-another{min-height:40px;margin-top:10px;padding:5px 0;border:0;background:transparent;color:#ddd;font:600 10px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;text-decoration:underline;text-underline-offset:4px}
+.brain-ask-another:hover,.brain-ask-another:focus-visible{color:#fff}
+.brain-ask-another:disabled{opacity:.55;cursor:wait}
 .brain-ask-label{display:block;margin:12px 0 6px}
 .brain-ask-prompts{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
-.brain-ask-prompt{padding:6px 8px;border:1px solid #ffffff52;background:#ffffff0a;color:#ddd;font:600 10px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;text-align:left}
+.brain-ask-prompt{min-height:40px;padding:8px 10px;border:1px solid #ffffff52;background:#ffffff0a;color:#ddd;font:600 10px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;text-align:left}
 .brain-ask-prompt:hover,.brain-ask-prompt:focus-visible{border-color:#ddd;background:#ffffff1a;color:#fff}
 .brain-ask-prompt:disabled{opacity:.55;cursor:not-allowed}
 .brain-ask-message{margin-top:12px;color:#ddd;font-size:12px;line-height:1.5}
@@ -83,6 +88,7 @@
 }
 @media(prefers-reduced-motion:reduce){
   .brain-seam,.brain-entry-content,.brain-open,.brain-window{transition:none}
+  .brain-memory-trace{display:none}
   .brain-seam{display:none}
   .brain-entry-content{opacity:1;transform:none}
 }

@@ -8,7 +8,9 @@ try {
     const mobile = width < 700;
     const page = await browser.newPage({ viewport: { width, height: 760 }, reducedMotion: reduced ? "reduce" : "no-preference" });
     const errors = [];
+    const apiRequests = [];
     page.on("pageerror", error => errors.push(error.message));
+    page.on("request", request => { if (request.url().includes("/api/brain")) apiRequests.push(request.url()); });
     await page.goto(base);
     await page.locator(".intro").waitFor({ state: "hidden" });
     const brain = page.locator("#brain");
@@ -18,6 +20,19 @@ try {
     await archive.waitFor();
     assert.equal(await brain.locator(".brain-window").count(), 1);
     assert.equal(await archive.locator(".brain-entry-row").count(), 3);
+    const prompts = archive.locator(".brain-ask-prompt");
+    await page.waitForFunction(() => document.querySelectorAll(".brain-ask-prompt").length === 3);
+    const firstGroup = await prompts.allTextContents();
+    assert.equal(new Set(firstGroup).size, 3, "Three distinct suggested questions");
+    await prompts.first().click();
+    assert(await archive.locator(".brain-ask-response").isVisible(), "Local answer opens immediately");
+    assert.equal(await archive.locator(".brain-ask-sources button").count(), 1, "Answer cites a published entry");
+    await archive.getByRole("button", { name: "Show me another 3 ↗", exact: true }).click();
+    await page.waitForFunction(() => document.querySelectorAll(".brain-ask-prompt").length === 3);
+    const nextGroup = await prompts.allTextContents();
+    assert.equal(new Set(nextGroup).size, 3);
+    assert(nextGroup.every(question => !firstGroup.includes(question)), "Next group excludes the previous three");
+    assert.deepEqual(apiRequests, [], "Brain Q&A makes no API requests");
 
     const search = archive.getByRole("searchbox", { name: "SEARCH ARCHIVE" });
     await search.fill("successor");

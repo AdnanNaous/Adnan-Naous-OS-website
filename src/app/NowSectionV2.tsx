@@ -51,13 +51,13 @@ export function NowSectionV2() {
 
   return <section id="now" className="content-section now-section now-v2" aria-labelledby="now-title">
     <div className="section-head reveal">
-      <p className="section-index">03 / RIGHT NOW</p>
+      <p className="section-index">04 / RIGHT NOW</p>
       <h2 id="now-title" className="section-title">The skills I’m building.</h2>
       <p className="section-lead">A living map of what I study and practice. Select a node to read more.</p>
     </div>
 
     <div ref={mapRef} className={`now-v2-map${entered ? " is-entered" : ""}`}>
-      <div className="now-v2-topline" aria-hidden="true"><span>AN.OS / 03</span><span>LIVE SKILL MAP</span><span>06 / 06</span></div>
+      <div className="now-v2-topline" aria-hidden="true"><span>AN.OS / 04</span><span>LIVE SKILL MAP</span><span>06 / 06</span></div>
       <div className="now-v2-origin">
         <div className="now-v2-origin-mark" aria-hidden="true"><span /></div>
         <div className="now-v2-origin-copy">

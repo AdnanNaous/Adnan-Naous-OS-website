@@ -43,7 +43,7 @@ export function WorkSectionV2() {
 
   return <section id="work" className={`content-section work-section work-v2 work-v2-${phase}`} aria-labelledby="work-title">
     <div className="section-head reveal">
-      <p className="section-index">02 / SELECTED WORK</p>
+      <p className="section-index">03 / SELECTED WORK</p>
       <h2 id="work-title" className="section-title">Built, tested, revised.</h2>
       <p className="section-lead">Three projects in progress. A short index trace introduces them below.</p>
     </div>

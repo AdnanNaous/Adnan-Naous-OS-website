@@ -33,7 +33,7 @@ export function CodexSection() {
   ];
   const objective = objectives[selected];
   return <section id="codex" ref={section} className={`content-section codex-section${visible ? " is-live" : ""}`} aria-labelledby="codex-title">
-    <div className="codex-top reveal"><p className="section-index">04 / CODEX · LONG GAME</p><h2 id="codex-title" className="section-title">The long game.</h2><p className="section-lead">A working log of the direction I’m taking, not a finished checklist.</p></div>
+    <div className="codex-top reveal"><p className="section-index">05 / CODEX · LONG GAME</p><h2 id="codex-title" className="section-title">The long game.</h2><p className="section-lead">A working log of the direction I’m taking, not a finished checklist.</p></div>
     <div className="codex-console reveal"><div className="codex-console-head"><span>AN / LONG-RANGE RECORD</span><span>AUTO CYCLE · SELECT ANY CHAPTER</span></div>
       <div className="codex-console-body"><ol className="codex-menu">{objectives.map((item, index) => <li key={item.code}><button type="button" className={selected === index ? "is-selected" : ""} onClick={() => setSelected(index)} aria-pressed={selected === index} aria-label={`0${index + 1}: ${item.title}`}><span>0{index + 1} / CHAPTER</span><strong>{item.code}</strong></button></li>)}</ol>
       <div className="codex-detail" key={selected}><div className="codex-detail-copy"><span className="codex-status">CHAPTER 0{selected + 1} / 03</span><strong>{objective.title}</strong><p>{objective.note}</p><small>A direction I keep working toward.</small></div></div></div>
@@ -70,7 +70,7 @@ export function AboutSection() {
   }, []);
 
   return <section id="about" className="content-section about-section" aria-labelledby="about-title">
-    <div className="section-head reveal"><p className="section-index">05 / BACKGROUND</p><h2 id="about-title" className="section-title">How I got here.</h2></div>
+    <div className="section-head reveal"><p className="section-index">06 / BACKGROUND</p><h2 id="about-title" className="section-title">How I got here.</h2></div>
     <div className="story-track" ref={track}><div className="story-stage" ref={stage}>
       <div className="story-code-field" aria-hidden="true">{[
         "const origin = 'medicine';", "observe(signal);", "01 / a new direction", "if (curious) keepBuilding();",

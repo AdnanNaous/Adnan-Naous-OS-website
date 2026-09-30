@@ -5,7 +5,7 @@ body{margin:0;background:var(--base);color:var(--ink);font-family:var(--font-int
 button,input,textarea,select{font:inherit}button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:focus-visible,a:focus-visible{outline:2px solid #ffffff;outline-offset:5px}a{color:inherit;text-decoration:none}h1,h2,h3,p{margin:0}h1,h2,h3{line-height:1.12}p{line-height:1.65}[hidden]{display:none!important}
 .skip-link{position:absolute;inset-inline-start:18px;top:-70px;z-index:40;background:#ffffff;color:#090909;padding:10px 16px}.skip-link:focus-visible{top:12px}
 
-/* The WebGL scene remains behind the page content. */
+/* Presentation-only graphics remain behind the page content. */
 .live-world{position:fixed;inset:0;z-index:0;overflow:hidden;background:radial-gradient(ellipse at 68% 45%,#2e2e2e 0%,#0d0d0d 50%,#090909 100%);pointer-events:none}
 .live-world canvas{display:block;width:100%;height:100%}
 .world-shade{position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(90deg,#090909f0 0%,#090909c8 30%,#09090930 67%,#09090924),linear-gradient(0deg,#090909aa,transparent 31%,#09090917 78%,#0909098c)}

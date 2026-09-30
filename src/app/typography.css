@@ -1,0 +1,51 @@
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("@fontsource-variable/inter/files/inter-latin-wght-normal.woff2") format("woff2");
+}
+
+/* Keep the existing type scale and terminal faces; refine the letterforms only. */
+body {
+  font-optical-sizing: auto;
+  font-synthesis: none;
+}
+
+.hero-title,
+.section-title,
+.intro-retro-name,
+.project-main strong {
+  font-feature-settings: "cv11" 1;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .hero-title {
+    transition: text-shadow .28s ease;
+  }
+
+  .section-title {
+    transition: transform .17s ease-out, text-shadow .28s ease;
+  }
+
+  .hero-title:hover,
+  .section-head:hover .section-title {
+    text-shadow: 0 0 18px rgb(255 255 255 / 18%), 0 0 40px rgb(255 255 255 / 9%);
+  }
+
+  .text-link,
+  .site-footer a,
+  .nav-inner nav a {
+    transition-property: color, border-color, text-shadow;
+    transition-duration: .22s;
+  }
+
+  .text-link:hover,
+  .text-link:focus-visible,
+  .site-footer a:hover,
+  .site-footer a:focus-visible,
+  .nav-inner nav a:hover,
+  .nav-inner nav a:focus-visible {
+    text-shadow: 0 0 10px rgb(255 255 255 / 24%);
+  }
+}

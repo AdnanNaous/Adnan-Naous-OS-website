@@ -7,20 +7,19 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test:brain-questions": "node --test scripts/brain-prompt-sampling.test.mjs",
     "test:browser": "node scripts/smoke.mjs && node scripts/contact-incident-smoke.mjs && node scripts/terminal-smoke.mjs && node scripts/brain-smoke.mjs"
   },
   "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
     "next": "16.3.6",
     "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "redis": "^6.2.1",
-    "three": "^0.186.1"
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/three": "^0.186.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.6",
     "playwright": "1.62.1",

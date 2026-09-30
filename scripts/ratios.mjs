@@ -11,6 +11,7 @@ try {
     page.on("pageerror", error => errors.push(error.message));
     await page.goto(base);
     await page.waitForFunction(() => ["done", "skip"].includes(document.querySelector(".intro")?.getAttribute("data-state")), { timeout: 7000 });
+    await page.evaluate(() => document.fonts.ready);
     for (const [width, height] of [[320, 700], [360, 780], [390, 844], [430, 932], [700, 900], [768, 1024], [1024, 768], [1280, 800], [1440, 900], [1920, 1080]]) {
       await page.setViewportSize({ width, height });
       await page.evaluate(() => scrollTo(0, 0));
@@ -21,13 +22,13 @@ try {
         cta: [...document.querySelectorAll(".command-action,.contact-action")].every(element => element.getBoundingClientRect().width > 100),
         font: getComputedStyle(document.body).fontFamily,
       }));
-      if (layout.overflow > 1 || !layout.nav || !layout.mobileTapTargets || !layout.cta || !layout.font.includes("Segoe UI")) failures.push({ language, width, height, layout });
+      if (layout.overflow > 1 || !layout.nav || !layout.mobileTapTargets || !layout.cta || !layout.font.includes("Inter Variable")) failures.push({ language, width, height, layout });
     }
     if (errors.length) failures.push({ language, errors });
     await page.close();
   }
   assert.deepEqual(failures, []);
-  console.log("PASS: 10 English viewport states, no horizontal overflow, usable navigation and actions, system font.");
+  console.log("PASS: 10 English viewport states, no horizontal overflow, usable navigation and actions, Inter typography.");
 } finally {
   await browser.close();
 }
