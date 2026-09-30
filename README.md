@@ -24,9 +24,11 @@ The terminal runs JavaScript and dot scripts in a restricted browser sandbox. Ja
 
 Brain Q&A is a local, curated question collection. It uses no AI provider, API route, or database. `src/data/brainPromptSampling.ts` selects three unique questions and avoids the current group when enough alternatives exist. Add source-linked questions to small `brainPromptChunk*.ts` files (about 100 per chunk), then register each chunk's count and import in `src/data/brainPrompts.ts`. Only selected chunks load; the sampler supports a 10,000-question collection without rendering or loading all answers at once. The current collection contains six questions.
 
-Typography is self-hosted in `src/app/typography.css`: Inter covers headings and body text, with IBM Plex Mono reserved for small technical labels. Both SIL OFL notices are in `public/fonts/`. Headings remain semantic HTML with stable glyphs during scrolling and hover.
+Typography is self-hosted in `src/app/typography.css`: Space Grotesk gives existing headings an architectural character, Inter keeps narrative text readable, and IBM Plex Mono handles technical labels. The three SIL OFL notices are in `public/fonts/`. Headings remain semantic HTML with stable glyphs during scrolling and hover. The added Latin variable face is 22,288 bytes.
 
 The background alone dissolves between chapters over 520ms, using one reusable Canvas2D snapshot and the shared adaptive clock. Rapid navigation retargets from the current image; there is no full-screen shutter, hidden text, or queued navigation. Reduced motion and quiet reading update immediately.
+
+Object motion preserves the existing layout, content and physical environments. Home settles into place; the Brain trace draws across the archive threshold; dossier marks respond to opening records; the selected skill route transfers; story lines and chapter indicators follow reading progress. Codex advances on the shared clock and retains its phase when hovered, focused, paused or offscreen. Camera depth and neutral lighting move gently, with long rests between mechanical movements. Added DOM motion uses cached ranges and visibility observers; reduced motion retains the complete interface.
 
 Seven cached perspective environments live in `src/graphics/scenes/environment.ts`. Mesh faces are depth sorted with deterministic surface detail; mobile selects fewer, larger forms. About keeps its decorative environment clipped above four normal-flow factual chapters. Contact uses an explicit full-width grid with bounded transmission rows. No external reference media or models are shipped.
 
@@ -53,7 +55,8 @@ With the server running, in another terminal:
 pnpm test:browser
 node scripts/ratios.mjs
 node scripts/materials-smoke.mjs
-node --test scripts/scene-transition.test.mjs scripts/motion-runtime.test.mjs
+node scripts/pulse-smoke.mjs
+node --test scripts/motion-runtime.test.mjs scripts/brain-prompt-sampling.test.mjs
 ```
 
 The browser checks default to `http://127.0.0.1:3000`; set `BASE_URL` for another address.

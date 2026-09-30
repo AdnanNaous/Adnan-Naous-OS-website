@@ -218,12 +218,15 @@ function project(object: Mesh, s: SceneInput, chapter: Chapter) {
     const time = s.reduced || s.quiet ? 0 : s.time;
     const cameraX = s.quiet ? 0 : s.pointerX * 1.65;
     const cameraY = s.quiet ? 0 : s.pointerY * 1.5;
-    const travel = s.quiet ? 0 : s.progress * (chapter === "codex" ? 100 : chapter === "work" ? 55 : 26);
+    const travel = s.quiet ? 0 : s.progress * (chapter === "codex" ? 100 : chapter === "work" ? 55 : chapter === "about" ? 42 : 34);
     const aspect = s.viewportAspect || (s.mobile ? .58 : 1.5);
     const lensX = 1.5 / aspect;
     const focal = s.mobile ? 660 : 760;
     const anchor = s.mobile ? 1000 : 865;
-    const drift = Math.sin(time * (chapter === "now" ? .63 : .16) + object.phase) * object.motion;
+    // Small mechanical movements are separated by long resting intervals.
+    const cycle = (time + object.phase * .7) % 16;
+    const wake = cycle < 4 ? Math.sin(cycle / 4 * Math.PI) ** 2 : 0;
+    const drift = Math.sin(time * (chapter === "now" ? .63 : .16) + object.phase) * object.motion * 2.2 * wake;
     for (let i = 0; i < object.vertices.length; i++) {
         const v = object.vertices[i], depth = Math.max(140, v[2] + 540 - travel);
         const scale = focal / depth;
@@ -324,8 +327,11 @@ function paintMesh(c: C, object: Mesh, tint: Set["tint"], s: SceneInput, chapter
 }
 export function drawEnvironment(c: C, chapter: Chapter, s: SceneInput) {
     const set = sets.get(chapter) || build(chapter);
-    const light = c.createRadialGradient(965, 355, 20, 925, 415, 700);
-    light.addColorStop(0, chapter === "about" ? "#332a233d" : "#3c49493d");
+    const still = s.reduced || s.quiet;
+    const lightX = still ? 0 : Math.sin(s.time * .14) * 12 + s.pointerX * 12;
+    const lightY = still ? 0 : Math.sin(s.time * .14) * 7 + s.pointerY * 5;
+    const light = c.createRadialGradient(965 + lightX, 355 + lightY, 20, 925 + lightX, 415 + lightY, 700);
+    light.addColorStop(0, "#4444443d");
     light.addColorStop(1, "#080a0b00");
     c.fillStyle = light;
     c.fillRect(0, 0, 1200, 800);

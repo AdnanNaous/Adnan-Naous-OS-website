@@ -1,0 +1,89 @@
+/* Motion belongs to the existing marks. All chapters keep their natural flow. */
+.about-section[data-story-motion="active"] .story-chapter {
+  background-image: linear-gradient(90deg, #e6dfd2a8, #e6dfd240);
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: calc(var(--story-read, 0) * 100%) 1px;
+}
+.about-section .story-chapter p {
+  color: color-mix(in srgb, #d6d6d6, #f4f1ea calc(var(--story-focus, 0) * 100%));
+  transition: color .35s ease;
+}
+.about-section[data-story-motion="active"] .story-coordinate {
+  transform: translateY(var(--story-drift, 0px));
+  color: color-mix(in srgb, #919191, #ddd5c8 calc(var(--story-focus, 0) * 100%));
+}
+.about-section .story-chapter-nav a {
+  transition: color .3s ease;
+}
+.about-section .story-chapter-nav a[data-current="true"],
+.about-section .story-chapter-nav a[data-current="true"] > span:first-child {
+  color: #f1eade;
+}
+.about-section .story-chapter-nav a > span:last-child {
+  transition: transform .4s var(--ease-out), color .3s ease;
+}
+.about-section .story-chapter-nav a[data-current="true"] > span:last-child {
+  transform: translateY(3px);
+}
+.about-section[data-story-motion="active"] .story-environment svg {
+  opacity: calc(.25 + var(--story-progress, 0) * .2);
+  transform: translateY(calc(var(--story-progress, 0) * -4px));
+}
+.about-section[data-story-motion="active"] .story-environment path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(.78 * (1 - var(--story-progress, 0)));
+}
+.about-section[data-story-motion="active"] .story-environment-code {
+  transform: translateY(calc(var(--story-progress, 0) * -5px));
+  opacity: calc(.16 + var(--story-progress, 0) * .08);
+}
+/* Reading and anticipation share the cycle's real, pausable phase. */
+.codex-section .codex-menu button.is-selected:after,
+.codex-section.is-live .codex-menu button.is-selected:after,
+.codex-section.is-playing.is-live .codex-menu button.is-selected:after {
+  animation: none;
+  transform: scaleX(var(--codex-cycle, 0));
+}
+.codex-section .codex-word {
+  transform: translateY(calc(var(--codex-travel, 0) * -8px));
+  opacity: calc(.75 + var(--codex-cycle, 0) * .25);
+}
+.codex-section .codex-trajectory {
+  background-image: linear-gradient(90deg, #ece7df99, #ece7df40);
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: calc(var(--codex-cycle, 0) * 100%) 1px;
+}
+.codex-section .codex-trajectory span {
+  transition: color .5s ease;
+}
+.codex-section[data-objective="0"] .codex-trajectory span:nth-child(1),
+.codex-section[data-objective="1"] .codex-trajectory span:nth-child(2),
+.codex-section[data-objective="2"] .codex-trajectory span:nth-child(3) {
+  color: #f1eade;
+}
+.codex-section .codex-detail { animation: none; }
+.codex-section .codex-detail-copy > * {
+  animation: record-resolve .65s var(--ease-out) both;
+}
+.codex-section .codex-detail-copy > strong { animation-delay: .07s; }
+.codex-section .codex-detail-copy > p { animation-delay: .14s; }
+.codex-section .codex-detail-copy > small { animation-delay: .21s; }
+@keyframes record-resolve {
+  from { opacity: .82; transform: translateY(5px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .about-section .story-chapter p { color: #e3e3e3; }
+  .about-section .story-coordinate,
+  .about-section .story-chapter-nav a > span:last-child,
+  .codex-section .codex-word { transform: none !important; }
+  .about-section .story-chapter-nav a,
+  .about-section .story-chapter-nav a > span:last-child,
+  .about-section .story-chapter p,
+  .codex-section .codex-trajectory span,
+  .codex-section .codex-trajectory i { transition: none; }
+  .codex-section .codex-detail-copy > * { animation: none; }
+  .codex-section .codex-menu button.is-selected:after { transform: none; }
+}

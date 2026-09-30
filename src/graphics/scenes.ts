@@ -15,7 +15,7 @@ export type SceneInput = {
     viewportAspect?: number;
 };
 type C = CanvasRenderingContext2D;
-/** The engine changes this opaque set only while its shutter covers the viewport. */
+/** Existing environments share a quiet, background-only dissolve. */
 export function paintChapter(c: C, chapter: Chapter, input: SceneInput, alpha: number) {
     if (alpha <= .001)
         return;
@@ -35,12 +35,12 @@ export function paintSignal(c: C, input: SceneInput, outgoing: number) {
     c.save();
     c.globalAlpha = energy * .25;
     c.lineWidth = .7;
-    c.strokeStyle = "#b6cdd1";
+    c.strokeStyle = "#c6c6c6";
     c.beginPath();
     c.moveTo(1170, 110);
     c.lineTo(1162, 350);
     c.stroke();
-    c.strokeStyle = "#cab99e";
+    c.strokeStyle = "#b3b3b3";
     c.beginPath();
     c.moveTo(1173, 110);
     c.lineTo(1165, 350);

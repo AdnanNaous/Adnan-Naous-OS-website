@@ -1,0 +1,48 @@
+/* Motion belongs to the original title, traces and interface lines. Geometry stays in place. */
+.pulse-ready .section-title{translate:var(--object-x,0px) var(--object-y,0px)}
+.pulse-ready .section-title[data-pulse-arrived="true"]{animation:object-title-arrive .85s cubic-bezier(.2,.8,.2,1) both}
+@keyframes object-title-arrive{from{opacity:.62;transform:translateY(12px);clip-path:inset(0 0 14% 0)}to{opacity:1;transform:none;clip-path:inset(0)}}
+.pulse-ready .hero-section.is-booted .hero-name-line{animation:object-name-arrive .95s cubic-bezier(.2,.8,.2,1) both!important}
+.pulse-ready .hero-section.is-booted .hero-name-line:nth-child(2){animation-delay:.12s!important}
+@keyframes object-name-arrive{from{opacity:.65;transform:translateY(14px);clip-path:inset(0 0 12% 0)}to{opacity:1;transform:none;clip-path:inset(0)}}
+.pulse-ready .hero-title{translate:var(--object-x,0px) var(--object-y,0px)}
+.pulse-ready .hero-imprint{translate:calc(var(--object-x,0px) * -3) var(--object-depth,0px);transition:opacity .7s ease}
+.pulse-ready .hero-terminal .terminal-head{position:relative}
+.pulse-ready .hero-terminal .terminal-head:after{content:"";position:absolute;bottom:-1px;left:0;right:0;height:1px;background:#eee;transform:scaleX(0);transform-origin:left;pointer-events:none}
+.pulse-ready .hero-section.is-booted .terminal-head:after{animation:object-line-arrive 1.15s .24s cubic-bezier(.2,.8,.2,1) both}
+@keyframes object-line-arrive{from{transform:scaleX(0);opacity:.5}to{transform:scaleX(1);opacity:.25}}
+.pulse-ready .terminal-head>span:last-child{animation:object-channel-pulse 9s 2s ease-in-out infinite}
+@keyframes object-channel-pulse{0%,12%,30%,100%{opacity:1}20%{opacity:.58}}
+.pulse-ready .hero-coordinate a>span{transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.pulse-ready .hero-coordinate a:hover>span,.pulse-ready .hero-coordinate a:focus-visible>span{transform:translateY(4px)}
+.pulse-ready .brain-section .brain-depth-word{translate:calc(var(--object-x,0px) * -4) var(--object-depth,0px)}
+.pulse-ready .brain-memory-trace{translate:calc(var(--object-x,0px) * -2) calc(var(--object-depth,0px) * -.4);transition:opacity .6s ease,transform .7s ease}
+.pulse-ready .brain-memory-trace path{stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--memory-draw,1));transition:stroke-dashoffset .22s linear}
+.pulse-ready .brain-memory-trace circle{animation:object-memory-node 10s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.pulse-ready .brain-memory-trace circle:nth-child(2){animation-delay:0s}
+.pulse-ready .brain-memory-trace circle:nth-child(3){animation-delay:.22s}
+.pulse-ready .brain-memory-trace circle:nth-child(4){animation-delay:.44s}
+.pulse-ready .brain-memory-trace circle:nth-child(5){animation-delay:.66s}
+.pulse-ready .brain-memory-trace circle:nth-child(6){animation-delay:.88s}
+@keyframes object-memory-node{0%,4%,16%,100%{opacity:.65;transform:scale(1)}9%{opacity:1;transform:scale(1.65)}}
+.pulse-ready .brain-section.is-archive-open .brain-memory-trace circle{animation-play-state:paused}
+.pulse-ready .brain-section .brain-window-archive{animation:object-archive-arrive .55s cubic-bezier(.2,.8,.2,1) both}
+@keyframes object-archive-arrive{from{opacity:.78;translate:0 10px}to{opacity:1;translate:0 0}}
+.pulse-ready .brain-section .brain-entry-row>span:last-child{transition:translate .4s cubic-bezier(.2,.8,.2,1)}
+.pulse-ready .brain-section .brain-entry-row:is(:hover,:focus-visible)>span:last-child{translate:3px -3px}
+.pulse-ready .brain-entry-code{font-variant-numeric:tabular-nums;transition:opacity .5s ease}
+.pulse-ready .brain-section.is-archive-open .brain-entry-code{opacity:.55}
+.pulse-ready .timeline-rail .timeline-progress{transition:height .18s linear}
+.pulse-ready .nav-code,.pulse-ready .visitor-clock strong,.pulse-ready .social-number{font-family:var(--font-code);font-variant-numeric:tabular-nums}
+.pulse-ready .contact-transmission .transmission-head{background-size:100% 100%;transition:border-color .6s ease}
+.pulse-ready .contact-transmission:focus-within,.pulse-ready .contact-transmission:hover{border-color:#ffffff70}
+.pulse-ready .contact-ending{translate:0 calc(var(--object-depth,0px) * -.25)}
+.pulse-ready [data-pulse-visible="false"] :is(.terminal-head>span:last-child,.brain-memory-trace circle){animation-play-state:paused}
+html.pulse-ready[data-pulse-paused="true"] :is(.section-title,.hero-name-line,.brain-window-archive,.terminal-head>span:last-child,.brain-memory-trace circle){animation-play-state:paused}
+@media(hover:none){.pulse-ready .hero-title,.pulse-ready .section-title{translate:none}}
+@media(prefers-reduced-motion:reduce){
+  .pulse-ready .section-title,.pulse-ready .hero-title,.pulse-ready .hero-imprint,.pulse-ready .brain-depth-word,.pulse-ready .brain-memory-trace,.pulse-ready .contact-ending{translate:none}
+  .pulse-ready .section-title[data-pulse-arrived="true"],.pulse-ready .hero-section.is-booted .hero-name-line,.pulse-ready .terminal-head>span:last-child,.pulse-ready .hero-section.is-booted .terminal-head:after,.pulse-ready .brain-memory-trace circle,.pulse-ready .brain-window-archive{animation:none!important;opacity:1;clip-path:none;transform:none}
+  .pulse-ready .brain-memory-trace path{stroke-dashoffset:0;transition:none}
+  .pulse-ready .timeline-rail .timeline-progress,.pulse-ready .hero-coordinate a>span,.pulse-ready .brain-entry-row>span:last-child{transition:none}
+}

@@ -20,13 +20,14 @@ try {
     };
     for(const id of ['home','brain','work','now','codex','about','contact']){
       await jump(id);
+      await page.waitForTimeout(1000);
       const health=await page.evaluate(id=>{
         const title=document.querySelector(`#${id} h1,#${id} h2`),r=title.getBoundingClientRect(),s=getComputedStyle(title);
         return {overflow:document.documentElement.scrollWidth-innerWidth,left:r.left,right:r.right,font:s.fontFamily,style:s.fontStyle,paint:s.color,opacity:s.opacity,mask:document.querySelectorAll('.scene-transition,.optical-titles,.story-mask').length};
       },id);
       assert(health.overflow<=1,`${id}: overflow ${width}`);
       assert(health.left>=-1&&health.right<=width+1,`${id}: title bounds ${width}`);
-      assert.match(health.font,/Inter/);assert.equal(health.style,'normal');assert.equal(health.opacity,'1');assert.notEqual(health.paint,'rgba(0, 0, 0, 0)');assert.equal(health.mask,0);
+      assert.match(health.font,/Space Grotesk/);assert.equal(health.style,'normal');assert.equal(health.opacity,'1');assert.notEqual(health.paint,'rgba(0, 0, 0, 0)');assert.equal(health.mask,0);
     }
     for(const id of ['home','contact','work','brain','about','home']){
       await page.evaluate(id=>scrollTo({top:document.getElementById(id).offsetTop,behavior:'instant'}),id);

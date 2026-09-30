@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { subscribeMotion } from "@/motion/runtime";
 
 type SkillNode = { name: string; detail: string };
 const paths: { name: string; nodes: SkillNode[] }[] = [
@@ -21,19 +22,31 @@ const flat = paths.flatMap(path => path.nodes);
 
 export function NowSectionV2() {
   const [selected, setSelected] = useState(0);
-  const [entered, setEntered] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || typeof IntersectionObserver === "undefined") return;
+    if (!map) return;
+    let visible = false;
+    const updateActivity = () => { map.dataset.motionActive = String(visible && !document.hidden); };
+    const unsubscribe = subscribeMotion(frame => {
+      if (frame.reduced) map.classList.add("is-entered");
+    });
+    if (typeof IntersectionObserver === "undefined") {
+      map.classList.add("is-entered");
+      return unsubscribe;
+    }
     const observer = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting)) {
-        setEntered(true);
-        observer.disconnect();
-      }
+      visible = entries.some(entry => entry.isIntersecting);
+      if (visible) map.classList.add("is-entered");
+      updateActivity();
     }, { threshold: 0.12 });
     observer.observe(map);
-    return () => observer.disconnect();
+    document.addEventListener("visibilitychange", updateActivity);
+    return () => {
+      observer.disconnect();
+      unsubscribe();
+      document.removeEventListener("visibilitychange", updateActivity);
+    };
   }, []);
 
   const active = flat[selected];
@@ -44,7 +57,7 @@ export function NowSectionV2() {
       <h2 id="now-title" className="section-title">The skills I’m building.</h2>
       <p className="section-lead">A living map of what I study and practice. Select a node to read more.</p>
     </div>
-    <div ref={mapRef} data-path={Math.floor(selected / 2)} className={`now-v2-map${entered ? " is-entered" : ""}`}>
+    <div ref={mapRef} data-path={Math.floor(selected / 2)} className="now-v2-map">
       <div className="now-v2-topline"><span>AN.OS / 04</span><span>CURRENT PATH</span><span>SELECT A NODE / 01—06</span></div>
       <div className="now-v2-origin">
         <span className="now-v2-origin-mark" aria-hidden="true">✳</span>
@@ -53,11 +66,11 @@ export function NowSectionV2() {
       <div className="now-v2-stage">
         <div className="now-v2-feature" aria-live="polite" aria-atomic="true">
           <div className="now-v2-feature-meta"><span>SELECTED NODE</span><span>0{selected + 1} / 06</span></div>
-          <strong className="now-v2-feature-number" aria-hidden="true">0{selected + 1}</strong>
-          <p className="now-v2-feature-path">{activePath} / CURRENT PRACTICE</p>
-          <h3>{active.name}</h3>
-          <p className="now-v2-feature-detail">{active.detail}</p>
-          <div className="now-v2-feature-route" aria-hidden="true"><span /> ROUTE ACTIVE / 0{selected + 1}</div>
+          <strong key={`number-${selected}`} className="now-v2-feature-number" aria-hidden="true">0{selected + 1}</strong>
+          <p key={`path-${selected}`} className="now-v2-feature-path">{activePath} / CURRENT PRACTICE</p>
+          <h3 key={`name-${selected}`}>{active.name}</h3>
+          <p key={`detail-${selected}`} className="now-v2-feature-detail">{active.detail}</p>
+          <div key={`route-${selected}`} className="now-v2-feature-route" aria-hidden="true"><span /> ROUTE ACTIVE / 0{selected + 1}</div>
         </div>
         <div className="now-v2-paths" aria-label="Skill paths">
           {paths.map((path, pathIndex) => <div className="now-v2-path" data-selected={Math.floor(selected / 2) === pathIndex} key={path.name}>

@@ -29,6 +29,33 @@ export function WorkSectionV2() {
     setProgress(previous => Math.abs(previous - next) > .016 || next === 0 || next === 1 ? next : previous);
   }), []);
 
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || typeof IntersectionObserver === "undefined") return;
+    const records = Array.from(section.querySelectorAll<HTMLElement>(".project-entry"));
+    const visible = new Set<Element>();
+    const updateActivity = () => {
+      section.dataset.motionActive = String(visible.has(section) && !document.hidden);
+      records.forEach(record => { record.dataset.recordActive = String(visible.has(record) && !document.hidden); });
+    };
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          visible.add(entry.target);
+          if (entry.target !== section) (entry.target as HTMLElement).dataset.recordArrived = "true";
+        } else visible.delete(entry.target);
+      });
+      updateActivity();
+    }, { threshold: .08 });
+    observer.observe(section);
+    records.forEach(record => observer.observe(record));
+    document.addEventListener("visibilitychange", updateActivity);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", updateActivity);
+    };
+  }, []);
+
   const totalCharacters = trace.reduce((sum, line) => sum + line.length, 0);
   const visibleCharacters = Math.round(progress * totalCharacters);
 

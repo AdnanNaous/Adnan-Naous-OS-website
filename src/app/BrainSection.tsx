@@ -81,7 +81,7 @@ export function BrainSection() {
       <span className="brain-seam brain-seam-left" aria-hidden="true" />
       <span className="brain-seam brain-seam-right" aria-hidden="true" />
       <div className="brain-depth-word" aria-hidden="true">MEMORY</div>
-      <svg className="brain-memory-trace" viewBox="0 0 700 280" preserveAspectRatio="none" aria-hidden="true"><path d="M64 208 188 132 328 175 464 82 636 151"/><circle cx="64" cy="208" r="3"/><circle cx="188" cy="132" r="3"/><circle cx="328" cy="175" r="3"/><circle cx="464" cy="82" r="3"/><circle cx="636" cy="151" r="3"/></svg>
+      <svg className="brain-memory-trace" viewBox="0 0 700 280" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M64 208 188 132 328 175 464 82 636 151"/><circle cx="64" cy="208" r="3"/><circle cx="188" cy="132" r="3"/><circle cx="328" cy="175" r="3"/><circle cx="464" cy="82" r="3"/><circle cx="636" cy="151" r="3"/></svg>
       <div className="brain-entry-content">
         <span className="brain-entry-signal" aria-hidden="true">ENTERING MEMORY ARRAY</span>
         <p className="section-index">02 / PERSONAL ARCHIVE</p>

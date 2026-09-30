@@ -1,0 +1,125 @@
+/* Existing record marks carry motion; geometry, content and final appearance stay intact. */
+.work-v2 .project-entry[data-record-arrived="true"] .project-number {
+  animation: record-index-arrival 700ms ease-out both;
+}
+.work-v2 .project-entry[data-record-arrived="true"] .project-trigger > .work-motif {
+  animation: record-index-arrival 850ms ease-out both;
+  animation-delay: calc(var(--build-order) * 70ms);
+}
+.work-v2 .project-entry:is(:hover, :focus-within, .is-open) .work-motif-diagnostic span {
+  animation: diagnostic-check 850ms ease-out both;
+  animation-delay: var(--record-step, 0ms);
+}
+.work-v2 .work-motif-diagnostic span:nth-child(2) { --record-step: 100ms; }
+.work-v2 .work-motif-diagnostic span:nth-child(3) { --record-step: 200ms; }
+.work-v2 .work-motif-diagnostic span:nth-child(4) { --record-step: 300ms; }
+.work-v2 .project-entry:is(:hover, :focus-within, .is-open) .work-motif-viewport i {
+  animation: viewport-register 950ms ease-out both;
+}
+.work-v2 .project-entry:is(:hover, :focus-within, .is-open) .work-motif-chronology span {
+  animation: chronology-step 850ms ease-out both;
+  animation-delay: var(--record-step, 0ms);
+}
+.work-v2 .work-motif-chronology span:nth-child(2) { --record-step: 120ms; }
+.work-v2 .work-motif-chronology span:nth-child(3) { --record-step: 240ms; }
+.work-v2 .work-motif-chronology span:nth-child(4) { --record-step: 360ms; }
+.work-v2 .project-detail:not([hidden]) .project-dossier-heading,
+.work-v2 .project-detail:not([hidden]) .project-detail-grid > * {
+  animation: dossier-read 500ms cubic-bezier(.2,.8,.2,1) both;
+  animation-delay: var(--record-step, 0ms);
+}
+.work-v2 .project-detail-grid > :nth-child(2) { --record-step: 60ms; }
+.work-v2 .project-detail-grid > :nth-child(3) { --record-step: 120ms; }
+.work-v2 .project-detail-grid > :nth-child(4) { --record-step: 180ms; }
+.work-v2 .project-trigger:active .project-verb { opacity: .65; }
+
+.now-v2 .now-v2-map.is-entered .now-v2-origin-mark {
+  animation: origin-register 900ms cubic-bezier(.2,.8,.2,1) both;
+}
+.now-v2 .now-v2-map.is-entered .now-v2-feature-number {
+  animation: record-index-arrival 650ms ease-out both;
+}
+.now-v2 .now-v2-map.is-entered .now-v2-feature-path,
+.now-v2 .now-v2-map.is-entered .now-v2-feature h3,
+.now-v2 .now-v2-map.is-entered .now-v2-feature-detail {
+  animation: dossier-read 500ms cubic-bezier(.2,.8,.2,1) both;
+}
+.now-v2 .now-v2-map.is-entered .now-v2-feature-detail { animation-delay: 65ms; }
+.now-v2 .now-v2-map.is-entered .now-v2-path:before {
+  transform-origin: left;
+  animation: route-connect 650ms cubic-bezier(.2,.8,.2,1) both;
+}
+.now-v2 .now-v2-map.is-entered .now-v2-path[data-selected="true"]:before {
+  animation-name: route-transfer;
+}
+.now-v2 .now-v2-map.is-entered .now-v2-feature-route span {
+  animation: route-signal 3.8s ease-in-out infinite;
+}
+.now-v2 .now-v2-node-arrow {
+  transition: transform 250ms cubic-bezier(.2,.8,.2,1);
+}
+.now-v2 .now-v2-node:is(:hover, :focus-visible) .now-v2-node-arrow {
+  transform: translate(2px, -2px);
+}
+.now-v2 .now-v2-node:active .now-v2-node-arrow { transform: translate(3px, -3px); }
+.now-v2 .now-v2-map.is-entered .now-v2-energy:hover .now-v2-energy-band span {
+  animation: energy-register 1000ms ease-out both;
+}
+
+/* Observers only toggle activity. They never hide or disable a record or node. */
+.work-v2:not([data-motion-active="true"]) .work-v2-caret,
+.work-v2 .project-entry:not([data-record-active="true"]) *,
+.now-v2 .now-v2-map:not([data-motion-active="true"]) *,
+.now-v2 .now-v2-map:not([data-motion-active="true"]) *:before,
+.now-v2 .now-v2-map:not([data-motion-active="true"]) *:after {
+  animation-play-state: paused !important;
+}
+@keyframes record-index-arrival {
+  from { opacity: .4; }
+  to { opacity: 1; }
+}
+@keyframes diagnostic-check {
+  0%, 100% { border-color: #ffffff80; background-color: transparent; }
+  40% { border-color: #fff; background-color: #ffffff15; }
+}
+@keyframes viewport-register {
+  0%, 100% { border-color: #ffffff69; }
+  40% { border-color: #fff; }
+}
+@keyframes chronology-step {
+  0%, 100% { border-color: #ffffff73; }
+  45% { border-color: #fff; }
+}
+@keyframes dossier-read {
+  from { opacity: .45; transform: translateY(7px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes origin-register {
+  from { transform: rotate(-90deg); }
+  to { transform: rotate(0); }
+}
+@keyframes route-connect {
+  from { transform: scaleX(.1); }
+  to { transform: scaleX(1); }
+}
+@keyframes route-transfer {
+  from { transform: scaleX(.1); }
+  to { transform: scaleX(1); }
+}
+@keyframes route-signal {
+  0%, 35%, 100% { opacity: 1; }
+  55% { opacity: .45; }
+}
+@keyframes energy-register {
+  0%, 100% { filter: brightness(1); }
+  40% { filter: brightness(1.35); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-v2 .project-entry *,
+  .now-v2 .now-v2-map *,
+  .now-v2 .now-v2-map *:before,
+  .now-v2 .now-v2-map *:after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -10,6 +10,7 @@ import { NowSectionV2 } from "./NowSectionV2";
 import { BrainSection } from "./BrainSection";
 import { installConsoleEasterEggs } from "./consoleEasterEggs";
 import { subscribeMotion } from "@/motion/runtime";
+import { mountObjectPulse } from "@/motion/pulse";
 
 const destinations = ["home", "brain", "work", "now", "codex", "about", "contact"] as const;
 
@@ -32,6 +33,7 @@ export default function Portfolio() {
   }, []);
 
   useEffect(() => installConsoleEasterEggs(), []);
+  useEffect(() => mountObjectPulse(), []);
 
   useEffect(() => {
     const openFromAction = (event: Event) => { setTerminalDocument((event as CustomEvent<string>).detail); setSecretOpen(true); };

@@ -35,7 +35,8 @@ export default function Intro() {
   useEffect(() => {
     const el = root.current;
     if (!el) return;
-    if (document.documentElement.dataset.anBoot === "skip" || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (el.dataset.state === "done" || document.documentElement.dataset.anBoot === "skip" || document.documentElement.dataset.anBoot === "done" || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      restoreBackground();
       el.dataset.state = "done";
       el.inert = true;
       document.documentElement.dataset.anBoot = "done";

@@ -1,9 +1,11 @@
-/* One reading face, with monospace reserved for code and small technical labels. */
+/* Space Grotesk gives headings character; Inter keeps narrative text readable. */
 @font-face{font-family:"Inter Variable";font-style:normal;font-weight:100 900;font-display:swap;src:url("@fontsource-variable/inter/files/inter-latin-wght-normal.woff2") format("woff2")}
+@font-face{font-family:"Space Grotesk Variable";font-style:normal;font-weight:300 700;font-display:swap;src:url("@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2") format("woff2")}
 @font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:400;font-display:swap;src:url("@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2") format("woff2")}
-:root{--font-editorial:var(--font-interface);--font-industrial:var(--font-interface);--font-code:"IBM Plex Mono",Consolas,monospace}
+:root{--font-display:"Space Grotesk Variable",var(--font-interface),sans-serif;--font-editorial:var(--font-display);--font-industrial:var(--font-display);--font-code:"IBM Plex Mono",Consolas,monospace}
 body{font-family:var(--font-interface),sans-serif;font-synthesis:none}
-.hero-title,.hero-imprint,.section-title,.brain-window-heading h3,.brain-thought-body h3,.work-v2 .project-main strong,.work-v2 .project-dossier-heading strong,.codex-word,.codex-section .codex-menu button strong,.story-chapter p{font-family:var(--font-interface),sans-serif;font-style:normal}
+.hero-title,.hero-imprint,.section-title,.brain-window-heading h3,.brain-thought-body h3,.work-v2 .project-main strong,.work-v2 .project-dossier-heading strong,.codex-word,.codex-section .codex-menu button strong{font-family:var(--font-display);font-style:normal}
+.story-chapter p{font-family:var(--font-interface),sans-serif;font-style:normal}
 .hero-title{font-size:clamp(76px,10vw,160px);font-weight:650;letter-spacing:-.045em;line-height:1.02}
 .hero-imprint{font-weight:700}
 .section-title,.brain-section .brain-entry .section-title,#work .section-title,.now-section .section-title,.codex-section .section-title,.about-section .section-title,.contact-content .section-title{font-size:clamp(44px,6.5vw,100px);font-weight:650;letter-spacing:-.035em;line-height:1.1;font-style:normal;text-transform:none}
