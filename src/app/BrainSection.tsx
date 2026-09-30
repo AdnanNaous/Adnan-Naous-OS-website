@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { brainEntries } from "../data/brain";
+import { AskMyBrain } from "./AskMyBrain";
 
 type BrainWindow = { id: string; slot: number; z: number };
 
@@ -96,6 +97,7 @@ export function BrainSection() {
           </div>
           {isArchive ? <div className="brain-window-body brain-archive-body">
             <div className="brain-window-heading"><p>PUBLIC MEMORY / 2026—</p><h3 id={titleId}>Brain Archive</h3><span>Thoughts kept as they were.</span></div>
+            <AskMyBrain onOpenSource={openWindow} />
             <label className="brain-search-label" htmlFor="brain-search">SEARCH ARCHIVE</label>
             <input id="brain-search" className="brain-search" type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Search thoughts, text, labels, dates…" autoComplete="off" />
             <p className="brain-result-count" role="status">{matches.length} {matches.length === 1 ? "ENTRY" : "ENTRIES"} FOUND</p>
