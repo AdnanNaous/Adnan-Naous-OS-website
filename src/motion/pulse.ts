@@ -24,6 +24,15 @@ export function mountObjectPulse() {
   };
   document.addEventListener("pointerover", trackText, { passive: true });
   document.addEventListener("pointerout", trackText, { passive: true });
+  document.addEventListener("pointerdown", trackText, { passive: true });
+  const releaseText = (event: PointerEvent) => {
+    if (event.pointerType === "mouse" || !hoveredText) return;
+    delete hoveredText.dataset.textHover;
+    hoveredText.style.removeProperty("--text-energy");
+    hoveredText = null;
+  };
+  document.addEventListener("pointerup", releaseText, { passive: true });
+  document.addEventListener("pointercancel", releaseText, { passive: true });
   const write = (element: HTMLElement, name: string, value: string) => {
     if (element.style.getPropertyValue(name) !== value) element.style.setProperty(name, value);
   };
@@ -49,15 +58,15 @@ export function mountObjectPulse() {
   const unsubscribe = subscribeMotion(frame => {
     root.dataset.pulseReduced = String(frame.reduced);
     root.dataset.pulseQuiet = String(frame.quiet);
-    if (hoveredText) write(hoveredText, "--text-energy", frame.reduced || frame.mobile || frame.quiet ? "0" : Math.min(1, frame.pointerForce).toFixed(3));
+    if (hoveredText) write(hoveredText, "--text-energy", frame.reduced || frame.quiet ? "0" : Math.min(1, frame.pointerForce).toFixed(3));
     for (const { id, element, visible } of sections) {
       if (!visible && id !== frame.chapter) continue;
       const progress = getRangeProgress(element, 1, 0);
       const still = frame.reduced || frame.quiet;
       write(element, "--object-progress", progress.toFixed(3));
-      write(element, "--object-x", still || frame.mobile ? "0px" : `${(frame.pointerX * 2.2).toFixed(2)}px`);
-      write(element, "--object-y", still || frame.mobile ? "0px" : `${(frame.pointerY * 1.6).toFixed(2)}px`);
-      write(element, "--object-depth", still ? "0px" : `${((progress - .5) * (frame.mobile ? 8 : 18)).toFixed(2)}px`);
+      write(element, "--object-x", still ? "0px" : `${(frame.pointerX * 2.2).toFixed(2)}px`);
+      write(element, "--object-y", still ? "0px" : `${(frame.pointerY * 1.6).toFixed(2)}px`);
+      write(element, "--object-depth", still ? "0px" : `${((progress - .5) * 18).toFixed(2)}px`);
       if (id === "brain") write(element, "--memory-draw", (frame.reduced ? 1 : Math.min(1, Math.max(0, (progress - .1) * 2.7))).toFixed(3));
     }
     if (rail) {
@@ -68,6 +77,7 @@ export function mountObjectPulse() {
   return () => {
     unsubscribe(); observer.disconnect(); document.removeEventListener("visibilitychange", visibility);
     document.removeEventListener("pointerover", trackText); document.removeEventListener("pointerout", trackText);
+    document.removeEventListener("pointerdown", trackText); document.removeEventListener("pointerup", releaseText); document.removeEventListener("pointercancel", releaseText);
     interactiveText.forEach(element => { element.classList.remove("text-reactive"); delete element.dataset.textHover; element.style.removeProperty("--text-energy"); });
     root.classList.remove("pulse-ready"); delete root.dataset.pulsePaused; delete root.dataset.pulseReduced; delete root.dataset.pulseQuiet;
     sections.forEach(({ element }) => { delete element.dataset.pulseVisible; });

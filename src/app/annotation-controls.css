@@ -2,10 +2,8 @@
 body{-webkit-user-select:none;user-select:none}
 input,textarea,[contenteditable="true"],[contenteditable="true"] *{-webkit-user-select:text;user-select:text;cursor:text}
 .text-reactive{cursor:crosshair}
-@media(hover:hover) and (pointer:fine){
   .text-reactive[data-text-hover="true"]{text-shadow:0 0 calc(2px + var(--text-energy,0) * 6px) #ffffff25}
   #home .hero-title[data-text-hover="true"] .hero-name-line[data-type-material]{text-shadow:calc(-.5px - var(--text-energy,0) * .8px) 0 #97c7da60,calc(.5px + var(--text-energy,0) * .8px) 0 #dba3b660}
-}
 .hero-terminal .terminal-secret{background:#bcbdbb;color:#0b0b0b;border-color:#dedede80}
 .hero-terminal .terminal-secret:hover,.hero-terminal .terminal-secret:focus-visible{background:#d0d1ce;transform:translateY(-2px)}
 .hero-terminal .terminal-secret:before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 25%,#ffffff45 45%,transparent 65%);transform:translateX(-120%);pointer-events:none;transition:transform .85s cubic-bezier(.2,.8,.2,1)}

@@ -226,13 +226,13 @@ function project(object: Mesh, s: SceneInput, chapter: Chapter) {
     // Small mechanical movements are separated by long resting intervals.
     const cycle = (time + object.phase * .7) % 16;
     const wake = cycle < 4 ? Math.sin(cycle / 4 * Math.PI) ** 2 : 0;
-    const drift = Math.sin(time * (chapter === "now" ? .63 : .16) + object.phase) * object.motion * (s.mobile ? 2.6 : 4.2) * wake;
+    const drift = Math.sin(time * (chapter === "now" ? .63 : .16) + object.phase) * object.motion * 4.2 * wake;
     for (let i = 0; i < object.vertices.length; i++) {
         const v = object.vertices[i], depth = Math.max(140, v[2] + 540 - travel);
         const scale = focal / depth;
         p[i * 3] = anchor + (v[0] - cameraX + drift) * scale * lensX;
         const wave = chapter === "about" && object.vertices.length > 100 && !s.reduced && !s.quiet
-            ? Math.sin(time * .62 + v[0] * .006 + object.phase) * (s.mobile ? 3 : 5) : 0;
+            ? Math.sin(time * .62 + v[0] * .006 + object.phase) * 5 : 0;
         p[i * 3 + 1] = 390 + (v[1] - cameraY + travel * .22 + wave) * scale;
         p[i * 3 + 2] = scale;
     }
@@ -312,7 +312,7 @@ function paintMesh(c: C, object: Mesh, tint: Set["tint"], s: SceneInput, chapter
             c.restore();
         }
     }
-    if (object.label && (!s.mobile || object.depth < 800)) {
+    if (object.label) {
         const n = object.faces[object.faces.length - 1].indices[0] * 3;
         c.fillStyle = "#d3d4cb88";
         c.font = `${Math.max(7, 11 * p[n + 2])}px monospace`;
@@ -356,10 +356,9 @@ export function drawEnvironment(c: C, chapter: Chapter, s: SceneInput) {
     c.lineTo(1130, 680);
     c.stroke();
     for (const object of set.meshes)
-        if (!s.mobile || object.mobile)
-            paintMesh(c, object, set.tint, s, chapter);
+        paintMesh(c, object, set.tint, s, chapter);
     c.fillStyle = "rgba(220,220,220,.18)";
-    for (let i = 0; i < (s.mobile ? 6 : 12); i++) {
+    for (let i = 0; i < 12; i++) {
         const x = 735 + surfaceGrain[i * 2] * 440 + Math.sin(hazeTime * .15 + i) * 8;
         const y = (surfaceGrain[i * 2 + 1] * 850 - hazeTime * (1.2 + i % 3) % 850 + 850) % 850 - 25;
         c.fillRect(x, y, .75, .75);

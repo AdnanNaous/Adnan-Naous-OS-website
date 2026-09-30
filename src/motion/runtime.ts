@@ -23,6 +23,7 @@ let frame: MotionFrame = {
 let active = false, dirty = true, raf = 0, paceTimer = 0, lastTick = 0, lastScrollTime = 0;
 let pointerTargetX = 0, pointerTargetY = 0, pointerInputVelocityX = 0, pointerInputVelocityY = 0;
 let lastPointerTime = 0, pointerInside = false;
+let contactPointerId: number | null = null;
 let cost = 0, downgrade = 0, quiet = false;
 const pointerPhysics = { positionDamping: 115, velocityDamping: 90, forceAttack: 65, forceRelease: 260, restDelay: 1300, restDamping: 700 };
 const ranges = new Map<HTMLElement, { top: number; height: number }>();
@@ -75,7 +76,7 @@ function tick(now: number) {
   const mobile = window.innerWidth < 700 || !!coarseQuery?.matches;
   const reduced = !!reducedQuery?.matches;
   const continuous = !reduced && [...subscribers].some(subscriber => subscriber.continuous && (!quiet || subscriber.foreground));
-  const interval = (mobile ? 50 : 33.3) * (downgrade ? 1.5 : 1);
+  const interval = 33.3 * (downgrade ? 1.5 : 1);
   // Input bursts share the capped clock without blocking page content.
   if (lastTick && now - lastTick < interval) {
     schedulePaced(Math.max(1, interval - (now - lastTick)));
@@ -89,7 +90,7 @@ function tick(now: number) {
   const y = window.scrollY;
   const chapter = deriveChapter(y, window.innerHeight);
   const visualChapter = visualOverride ?? chapter.chapter;
-  const pointer = advancePointer(now, delta, reduced || mobile);
+  const pointer = advancePointer(now, delta, reduced);
   const rawVelocity = (y - frame.scrollY) / Math.max(16, now - (lastScrollTime || now - 16));
   const velocity = Math.abs(y - frame.scrollY) > .5 ? Math.max(-3, Math.min(3, rawVelocity)) : frame.velocity * Math.exp(-delta / 95);
   const next: MotionFrame = {
@@ -138,7 +139,7 @@ function schedulePaced(delay: number) {
 }
 function onScroll() { lastScrollTime = performance.now(); dirty = true; schedule(); }
 function pointerNeedsFrame(now: number) {
-  if (frame.reduced || frame.mobile) return false;
+  if (frame.reduced) return false;
   const resting = !pointerInside || now - lastPointerTime > pointerPhysics.restDelay;
   return (!resting && (frame.pointerX !== 0 || frame.pointerY !== 0))
     || frame.pointerForce !== 0 || frame.pointerVelocityX !== 0 || frame.pointerVelocityY !== 0
@@ -165,7 +166,9 @@ function advancePointer(now: number, delta: number, disabled: boolean) {
   };
 }
 function onPointer(event: PointerEvent) {
-  if (event.pointerType !== "mouse") return;
+  if (event.isPrimary === false) return;
+  if (event.pointerType === "touch" && contactPointerId !== event.pointerId) return;
+  if (contactPointerId !== null && contactPointerId !== event.pointerId) return;
   const now = performance.now();
   const x = Math.max(-1, Math.min(1, (event.clientX / Math.max(1, window.innerWidth) - .5) * 2));
   const y = Math.max(-1, Math.min(1, (event.clientY / Math.max(1, window.innerHeight) - .5) * 2));
@@ -177,7 +180,19 @@ function onPointer(event: PointerEvent) {
   dirty = true;
   schedule();
 }
-function onPointerLeave() { pointerInside = false; pointerInputVelocityX = pointerInputVelocityY = 0; dirty = true; schedule(); }
+function onPointerDown(event: PointerEvent) {
+  if (event.isPrimary === false) return;
+  if (event.pointerType === "touch" || event.pointerType === "pen") {
+    if (contactPointerId !== null && contactPointerId !== event.pointerId) return;
+    pointerInside = false;
+    contactPointerId = event.pointerId;
+  }
+  onPointer(event);
+}
+function onPointerRelease(event: PointerEvent) {
+  if (contactPointerId === event.pointerId) onPointerLeave();
+}
+function onPointerLeave() { contactPointerId = null; pointerInside = false; pointerInputVelocityX = pointerInputVelocityY = 0; dirty = true; schedule(); }
 function onPointerOut(event: PointerEvent) { if (!event.relatedTarget) onPointerLeave(); }
 function onVisibility() {
   if (document.hidden) { cancelAnimationFrame(raf); clearTimeout(paceTimer); raf = paceTimer = 0; onPointerLeave(); }
@@ -195,6 +210,9 @@ function start() {
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", measure, { passive: true });
   window.addEventListener("pointermove", onPointer, { passive: true });
+  window.addEventListener("pointerdown", onPointerDown, { passive: true });
+  window.addEventListener("pointerup", onPointerRelease, { passive: true });
+  window.addEventListener("pointercancel", onPointerRelease, { passive: true });
   window.addEventListener("pointerout", onPointerOut, { passive: true });
   window.addEventListener("blur", onPointerLeave);
   document.addEventListener("visibilitychange", onVisibility);
@@ -210,6 +228,9 @@ function stop() {
   window.removeEventListener("scroll", onScroll);
   window.removeEventListener("resize", measure);
   window.removeEventListener("pointermove", onPointer);
+  window.removeEventListener("pointerdown", onPointerDown);
+  window.removeEventListener("pointerup", onPointerRelease);
+  window.removeEventListener("pointercancel", onPointerRelease);
   window.removeEventListener("pointerout", onPointerOut);
   window.removeEventListener("blur", onPointerLeave);
   document.removeEventListener("visibilitychange", onVisibility);
@@ -217,7 +238,7 @@ function stop() {
   coarseQuery?.removeEventListener("change", invalidateMotion);
   bounds = [];
   ranges.clear();
-  pointerInside = false; pointerInputVelocityX = pointerInputVelocityY = 0;
+  contactPointerId = null; pointerInside = false; pointerInputVelocityX = pointerInputVelocityY = 0;
   visualOverride = null;
 }
 
@@ -266,5 +287,5 @@ export function getMotionDiagnostics() {
   return { active, hidden: typeof document === "undefined" ? true : document.hidden,
     quiet, ticks: tickCount, callbacks: callbackCount, lastFrameTime: lastTick,
     visualChapter: frame.visualChapter,
-    targetFps: (frame.reduced || quiet) && !pointerNeedsFrame(performance.now()) ? 0 : frame.mobile ? (downgrade ? 13 : 20) : (downgrade ? 20 : 30) };
+    targetFps: (frame.reduced || quiet) && !pointerNeedsFrame(performance.now()) ? 0 : (downgrade ? 20 : 30) };
 }

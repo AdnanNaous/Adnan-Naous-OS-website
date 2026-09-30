@@ -27,6 +27,7 @@
 @keyframes object-memory-node{0%,4%,16%,100%{opacity:.65;transform:scale(1)}9%{opacity:1;transform:scale(1.65)}}
 .pulse-ready .brain-section.is-archive-open .brain-memory-trace circle{animation-play-state:paused}
 .pulse-ready .brain-section .brain-window-archive{animation:object-archive-arrive .55s cubic-bezier(.2,.8,.2,1) both}
+.pulse-ready .brain-section .brain-window-thought{animation:brain-thought-arrive .8s cubic-bezier(.16,1,.3,1) both}
 @keyframes object-archive-arrive{from{opacity:.78;translate:0 10px}to{opacity:1;translate:0 0}}
 .pulse-ready .brain-section .brain-entry-row>span:last-child{transition:translate .4s cubic-bezier(.2,.8,.2,1)}
 .pulse-ready .brain-section .brain-entry-row:is(:hover,:focus-visible)>span:last-child{translate:3px -3px}
@@ -39,10 +40,9 @@
 .pulse-ready .contact-ending{translate:0 calc(var(--object-depth,0px) * -.25)}
 .pulse-ready [data-pulse-visible="false"] :is(.terminal-head>span:last-child,.brain-memory-trace circle){animation-play-state:paused}
 html.pulse-ready[data-pulse-paused="true"] :is(.section-title,.hero-name-line,.brain-window-archive,.terminal-head>span:last-child,.brain-memory-trace circle){animation-play-state:paused}
-@media(hover:none){.pulse-ready .hero-title,.pulse-ready .section-title{translate:none}}
 @media(prefers-reduced-motion:reduce){
   .pulse-ready .section-title,.pulse-ready .hero-title,.pulse-ready .hero-imprint,.pulse-ready .brain-depth-word,.pulse-ready .brain-memory-trace,.pulse-ready .contact-ending{translate:none}
-  .pulse-ready .section-title[data-pulse-arrived="true"],.pulse-ready .hero-section.is-booted .hero-name-line,.pulse-ready .terminal-head>span:last-child,.pulse-ready .hero-section.is-booted .terminal-head:after,.pulse-ready .brain-memory-trace circle,.pulse-ready .brain-window-archive{animation:none!important;opacity:1;clip-path:none;transform:none}
+  .pulse-ready .section-title[data-pulse-arrived="true"],.pulse-ready .hero-section.is-booted .hero-name-line,.pulse-ready .terminal-head>span:last-child,.pulse-ready .hero-section.is-booted .terminal-head:after,.pulse-ready .brain-memory-trace circle,.pulse-ready .brain-window-archive,.pulse-ready .brain-window-thought{animation:none!important;opacity:1;clip-path:none;transform:none}
   .pulse-ready .brain-memory-trace path{stroke-dashoffset:0;transition:none}
   .pulse-ready .timeline-rail .timeline-progress,.pulse-ready .hero-coordinate a>span,.pulse-ready .brain-entry-row>span:last-child{transition:none}
 }

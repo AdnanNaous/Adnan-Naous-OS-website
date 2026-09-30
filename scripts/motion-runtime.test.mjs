@@ -6,15 +6,16 @@ import ts from "typescript";
 
 // Browser scheduling harness: exercise the actual shared runtime without a second animation loop.
 function browserRuntime({ reduced = false, mobile = false } = {}) {
-  let now = 100, nextHandle = 0;
+  let now = 100, nextHandle = 0, workTime = 0;
   const rafs = new Map(), timers = new Map(), styles = new Map();
   const makeEvents = () => {
-    const listeners = new Map();
+    const listeners = new Map(), options = new Map();
     return {
-      addEventListener(name, callback) { if (!listeners.has(name)) listeners.set(name, new Set()); listeners.get(name).add(callback); },
+      addEventListener(name, callback, option) { if (!listeners.has(name)) listeners.set(name, new Set()); listeners.get(name).add(callback); options.set(name, option); },
       removeEventListener(name, callback) { listeners.get(name)?.delete(callback); },
       emit(name, detail = {}) { for (const callback of listeners.get(name) ?? []) callback(detail); },
       count() { return [...listeners.values()].reduce((total, callbacks) => total + callbacks.size, 0); },
+      options(name) { return options.get(name); },
     };
   };
   const window = { ...makeEvents(), scrollY: 0, innerWidth: mobile ? 390 : 1440, innerHeight: 900 };
@@ -25,7 +26,7 @@ function browserRuntime({ reduced = false, mobile = false } = {}) {
   const scheduleTimer = (callback, delay) => { const handle = ++nextHandle; timers.set(handle, { callback, at: now + delay }); return handle; };
   window.setTimeout = scheduleTimer;
   const sandbox = {
-    window, document, performance: { now: () => now },
+    window, document, performance: { now: () => now + workTime },
     matchMedia: query => query.includes("reduced") ? media.reduced : media.coarse,
     ResizeObserver: class { observe() {} unobserve() {} disconnect() {} },
     MutationObserver: class { observe() {} disconnect() {} },
@@ -51,7 +52,7 @@ function browserRuntime({ reduced = false, mobile = false } = {}) {
       for (const [handle, callback] of [...rafs]) { rafs.delete(handle); callback(now); }
     }
   }
-  return { runtime, window, document, media, run, pending: () => rafs.size + timers.size };
+  return { runtime, window, document, media, run, spendWork: ms => { workTime += ms; }, pending: () => rafs.size + timers.size };
 }
 
 test("quiet and reduced navigation updates the background without queuing a blackout", () => {
@@ -129,12 +130,59 @@ test("bursts obey one desktop/mobile clock and a visual override preserves seman
     const dispose = browser.runtime.subscribeMotion(frame => frames.push(frame), { continuous: true });
     browser.window.scrollY = 6400; browser.runtime.setMotionVisualChapter("brain");
     for (let i = 0; i < 150; i++) { browser.window.emit("scroll"); browser.window.emit("resize"); browser.run(16); }
-    assert.ok(frames.every((frame, index) => !index || (frame.time - frames[index - 1].time) * 1000 >= (mobile ? 50 : 33.3) - .01));
+    assert.ok(frames.every((frame, index) => !index || (frame.time - frames[index - 1].time) * 1000 >= 33.3 - .01));
+    assert.equal(browser.runtime.getMotionDiagnostics().targetFps, 30);
     assert.equal(frames.at(-1).chapter, "contact");
     assert.equal(frames.at(-1).visualChapter, "brain");
     browser.runtime.setMotionVisualChapter(null); browser.run(1300);
     assert.equal(frames.at(-1).visualChapter, "contact");
     dispose();
     assert.equal(browser.pending(), 0);
+  }
+});
+
+test("touch and pen share mouse position, impulse, and passive release on both viewport widths", () => {
+  for (const pointerType of ["touch", "pen"]) for (const mobile of [false, true]) for (const release of ["pointerup", "pointercancel"]) {
+    const browser = browserRuntime({ mobile });
+    const frames = [];
+    const dispose = browser.runtime.subscribeMotion(frame => frames.push(frame));
+    browser.runtime.setMotionQuiet(true); browser.run(100);
+    const pointer = { pointerType, pointerId: 7, isPrimary: true };
+    for (const name of ["pointerdown", "pointermove", "pointerup", "pointercancel"]) assert.equal(browser.window.options(name).passive, true);
+    browser.window.emit("pointerdown", { ...pointer, clientX: browser.window.innerWidth / 2, clientY: 450 }); browser.run(48);
+    browser.window.emit("pointermove", { ...pointer, clientX: browser.window.innerWidth * .98, clientY: 40 }); browser.run(48);
+    assert.ok(frames.at(-1).pointerX > 0 && frames.at(-1).pointerX < .96);
+    assert.ok(frames.at(-1).pointerForce > .1 && frames.at(-1).pointerForce <= 1);
+    assert.ok(Math.abs(frames.at(-1).pointerVelocityX) <= 4 && Math.abs(frames.at(-1).pointerVelocityY) <= 4);
+    browser.window.scrollY = 1200; browser.window.emit("scroll"); browser.run(48);
+    assert.equal(frames.at(-1).scrollY, 1200, "touch input must coexist with native scroll updates");
+    browser.window.emit(release, pointer); browser.run(3500);
+    assert.ok(Math.abs(frames.at(-1).pointerX) < .001 && Math.abs(frames.at(-1).pointerY) < .001);
+    assert.ok(frames.at(-1).pointerForce < .001);
+    assert.equal(browser.pending(), 0);
+    dispose();
+    assert.equal(browser.window.count(), 0);
+  }
+});
+
+test("desktop and phone use identical cadence and cost-based downgrade", () => {
+  for (const expensive of [false, true]) {
+    const clocks = [];
+    for (const mobile of [false, true]) {
+      const browser = browserRuntime({ mobile });
+      const times = [];
+      const dispose = browser.runtime.subscribeMotion(frame => {
+        times.push(frame.time);
+        if (expensive) browser.spendWork(40);
+      }, { continuous: true });
+      browser.run(2400);
+      assert.equal(browser.runtime.getMotionDiagnostics().targetFps, expensive ? 20 : 30);
+      assert.ok(times.every((time, index) => !index || (time - times[index - 1]) * 1000 >= 33.3 - .01));
+      if (expensive) assert.ok((times.at(-1) - times.at(-2)) * 1000 >= 49.95 - .01);
+      clocks.push(times);
+      dispose();
+      assert.equal(browser.pending(), 0);
+    }
+    assert.deepEqual(clocks[0], clocks[1]);
   }
 });

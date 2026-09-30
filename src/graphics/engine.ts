@@ -41,7 +41,7 @@ export function mountEngine(host: HTMLElement, canvas: HTMLCanvasElement) {
       }
       if (frame.reduced || frame.quiet) blendStarted = 0;
       paintedChapter = chapter;
-      const nextDpr = Math.max(.65, Math.min(window.devicePixelRatio || 1, frame.mobile || constrained ? 1 : 1.5, Math.sqrt(3200000 / Math.max(1, frame.width * frame.height))));
+      const nextDpr = Math.max(.65, Math.min(window.devicePixelRatio || 1, constrained ? 1 : 1.5, Math.sqrt(3200000 / Math.max(1, frame.width * frame.height))));
       if (frame.width !== width || frame.height !== height || nextDpr !== dpr) {
         width = frame.width; height = frame.height; dpr = nextDpr;
         canvas.width = Math.ceil(width * dpr); canvas.height = Math.ceil(height * dpr);
@@ -54,8 +54,8 @@ export function mountEngine(host: HTMLElement, canvas: HTMLCanvasElement) {
       const input: SceneInput = {
         time: frame.reduced || override === "reading" ? 0 : frame.time,
         progress: chapter === frame.chapter ? frame.chapterProgress : 0, velocity: frame.reduced ? 0 : frame.velocity,
-        pointerX: frame.reduced || frame.mobile ? 0 : frame.pointerX * 18,
-        pointerY: frame.reduced || frame.mobile ? 0 : frame.pointerY * 12,
+        pointerX: frame.reduced ? 0 : frame.pointerX * 18,
+        pointerY: frame.reduced ? 0 : frame.pointerY * 12,
         pointerForce: frame.pointerForce, pointerVelocityX: frame.pointerVelocityX, pointerVelocityY: frame.pointerVelocityY,
         viewportAspect: width / Math.max(1, height),
         mobile: frame.mobile, reduced: frame.reduced, quiet: frame.quiet,
