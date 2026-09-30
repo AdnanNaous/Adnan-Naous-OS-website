@@ -78,6 +78,7 @@ export default function Intro() {
   }, [close, restoreBackground]);
 
   return <>
+    <noscript><style>{'.intro.intro-retro{display:none!important}#home .hero-content,#home .hero-name-line{opacity:1!important}'}</style></noscript>
     <script dangerouslySetInnerHTML={{ __html: 'try{if(sessionStorage.getItem("an-os-booted")==="1")document.documentElement.dataset.anBoot="skip"}catch(e){}' }} />
     <div className="intro intro-retro" data-state="loading" data-stage="memory" ref={root} aria-label="AN/OS startup">
       <div className="intro-retro-frame" aria-hidden="true"><span>AN/OS</span><span>001 / MEMORY ARRAY</span></div>

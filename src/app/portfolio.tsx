@@ -11,6 +11,7 @@ import { BrainSection } from "./BrainSection";
 import { installConsoleEasterEggs } from "./consoleEasterEggs";
 import { subscribeMotion } from "@/motion/runtime";
 import { mountObjectPulse } from "@/motion/pulse";
+import TypeMaterial from "./TypeMaterial";
 
 const destinations = ["home", "brain", "work", "now", "codex", "about", "contact"] as const;
 
@@ -96,6 +97,7 @@ export default function Portfolio() {
   const visitorClock = `${String(Math.floor(secondsHere / 60)).padStart(2, "0")}:${String(secondsHere % 60).padStart(2, "0")}`;
 
   return <>
+    <TypeMaterial />
     <VisualEngine />
     <div className="world-shade" aria-hidden="true" />
     <Intro />
@@ -120,7 +122,7 @@ export default function Portfolio() {
         <div className="hero-imprint" aria-hidden="true"><span>AN</span><span>/OS</span><small>SOFTWARE / CURIOSITY<br/>WORLDS IN PROGRESS</small></div>
         <div className="hero-content reveal">
           <p className="section-index">01 / SOFTWARE · LEARNING · CURIOSITY</p>
-          <h1 id="hero-title" className="hero-title"><span className="hero-name-line" data-word="Adnan">Adnan</span><span className="hero-name-line" data-word="Naous.">Naous.</span></h1>
+          <h1 id="hero-title" className="hero-title"><span className="hero-name-line" data-type-material data-word="Adnan">Adnan</span><span className="hero-name-line" data-type-material data-word="Naous.">Naous.</span></h1>
           <p className="hero-statement">I build to learn. I keep what works.</p>
           <p className="hero-intro">I study Computer Science and AI at Arab Open University. These are the projects I’m learning from now.</p>
           <div className="hero-terminal" aria-label="Welcome message">

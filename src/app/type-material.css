@@ -1,0 +1,34 @@
+/* The tutorial's inner material edge, painted onto the existing Space Grotesk glyphs. */
+.type-material-defs{position:absolute;pointer-events:none;overflow:hidden}
+#home .hero-name-line[data-type-material]{color:#e3e3e3;filter:url("#an-name-material")}
+
+/* A solid DOM text fallback precedes the clipped paint enhancement, including SSR. */
+@supports ((background-clip:text) or (-webkit-background-clip:text)){
+  #home .hero-name-line[data-type-material]{
+    background-color:#d8d8d8;
+    background-image:repeating-linear-gradient(110deg,#a9a9a9 0%,#c5c5c5 15%,#fafafa 25%,#c5c5c5 35%,#a9a9a9 50%);
+    background-size:240% 100%;
+    background-position:100% 50%;
+    background-clip:text;-webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  /* Keep the original arrival; add a short traverse followed by a long still interval. */
+  .pulse-ready #home.is-booted .hero-name-line[data-type-material]{
+    animation:object-name-arrive .95s cubic-bezier(.2,.8,.2,1) backwards,type-material-light 18s .35s ease-in-out infinite alternate!important;
+  }
+  .pulse-ready #home.is-booted .hero-name-line[data-type-material]:nth-child(2){animation-delay:.12s,.65s!important}
+  @keyframes type-material-light{0%{background-position:100% 50%}16%,100%{background-position:0% 50%}}
+}
+
+.pulse-ready #home[data-pulse-visible="false"] .hero-name-line[data-type-material],
+html.pulse-ready[data-pulse-paused="true"] #home .hero-name-line[data-type-material]{animation-play-state:paused!important}
+#home .hero-name-line[data-type-material]::selection{background:#555;color:#fff;-webkit-text-fill-color:#fff}
+
+@media(prefers-reduced-motion:reduce){
+  .pulse-ready #home.is-booted .hero-name-line[data-type-material]{animation:none!important}
+  #home .hero-name-line[data-type-material]{background-position:50% 50%;filter:none!important}
+}
+html[data-pulse-reduced="true"] #home.is-booted .hero-name-line[data-type-material]{animation:none!important}
+@media(forced-colors:active){
+  #home .hero-name-line[data-type-material]{background:none;filter:none;color:CanvasText;-webkit-text-fill-color:CanvasText}
+}

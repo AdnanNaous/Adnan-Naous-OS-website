@@ -26,6 +26,8 @@ Brain Q&A is a local, curated question collection. It uses no AI provider, API r
 
 Typography is self-hosted in `src/app/typography.css`: Space Grotesk gives existing headings an architectural character, Inter keeps narrative text readable, and IBM Plex Mono handles technical labels. The three SIL OFL notices are in `public/fonts/`. Headings remain semantic HTML with stable glyphs during scrolling and hover. The added Latin variable face is 22,288 bytes.
 
+The two original Home name lines use a small shared SVG material filter: blurred glyph alpha isolates an inner edge, an overlay blend gives depth, and equal RGB transfer keeps the finish silver. A clipped repeating gradient passes across the selectable HTML text, followed by long still intervals. It pauses offscreen and in hidden tabs; reduced motion and forced colors retain readable static text. The font, glyph geometry and layout are unchanged. No shader library, video asset, external service or duplicate text is used.
+
 The background alone dissolves between chapters over 520ms, using one reusable Canvas2D snapshot and the shared adaptive clock. Rapid navigation retargets from the current image; there is no full-screen shutter, hidden text, or queued navigation. Reduced motion and quiet reading update immediately.
 
 Object motion preserves the existing layout, content and physical environments. Home settles into place; the Brain trace draws across the archive threshold; dossier marks respond to opening records; the selected skill route transfers; story lines and chapter indicators follow reading progress. Codex advances on the shared clock and retains its phase when hovered, focused, paused or offscreen. Camera depth and neutral lighting move gently, with long rests between mechanical movements. Added DOM motion uses cached ranges and visibility observers; reduced motion retains the complete interface.
@@ -56,10 +58,12 @@ pnpm test:browser
 node scripts/ratios.mjs
 node scripts/materials-smoke.mjs
 node scripts/pulse-smoke.mjs
+node scripts/type-material-smoke.mjs
 node --test scripts/motion-runtime.test.mjs scripts/brain-prompt-sampling.test.mjs
 ```
 
 The browser checks default to `http://127.0.0.1:3000`; set `BASE_URL` for another address.
+The material check inspects actual screenshot pixels through four light phases, preserves text geometry, and covers reduced motion, solid text fallback and rendering without JavaScript. Set `TEST_WEBKIT=1` after installing Playwright WebKit to check that engine alongside Chrome.
 
 ## Rights
 

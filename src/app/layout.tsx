@@ -13,6 +13,7 @@ import "./typography.css";
 import "./object-motion.css";
 import "./records-motion.css";
 import "./story-motion.css";
+import "./type-material.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://adnannaous.vercel.app"),
