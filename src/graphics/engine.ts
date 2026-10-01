@@ -8,7 +8,7 @@ export function mountEngine(host: HTMLElement, canvas: HTMLCanvasElement) {
   if (!ctx) { host.dataset.fallback = "true"; return () => {}; }
   let width = 0, height = 0, dpr = 1, override: VisualState | null = null;
   let failed = false;
-  let sceneTime = 0, exposure = .7;
+  let sceneTime = 0, exposure = .82;
   let grain: CanvasPattern | null = null;
   const noise = document.createElement("canvas");
   noise.width = noise.height = 96;
@@ -29,7 +29,7 @@ export function mountEngine(host: HTMLElement, canvas: HTMLCanvasElement) {
     try {
       const chapter = frame.visualChapter;
       if (!frame.reduced && !frame.quiet) sceneTime += frame.delta / 1000;
-      const targetExposure = chapter === "contact" ? .3 : .7;
+      const targetExposure = chapter === "contact" ? .55 : .82;
       exposure = frame.reduced ? targetExposure : exposure + (targetExposure - exposure) * (1 - Math.exp(-frame.delta / 550));
       const nextDpr = Math.max(.65, Math.min(window.devicePixelRatio || 1, constrained ? 1 : 1.5, Math.sqrt(3200000 / Math.max(1, frame.width * frame.height))));
       if (frame.width !== width || frame.height !== height || nextDpr !== dpr) {

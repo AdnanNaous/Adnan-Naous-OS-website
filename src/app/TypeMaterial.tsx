@@ -13,8 +13,10 @@ export default function TypeMaterial() {
           <feFuncB type="linear" slope="0.42" intercept="0.58" />
         </feComponentTransfer>
         <feComposite in="silver" in2="SourceAlpha" operator="in" result="silver-text" />
+      </filter>
+      <filter id="an-local-material" x="-12%" y="-24%" width="124%" height="148%" colorInterpolationFilters="sRGB">
         <feTurbulence type="fractalNoise" baseFrequency=".004 .02" numOctaves="1" seed="17" result="optical-field" />
-        <feDisplacementMap id="an-name-displace" in="silver-text" in2="optical-field" scale="0" xChannelSelector="R" yChannelSelector="G" />
+        <feDisplacementMap id="an-name-displace" in="SourceGraphic" in2="optical-field" scale="0" xChannelSelector="R" yChannelSelector="G" />
       </filter>
     </defs>
   </svg>;

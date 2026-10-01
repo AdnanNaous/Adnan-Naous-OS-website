@@ -17,6 +17,9 @@ import "./type-material.css";
 import "./annotation-panels.css";
 import "./annotation-controls.css";
 import "./hologram.css";
+import "./scene-cursor.css";
+import "./live-panels.css";
+import "./memory-fit.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://adnannaous.vercel.app"),

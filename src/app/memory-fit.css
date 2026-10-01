@@ -1,0 +1,12 @@
+/* Size the backdrop from its own archive width, including room for depth drift. */
+.brain-section .brain-entry { container-type: inline-size; }
+.brain-section .brain-depth-word {
+  font-size: 25.4cqw;
+  letter-spacing: -.11em;
+  white-space: nowrap;
+}
+.pulse-ready .brain-section .brain-depth-word {
+  translate: clamp(-1cqw, calc(var(--object-x, 0px) * -4), 1cqw) var(--object-depth, 0px);
+}
+/* Opening windows should dim the backdrop without widening it past the edges. */
+.brain-section.is-archive-open .brain-depth-word { letter-spacing: -.11em; }

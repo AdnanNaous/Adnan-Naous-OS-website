@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { contact, copy, socials } from "@/data/portfolio";
 import { getRangeProgress, subscribeMotion } from "@/motion/runtime";
+import { createStoryTransition } from "@/motion/story";
 import ContactIncident from "./ContactIncident";
 
 const objectives = [
@@ -79,6 +80,7 @@ export function AboutSection() {
     const chapters = Array.from(node.querySelectorAll<HTMLElement>(".story-chapter"));
     const links = Array.from(node.querySelectorAll<HTMLAnchorElement>(".story-chapter-nav a"));
     const count = node.querySelector<HTMLElement>(".story-count-current");
+    const transition = createStoryTransition(chapters);
     let enhanced = false;
     const render = (progress: number, reduced: boolean) => {
       const position = Math.min(chapters.length - .00001, progress * chapters.length);
@@ -86,14 +88,11 @@ export function AboutSection() {
       node.dataset.storyCurrent = String(current + 1);
       node.style.setProperty("--story-progress", progress.toFixed(4));
       if (count) count.textContent = String(current + 1).padStart(2, "0");
-      chapters.forEach((chapter, index) => {
-        chapter.dataset.current = String(index === current);
-        // Exactly one paragraph is visible; no overlapping text or empty frame.
-        if (reduced) { chapter.removeAttribute("aria-hidden"); chapter.inert = false; }
-        else { chapter.setAttribute("aria-hidden", String(index !== current)); chapter.inert = index !== current; }
-        links[index]?.setAttribute("data-current", String(index === current));
-        if (index === current) links[index]?.setAttribute("aria-current", "step");
-        else links[index]?.removeAttribute("aria-current");
+      transition.setCurrent(current, reduced);
+      links.forEach((link, index) => {
+        link.setAttribute("data-current", String(index === current));
+        if (index === current) link.setAttribute("aria-current", "step");
+        else link.removeAttribute("aria-current");
       });
     };
     jumpToChapter.current = (index, focus = false) => {
@@ -109,7 +108,7 @@ export function AboutSection() {
         render(progress, false);
         window.scrollTo({ top: rect.top + window.scrollY - window.innerHeight * .14 + distance * progress, behavior: "instant" });
       }
-      if (focus) chapter.focus({ preventScroll: true });
+      if (focus) transition.focus(index);
     };
     const hashChapter = () => {
       const index = chapters.findIndex(chapter => `#${chapter.id}` === window.location.hash);
@@ -129,6 +128,7 @@ export function AboutSection() {
     window.addEventListener("hashchange", hashChapter);
     return () => {
       unsubscribe();
+      transition.dispose();
       window.removeEventListener("hashchange", hashChapter);
       jumpToChapter.current = () => {};
       delete node.dataset.storyMotion;

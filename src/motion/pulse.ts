@@ -1,16 +1,18 @@
 import { chapterIds, getRangeProgress, subscribeMotion } from "./runtime";
+import { mountSceneCursor } from "./cursor";
 
 /** The existing set shares the scene clock; only its visible objects receive input. */
 export function mountObjectPulse() {
   if (typeof IntersectionObserver === "undefined") return () => {};
   const root = document.documentElement;
+  const disposeCursor = mountSceneCursor();
   const sections = chapterIds.flatMap(id => {
     const element = document.getElementById(id);
     return element ? [{ id, element, visible: false }] : [];
   });
   const headings = [...document.querySelectorAll<HTMLElement>("main .section-title")];
   const rail = document.querySelector<HTMLElement>(".timeline-rail");
-  const textSelector = ".hero-title,.section-title,.hero-statement,.hero-intro,.section-lead,.story-chapter > p,.project-main strong,.project-main > span,.now-v2-feature h3,.brain-window-heading h3,.codex-detail-copy strong";
+  const textSelector = ".hero-title,.section-title,.hero-statement,.hero-intro,.section-lead,.story-chapter > p,.project-main strong,.project-main > span,.now-v2-feature h3,.now-v2-origin strong,.brain-window-heading h3,.codex-detail-copy strong,.codex-menu strong";
   const interactiveText = new Set(document.querySelectorAll<HTMLElement>(textSelector));
   interactiveText.forEach(element => element.classList.add("text-reactive"));
   let hoveredText: HTMLElement | null = null;
@@ -19,16 +21,32 @@ export function mountObjectPulse() {
   nameLines.forEach(line => { line.dataset.holoText = line.textContent || ""; });
   let nameRects: DOMRect[] = [];
   let pointerClientX = 0, pointerClientY = 0;
+  let smoothX = 0, smoothY = 0, textRect: DOMRect | null = null, measuredScroll = 0;
+  const opticalCopies = new Map<HTMLElement, HTMLElement>();
   const trackNamePointer = (event: PointerEvent) => { pointerClientX = event.clientX; pointerClientY = event.clientY; };
-  const measureName = () => { nameRects = nameLines.map(line => line.getBoundingClientRect()); };
+  const measureName = () => {
+    nameRects = nameLines.map(line => line.getBoundingClientRect());
+    if (hoveredText) { textRect = hoveredText.getBoundingClientRect(); measuredScroll = window.scrollY; }
+  };
   const trackText = (event: PointerEvent) => {
     const target = event.type === "pointerout" ? event.relatedTarget : event.target;
     const next = target instanceof Element ? target.closest<HTMLElement>(textSelector) : null;
     if (next === hoveredText) return;
+    opticalCopies.forEach((copy, element) => { if (!element.isConnected) { copy.remove(); opticalCopies.delete(element); interactiveText.delete(element); } });
     if (hoveredText) { delete hoveredText.dataset.textHover; hoveredText.style.removeProperty("--text-energy"); }
     hoveredText = next;
-    if (next?.classList.contains("hero-title")) { measureName(); trackNamePointer(event); }
-    if (next) { next.classList.add("text-reactive"); interactiveText.add(next); next.dataset.textHover = "true"; }
+    if (next) {
+      trackNamePointer(event); smoothX = pointerClientX; smoothY = pointerClientY;
+      textRect = next.getBoundingClientRect(); measuredScroll = window.scrollY;
+      if (next.classList.contains("hero-title")) measureName();
+      else if (!opticalCopies.has(next)) {
+        const copy = document.createElement("span");
+        copy.className = "text-optical-copy"; copy.setAttribute("aria-hidden", "true");
+        copy.textContent = next.textContent;
+        next.append(copy); opticalCopies.set(next, copy);
+      }
+      next.classList.add("text-reactive"); interactiveText.add(next); next.dataset.textHover = "true";
+    }
   };
   document.addEventListener("pointerover", trackText, { passive: true });
   document.addEventListener("pointerout", trackText, { passive: true });
@@ -69,13 +87,20 @@ export function mountObjectPulse() {
     root.dataset.pulseReduced = String(frame.reduced);
     root.dataset.pulseQuiet = String(frame.quiet);
     if (hoveredText) write(hoveredText, "--text-energy", frame.reduced || frame.quiet ? "0" : Math.min(1, frame.pointerForce).toFixed(3));
+    const mix = 1 - Math.exp(-frame.delta / 55);
+    smoothX += (pointerClientX - smoothX) * mix; smoothY += (pointerClientY - smoothY) * mix;
+    if (hoveredText && frame.scrollY !== measuredScroll) measureName();
+    if (hoveredText && textRect) {
+      write(hoveredText, "--text-light-x", `${(smoothX - textRect.left).toFixed(1)}px`);
+      write(hoveredText, "--text-light-y", `${(smoothY - textRect.top + frame.scrollY - measuredScroll).toFixed(1)}px`);
+    }
     const nameActive = hoveredText?.classList.contains("hero-title") && sections[0]?.visible && !frame.reduced && !frame.quiet;
     const scale = nameActive ? (4 + Math.min(1, frame.pointerForce) * 14).toFixed(2) : "0";
     if (nameDisplacement?.getAttribute("scale") !== scale) nameDisplacement?.setAttribute("scale", scale);
     if (nameActive) nameLines.forEach((line, i) => {
       const rect = nameRects[i]; if (!rect) return;
-      write(line, "--name-light-x", `${(pointerClientX - rect.left).toFixed(1)}px`);
-      write(line, "--name-light-y", `${(pointerClientY - rect.top).toFixed(1)}px`);
+      write(line, "--name-light-x", `${(smoothX - rect.left).toFixed(1)}px`);
+      write(line, "--name-light-y", `${(smoothY - rect.top + frame.scrollY - measuredScroll).toFixed(1)}px`);
       write(line, "--holo-x", `${(frame.pointerX * 7).toFixed(2)}px`);
       write(line, "--holo-y", `${(frame.pointerY * 4).toFixed(2)}px`);
       write(line, "--holo-tilt", `${(frame.pointerX * 7).toFixed(2)}deg`);
@@ -96,13 +121,14 @@ export function mountObjectPulse() {
     }
   });
   return () => {
-    unsubscribe(); observer.disconnect(); document.removeEventListener("visibilitychange", visibility);
+    unsubscribe(); disposeCursor(); observer.disconnect(); document.removeEventListener("visibilitychange", visibility);
     document.removeEventListener("pointerover", trackText); document.removeEventListener("pointerout", trackText);
     document.removeEventListener("pointerdown", trackText); document.removeEventListener("pointerup", releaseText); document.removeEventListener("pointercancel", releaseText);
     document.removeEventListener("pointermove", trackNamePointer); window.removeEventListener("resize", measureName);
     nameDisplacement?.setAttribute("scale", "0");
     nameLines.forEach(line => { delete line.dataset.holoText; ["--name-light-x","--name-light-y","--holo-x","--holo-y","--holo-tilt"].forEach(name => line.style.removeProperty(name)); });
-    interactiveText.forEach(element => { element.classList.remove("text-reactive"); delete element.dataset.textHover; element.style.removeProperty("--text-energy"); });
+    opticalCopies.forEach(copy => copy.remove());
+    interactiveText.forEach(element => { element.classList.remove("text-reactive"); delete element.dataset.textHover; ["--text-energy","--text-light-x","--text-light-y"].forEach(name => element.style.removeProperty(name)); });
     root.classList.remove("pulse-ready"); delete root.dataset.pulsePaused; delete root.dataset.pulseReduced; delete root.dataset.pulseQuiet;
     sections.forEach(({ element }) => { delete element.dataset.pulseVisible; });
   };

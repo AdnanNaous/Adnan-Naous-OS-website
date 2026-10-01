@@ -53,7 +53,7 @@ export function paintFinish(c: C, input: SceneInput) {
     shade.addColorStop(0, "#05060660");
     shade.addColorStop(.23, "#05060600");
     shade.addColorStop(.76, "#05060600");
-    shade.addColorStop(1, "#050606a6");
+    shade.addColorStop(1, "#0506064d");
     c.fillStyle = shade;
     c.fillRect(0, 0, 1200, 800);
     if (!input.mobile) {

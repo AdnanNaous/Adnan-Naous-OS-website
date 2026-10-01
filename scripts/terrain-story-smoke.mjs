@@ -24,11 +24,11 @@ for(const engine of process.env.TEST_WEBKIT==='1'?[chromium,webkit]:[chromium]) 
       assert.equal(await page.locator('.live-world').getAttribute('data-depth-layers'),'10');
       assert.match(await page.locator('.hero-title').evaluate(e=>getComputedStyle(e).fontFamily),/IBM Plex Mono/);
       assert.equal(await page.getByRole('heading',{name:'Adnan Naous.',exact:true}).count(),1,'Optical echoes do not duplicate the accessible name');
-      const isolate=await page.addStyleTag({content:'.live-world,.world-shade,.hero-imprint{visibility:hidden!important}#home .hero-name-line{animation:none!important}#home{--object-x:0px!important;--object-y:0px!important}'});
+      const isolate=await page.addStyleTag({content:'.live-world,.world-shade,.hero-imprint,.scene-sight{visibility:hidden!important}#home .hero-name-line{animation:none!important}#home{--object-x:0px!important;--object-y:0px!important}'});
       const touch=engine===chromium && width<700 ? await page.context().newCDPSession(page) : null;
       for(let i=0;i<2;i++) {
         await page.mouse.move(5,5); await page.waitForTimeout(80);
-        const line=page.locator('.hero-name-line').nth(i), box=await line.boundingBox();
+        const line=page.locator('.hero-name-line').nth(i), box=await line.evaluate(e=>{const r=document.createRange();r.selectNodeContents(e);const b=r.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};});
         const before=await line.screenshot();
         if(touch) {
           const x=box.x+box.width*.55,y=box.y+box.height*.5;

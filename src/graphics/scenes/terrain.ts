@@ -24,7 +24,7 @@ points.forEach((p, i) => {
   const length = Math.hypot(nx, 1, nz);
   p.nx = nx / length; p.ny = 1 / length; p.nz = nz / length;
 });
-const tones = ["#56605f", "#79807f", "#a1a6a5", "#c5c8c7", "#e9ebea"];
+const tones = ["#536263", "#788d91", "#a0bec1", "#c4d9db", "#eef9f8"];
 let skyGrid: Path2D | undefined;
 
 export function drawTerrain(c: CanvasRenderingContext2D, chapter: Chapter, input: SceneInput) {
@@ -41,9 +41,9 @@ export function drawTerrain(c: CanvasRenderingContext2D, chapter: Chapter, input
   const lightX = 600 + lx * 600, lightY = 400 + input.pointerY / 12 * 400;
   const aspect = input.viewportAspect || 1.5;
   // Responsive camera framing changes composition, never the landscape's motion or detail.
-  const width = aspect < .9 ? 910 : 1220;
-  const exposure = input.exposure ?? (chapter === "contact" ? .3 : .7);
-  const horizon = 535;
+  const width = aspect < .9 ? 1030 : 1360;
+  const exposure = input.exposure ?? (chapter === "contact" ? .55 : .82);
+  const horizon = 490;
   const cameraY = input.pointerY * .32 + breath * 12;
   c.save();
   c.strokeStyle = "#b6bfba10"; c.lineWidth = .65;
@@ -64,7 +64,7 @@ export function drawTerrain(c: CanvasRenderingContext2D, chapter: Chapter, input
     const ripple = input.reduced ? 0 : breath * p.phase * .022;
     const depth = 1 - p.layer / 10;
     const px = 540 + x * width * .38 * perspective + input.pointerX * (.4 + depth * 1.6);
-    const py = horizon + z * 300 * perspective - (p.h + ripple) * 330 * perspective + cameraY;
+    const py = horizon + z * 300 * perspective - (p.h + ripple) * 420 * perspective + cameraY;
     if (px < -4 || px > 1204 || py < 0 || py > 804) continue;
     const spotlight = Math.max(0, 1 - ((px - lightX) ** 2 / 90000 + (py - lightY) ** 2 / 64000));
     const incidence = Math.max(0, (p.nx * lx + p.ny * ly + p.nz * lz) / lightLength);

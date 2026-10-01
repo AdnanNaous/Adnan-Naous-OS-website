@@ -21,7 +21,8 @@ try {
     else await page.mouse.move(x,y);
     await page.waitForTimeout(160);
     assert.equal(await page.locator('.hero-title').getAttribute('data-text-hover'),'true');
-    assert.notEqual(await page.locator('.hero-name-line').first().evaluate(e=>getComputedStyle(e).textShadow),'none');
+    assert.notEqual(await page.locator('.hero-name-line').first().evaluate(e=>getComputedStyle(e,'::before').textShadow),'none','Optical shadow lives on the local masked copy');
+    assert.match(await page.locator('.hero-name-line').first().evaluate(e=>getComputedStyle(e,'::before').maskImage),/radial-gradient/);
     assert(Math.abs(await page.locator('#home').evaluate(e=>parseFloat(e.style.getPropertyValue('--object-x'))))>.01,'Pointer or touch moves the original title on both devices');
     if(phone)await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
     else await page.mouse.move(width-2,height-2);
