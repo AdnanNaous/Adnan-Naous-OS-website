@@ -16,6 +16,7 @@ export function mountObjectPulse() {
   let hoveredText: HTMLElement | null = null;
   const nameDisplacement = document.getElementById("an-name-displace");
   const nameLines = [...document.querySelectorAll<HTMLElement>(".hero-name-line")];
+  nameLines.forEach(line => { line.dataset.holoText = line.textContent || ""; });
   let nameRects: DOMRect[] = [];
   let pointerClientX = 0, pointerClientY = 0;
   const trackNamePointer = (event: PointerEvent) => { pointerClientX = event.clientX; pointerClientY = event.clientY; };
@@ -75,6 +76,9 @@ export function mountObjectPulse() {
       const rect = nameRects[i]; if (!rect) return;
       write(line, "--name-light-x", `${(pointerClientX - rect.left).toFixed(1)}px`);
       write(line, "--name-light-y", `${(pointerClientY - rect.top).toFixed(1)}px`);
+      write(line, "--holo-x", `${(frame.pointerX * 7).toFixed(2)}px`);
+      write(line, "--holo-y", `${(frame.pointerY * 4).toFixed(2)}px`);
+      write(line, "--holo-tilt", `${(frame.pointerX * 7).toFixed(2)}deg`);
     });
     for (const { id, element, visible } of sections) {
       if (!visible && id !== frame.chapter) continue;
@@ -97,7 +101,7 @@ export function mountObjectPulse() {
     document.removeEventListener("pointerdown", trackText); document.removeEventListener("pointerup", releaseText); document.removeEventListener("pointercancel", releaseText);
     document.removeEventListener("pointermove", trackNamePointer); window.removeEventListener("resize", measureName);
     nameDisplacement?.setAttribute("scale", "0");
-    nameLines.forEach(line => { line.style.removeProperty("--name-light-x"); line.style.removeProperty("--name-light-y"); });
+    nameLines.forEach(line => { delete line.dataset.holoText; ["--name-light-x","--name-light-y","--holo-x","--holo-y","--holo-tilt"].forEach(name => line.style.removeProperty(name)); });
     interactiveText.forEach(element => { element.classList.remove("text-reactive"); delete element.dataset.textHover; element.style.removeProperty("--text-energy"); });
     root.classList.remove("pulse-ready"); delete root.dataset.pulsePaused; delete root.dataset.pulseReduced; delete root.dataset.pulseQuiet;
     sections.forEach(({ element }) => { delete element.dataset.pulseVisible; });

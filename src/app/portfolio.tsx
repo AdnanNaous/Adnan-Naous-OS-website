@@ -122,7 +122,7 @@ export default function Portfolio() {
         <div className="hero-imprint" aria-hidden="true"><span>AN</span><span>/OS</span><small>SOFTWARE / CURIOSITY<br/>WORLDS IN PROGRESS</small></div>
         <div className="hero-content reveal">
           <p className="section-index">01 / SOFTWARE · LEARNING · CURIOSITY</p>
-          <h1 id="hero-title" className="hero-title"><span className="hero-name-line" data-type-material data-word="Adnan">Adnan</span><span className="hero-name-line" data-type-material data-word="Naous.">Naous.</span></h1>
+          <h1 id="hero-title" className="hero-title" aria-label="Adnan Naous."><span className="hero-name-line" aria-hidden="true" data-type-material data-word="Adnan">Adnan</span><span className="hero-name-line" aria-hidden="true" data-type-material data-word="Naous.">Naous.</span></h1>
           <p className="hero-statement">I build to learn. I keep what works.</p>
           <p className="hero-intro">I study Computer Science and AI at Arab Open University. These are the projects I’m learning from now.</p>
           <div className="hero-terminal" aria-label="Welcome message">

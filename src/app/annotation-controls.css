@@ -12,11 +12,16 @@ input,textarea,[contenteditable="true"],[contenteditable="true"] *{-webkit-user-
 .contact-section{min-height:0;padding-top:76px;padding-bottom:52px}
 .contact-ending{margin-bottom:28px}
 .contact-transmission{margin-top:30px}
-.contact-section .contact-email-button{position:relative;min-height:134px;margin:10px 0;padding:19px 22px;border:1px solid #ffffff65;background:linear-gradient(110deg,#ffffff15,#ffffff04);overflow:hidden}
-.contact-section .contact-email-button:before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:#e3e3e3;transition:width .4s ease}
-.contact-section .contact-email-button:hover,.contact-section .contact-email-button:focus-visible{padding-inline:28px;background:linear-gradient(110deg,#ffffff24,#ffffff0a);outline:2px solid #ddd;outline-offset:3px}
+.contact-section .contact-email-button{position:relative;min-height:134px;margin:10px 0;padding:19px 22px;border:1px solid #747b7e;background:#111619;color:#eef2f3;overflow:hidden;box-shadow:inset 0 0 0 4px #111619,inset 0 0 0 5px #ffffff13;clip-path:none;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
+.contact-section .contact-email-button:before{content:"";position:absolute;inset:12px auto 12px 0;width:3px;background:#c5d3d9;pointer-events:none}
+.contact-section .contact-email-button:after{content:"";position:absolute;inset:9px 9px auto auto;width:16px;height:16px;border-top:2px solid #c5d3d9;border-right:2px solid #c5d3d9;background:none;opacity:1;transform:none;transition:none;pointer-events:none}
+.contact-section .contact-email-button:hover,.contact-section .contact-email-button:focus-visible{padding-inline:22px;background:#1b252b;border-color:#dce8ed;color:#fff;outline:2px solid #ddd;outline-offset:3px;transform:translateY(-2px)}
+.contact-section .contact-email-button:hover:after,.contact-section .contact-email-button:focus-visible:after{background:none;opacity:1;transform:none;transition:none}
+.contact-section .contact-email-button:active{background:#0b1013;transform:none}
+.contact-section .contact-email-button .contact-glitch{color:#eef2f3;text-shadow:none}
+.contact-section .contact-email-button .contact-action-copy small{color:#aab9c0}
 .contact-section .contact-email-button .contact-action-copy .contact-action-cue{color:#b9b9b9;font:500 9px/1.4 var(--font-code);letter-spacing:.12em;text-transform:uppercase;transform:none;transition:none}
-.contact-section .contact-email-button .contact-action-arrow{display:grid;place-items:center;flex-shrink:0;width:48px;height:48px;border:1px solid #ffffff65;font-size:30px;background:#ffffff08}
+.contact-section .contact-email-button .contact-action-arrow{display:grid;place-items:center;flex-shrink:0;width:48px;height:48px;border:1px solid #a8bbc4;font-size:30px;background:#26333b;color:#fff}
 .contact-section .social-line{margin-top:25px}
 .site-footer{min-height:68px;padding-block:14px}
 @media(max-width:700px){

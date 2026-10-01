@@ -15,7 +15,7 @@ try {
     await page.locator('.intro').waitFor({state:'hidden'});
     await page.locator('.live-world[data-ready="true"]').waitFor();
     await page.evaluate(()=>document.fonts.ready);
-    assert(await page.evaluate(()=>document.fonts.check('650 40px "Space Grotesk Variable"')));
+    assert(await page.evaluate(()=>document.fonts.check('600 40px "IBM Plex Mono"')));
     assert.equal(await page.locator('.project-entry').count(),3);
     assert.equal(await page.locator('.now-v2-node').count(),6);
     assert.equal(await page.locator('.story-chapter').count(),4);

@@ -1,5 +1,6 @@
 /* Annotation adjustments use the existing archive and chapter motion cues. */
-.brain-section .brain-entry .section-title{font-size:clamp(92px,10vw,150px);line-height:.9}
+.brain-section .brain-entry .section-title{font-size:clamp(92px,10vw,150px);line-height:.9;text-shadow:none;background:transparent;box-shadow:none;filter:none}
+.brain-section .brain-entry-content{background:transparent;box-shadow:none;filter:none}
 .brain-section.is-entered .brain-memory-trace path{animation:annotation-memory-trace 8s ease-in-out infinite}
 .brain-section.is-entered .brain-depth-word{animation:annotation-memory-depth 12s ease-in-out infinite}
 .brain-section.is-entered .brain-entry-signal{animation:annotation-memory-signal 5s ease-in-out infinite}

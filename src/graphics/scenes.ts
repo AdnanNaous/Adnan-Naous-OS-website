@@ -13,6 +13,7 @@ export type SceneInput = {
     pointerVelocityX?: number;
     pointerVelocityY?: number;
     viewportAspect?: number;
+    exposure?: number;
 };
 type C = CanvasRenderingContext2D;
 /** Existing environments share a quiet, background-only dissolve. */

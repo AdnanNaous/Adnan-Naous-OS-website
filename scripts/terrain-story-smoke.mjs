@@ -21,6 +21,9 @@ for(const engine of process.env.TEST_WEBKIT==='1'?[chromium,webkit]:[chromium]) 
       const errors=[]; page.on('pageerror',e=>errors.push(e.message));
       await page.addInitScript(()=>sessionStorage.setItem('an-os-booted','1'));
       await page.goto(base); await page.locator('.live-world[data-ready="true"]').waitFor(); await page.evaluate(()=>document.fonts.ready); await page.waitForTimeout(1300);
+      assert.equal(await page.locator('.live-world').getAttribute('data-depth-layers'),'10');
+      assert.match(await page.locator('.hero-title').evaluate(e=>getComputedStyle(e).fontFamily),/IBM Plex Mono/);
+      assert.equal(await page.getByRole('heading',{name:'Adnan Naous.',exact:true}).count(),1,'Optical echoes do not duplicate the accessible name');
       const isolate=await page.addStyleTag({content:'.live-world,.world-shade,.hero-imprint{visibility:hidden!important}#home .hero-name-line{animation:none!important}#home{--object-x:0px!important;--object-y:0px!important}'});
       const touch=engine===chromium && width<700 ? await page.context().newCDPSession(page) : null;
       for(let i=0;i<2;i++) {
@@ -47,7 +50,22 @@ for(const engine of process.env.TEST_WEBKIT==='1'?[chromium,webkit]:[chromium]) 
       await page.screenshot({path:`${dir}/${engine.name()}-home-${width}.png`});
       const sceneHash=()=>page.locator('.live-world canvas').evaluate(c=>{const a=c.getContext('2d').getImageData(0,0,c.width,c.height).data;let hash=0;for(let i=0;i<a.length;i+=64)hash=(Math.imul(hash,31)+a[i])>>>0;return hash;});
       const before=await sceneHash(); await page.waitForTimeout(600); assert.notEqual(await sceneHash(),before,'Terrain moves on the existing clock');
+      await page.evaluate(()=>{
+        window.__spectralPixels=0;const until=performance.now()+4000;let previous=0;
+        const sample=now=>{
+          if(now-previous>=80){previous=now;const c=document.querySelector('.live-world canvas');const a=c.getContext('2d').getImageData(0,0,c.width,c.height).data;let count=0;
+            for(let i=0;i<a.length;i+=4)if(Math.max(a[i],a[i+1],a[i+2])-Math.min(a[i],a[i+1],a[i+2])>12)count++;
+            window.__spectralPixels=Math.max(window.__spectralPixels,count);
+          }
+          if(now<until&&window.__spectralPixels<=15)requestAnimationFrame(sample);
+        };requestAnimationFrame(sample);
+      });
+      await page.mouse.move(width*.65,height*.65);await page.mouse.move(width*.36,height*.73,{steps:5});
+      await page.waitForFunction(()=>window.__spectralPixels>15,{},{timeout:5000});
+      await page.screenshot({path:`${dir}/${engine.name()}-lighting-${width}.png`});
       await page.locator('#about').evaluate(e=>e.scrollIntoView({behavior:'instant',block:'start'}));
+      assert(await page.locator('.story-track').evaluate(e=>e.getBoundingClientRect().height<=innerHeight*2.42),'Shorter native story track');
+      if(width>=1000)assert((await page.locator('.story-frame').boundingBox()).width>=700,'Larger desktop story frame');
       for(let i=1;i<=4;i++) {
         await page.locator(`.story-chapter-nav a[href="#story-chapter-${i}"]`).click();
         await page.waitForFunction(i=>document.getElementById('about').dataset.storyCurrent===String(i),i);
@@ -77,6 +95,7 @@ for(const engine of process.env.TEST_WEBKIT==='1'?[chromium,webkit]:[chromium]) 
       await page.screenshot({path:`${dir}/${engine.name()}-cv-${width}.png`});
       await page.keyboard.press('Escape');
       await page.locator('#contact').evaluate(e=>e.scrollIntoView({behavior:'instant',block:'start'})); await page.waitForTimeout(700);
+      assert.equal(await page.locator('.contact-email-button').evaluate(e=>getComputedStyle(e).backgroundImage),'none','Mail channel uses a solid terminal material');
       await page.screenshot({path:`${dir}/${engine.name()}-contact-${width}.png`});
       await page.locator('[data-contact-action="email"]').click();
       // Sample in the browser before triggering the short burst. Transport and
@@ -101,5 +120,19 @@ for(const engine of process.env.TEST_WEBKIT==='1'?[chromium,webkit]:[chromium]) 
       assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert.deepEqual(errors,[]);
       await page.close();console.log(`PASS ${engine.name()} visible name response, animated terrain, single-frame story, readable CV: ${width}x${height}`);
     }
+    // Freeze autonomous time to isolate geometry from legitimate camera motion.
+    // Chapters share exactly the same terrain; Contact only eases the exposure.
+    const continuity=await browser.newPage({viewport:{width:393,height:852},reducedMotion:'reduce'});
+    await continuity.addInitScript(()=>sessionStorage.setItem('an-os-booted','1'));
+    await continuity.goto(base);await continuity.locator('.live-world[data-ready="true"]').waitFor();
+    let original;
+    for(const id of ['home','brain','work','now','codex','about','contact','home']) {
+      await continuity.locator(`#${id}`).evaluate(e=>e.scrollIntoView({behavior:'instant'}));await continuity.waitForTimeout(100);
+      const hash=await continuity.locator('.live-world canvas').evaluate(c=>{const a=c.getContext('2d').getImageData(0,0,c.width,c.height).data;let hash=0;for(let i=0;i<a.length;i+=64)hash=(Math.imul(hash,31)+a[i])>>>0;return hash;});
+      if(id==='home'&&original===undefined)original=hash;
+      if(id!=='contact')assert.equal(hash,original,`Landscape geometry survives ${id} navigation without a dissolve or reframe`);
+    }
+    assert.equal(await continuity.locator('.brain-entry .section-title').evaluate(e=>getComputedStyle(e).textShadow),'none','Brain title has no clipped black shadow');
+    await continuity.close();console.log(`PASS ${engine.name()} stable terrain across all sections and clean Brain title`);
   } finally {await browser.close();}
 }

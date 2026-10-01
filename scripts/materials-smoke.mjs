@@ -28,7 +28,7 @@ try {
       },id);
       assert(health.overflow<=1,`${id}: overflow ${width}`);
       assert(health.left>=-1&&health.right<=width+1,`${id}: title bounds ${width}`);
-      assert.match(health.font,/Space Grotesk/);assert.equal(health.style,'normal');assert.equal(health.opacity,'1');assert.notEqual(health.paint,'rgba(0, 0, 0, 0)');assert.equal(health.mask,0);
+      assert.match(health.font,/IBM Plex Mono/);assert.equal(health.style,'normal');assert.equal(health.opacity,'1');assert.notEqual(health.paint,'rgba(0, 0, 0, 0)');assert.equal(health.mask,0);
     }
     for(const id of ['home','contact','work','brain','about','home']){
       await page.evaluate(id=>scrollTo({top:document.getElementById(id).offsetTop,behavior:'instant'}),id);
