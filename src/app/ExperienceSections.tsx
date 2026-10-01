@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { contact, copy, socials } from "@/data/portfolio";
 import { getRangeProgress, subscribeMotion } from "@/motion/runtime";
 import ContactIncident from "./ContactIncident";
@@ -70,59 +70,84 @@ const storyCoordinates = ["2023 / MEDICINE", "2025 / COMPUTING", "BUILD / ADNAN 
 
 export function AboutSection() {
   const section = useRef<HTMLElement>(null);
+  const jumpToChapter = useRef<(index: number, focus?: boolean) => void>(() => {});
   useEffect(() => {
     const node = section.current;
     if (!node) return;
+    const track = node.querySelector<HTMLElement>(".story-track");
+    if (!track) return;
     const chapters = Array.from(node.querySelectorAll<HTMLElement>(".story-chapter"));
     const links = Array.from(node.querySelectorAll<HTMLAnchorElement>(".story-chapter-nav a"));
-    // Arrival is a progressive enhancement: semantic copy is visible before
-    // hydration, and leaving/re-entering a chapter replays its gentle entrance.
-    const arrival = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        const chapter = entry.target.closest<HTMLElement>(".story-chapter");
-        if (chapter) chapter.dataset.arriving = String(entry.isIntersecting);
-      });
-    }, { rootMargin: "-10% 0px -12% 0px", threshold: .12 });
-    chapters.forEach(chapter => {
-      const paragraph = chapter.querySelector("p");
-      if (paragraph) arrival.observe(paragraph);
-    });
-    const environment = new IntersectionObserver(entries => {
-      node.dataset.storyVisible = String(entries.some(entry => entry.isIntersecting));
-    });
-    environment.observe(node);
-    const unsubscribe = subscribeMotion(frame => {
-      // Runtime ranges are cached and remeasured when any section resizes, so
-      // opening a project above the story cannot leave these coordinates stale.
-      const progress = chapters.map(chapter => getRangeProgress(chapter, .8, .2));
-      let current = 0;
-      progress.forEach((value, index) => { if (value >= .46) current = index; });
+    const count = node.querySelector<HTMLElement>(".story-count-current");
+    let enhanced = false;
+    const render = (progress: number, reduced: boolean) => {
+      const position = Math.min(chapters.length - .00001, progress * chapters.length);
+      const current = Math.floor(position);
       node.dataset.storyCurrent = String(current + 1);
-      node.dataset.storyMotion = frame.reduced ? "reduced" : "active";
-      node.dataset.storyQuiet = String(frame.quiet || document.hidden);
-      node.style.setProperty("--story-progress", ((current + progress[current]) / chapters.length).toFixed(4));
+      node.style.setProperty("--story-progress", progress.toFixed(4));
+      if (count) count.textContent = String(current + 1).padStart(2, "0");
       chapters.forEach((chapter, index) => {
-        const focus = Math.max(0, 1 - Math.abs(progress[index] - .56) / .56);
-        chapter.style.setProperty("--story-read", progress[index].toFixed(4));
-        chapter.style.setProperty("--story-focus", focus.toFixed(4));
-        chapter.style.setProperty("--story-drift", frame.reduced ? "0px" : `${((1 - progress[index]) * 4).toFixed(2)}px`);
         chapter.dataset.current = String(index === current);
+        // Exactly one paragraph is visible; no overlapping text or empty frame.
+        if (reduced) { chapter.removeAttribute("aria-hidden"); chapter.inert = false; }
+        else { chapter.setAttribute("aria-hidden", String(index !== current)); chapter.inert = index !== current; }
         links[index]?.setAttribute("data-current", String(index === current));
         if (index === current) links[index]?.setAttribute("aria-current", "step");
         else links[index]?.removeAttribute("aria-current");
       });
+    };
+    jumpToChapter.current = (index, focus = false) => {
+      const chapter = chapters[index];
+      if (!chapter) return;
+      if (!enhanced) { chapter.scrollIntoView({ behavior: "instant", block: "start" }); }
+      else {
+        // Only explicit links move scroll. Wheel, touch, keys and reverse scroll
+        // remain native; the runtime owns the scroll clock and cached ranges.
+        const rect = track.getBoundingClientRect();
+        const distance = Math.max(1, rect.height - window.innerHeight * .86);
+        const progress = (index + .15) / chapters.length;
+        render(progress, false);
+        window.scrollTo({ top: rect.top + window.scrollY - window.innerHeight * .14 + distance * progress, behavior: "instant" });
+      }
+      if (focus) chapter.focus({ preventScroll: true });
+    };
+    const hashChapter = () => {
+      const index = chapters.findIndex(chapter => `#${chapter.id}` === window.location.hash);
+      if (index >= 0) jumpToChapter.current(index);
+    };
+    let initialHashHandled = false;
+    const unsubscribe = subscribeMotion(frame => {
+      enhanced = !frame.reduced;
+      node.dataset.storyMotion = frame.reduced ? "reduced" : "active";
+      node.dataset.storyQuiet = String(frame.quiet || document.hidden || frame.chapter !== "about");
+      const progress = frame.reduced
+        ? chapters.reduce((current, chapter, index) => getRangeProgress(chapter, .5, .5) >= .5 ? index / chapters.length : current, 0)
+        : getRangeProgress(track, .14, 1);
+      render(progress, frame.reduced);
+      if (!initialHashHandled) { initialHashHandled = true; hashChapter(); }
     });
-    const visibility = () => { node.dataset.storyQuiet = String(document.hidden); };
-    document.addEventListener("visibilitychange", visibility);
+    window.addEventListener("hashchange", hashChapter);
     return () => {
       unsubscribe();
-      arrival.disconnect();
-      environment.disconnect();
-      document.removeEventListener("visibilitychange", visibility);
+      window.removeEventListener("hashchange", hashChapter);
+      jumpToChapter.current = () => {};
+      delete node.dataset.storyMotion;
+      chapters.forEach(chapter => { chapter.removeAttribute("aria-hidden"); chapter.inert = false; });
     };
   }, []);
+  const navigate = (event: MouseEvent<HTMLAnchorElement>, index: number) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    window.history.pushState(window.history.state, "", `#story-chapter-${index + 1}`);
+    jumpToChapter.current(index, event.detail === 0);
+  };
   return <section ref={section} id="about" className="content-section about-section" aria-labelledby="about-title">
     <div className="section-head reveal"><p className="section-index">06 / BACKGROUND</p><h2 id="about-title" className="section-title">How I got here.</h2><p className="section-lead">The field changed. The curiosity stayed.</p></div>
+    <div className="story-track"><div className="story-stage">
+    <nav className="story-chapter-nav" aria-label="Story chapters">
+      {storyLabels.map((label, index) => <a key={label} href={`#story-chapter-${index + 1}`} onClick={event => navigate(event, index)} aria-label={`Read chapter ${index + 1}: ${label}`}><span>0{index + 1}</span><span>{label}</span><span aria-hidden="true">↓</span></a>)}
+    </nav>
+    <div className="story-frame"><div className="story-frame-head" aria-hidden="true"><span>06 / BACKGROUND</span><span className="story-count"><span className="story-count-current">01</span> / {String(copy.en.story.length).padStart(2, "0")}</span></div>
     <div className="story-environment" aria-hidden="true">
       <div className="story-environment-code">{[
         "const origin = 'medicine';", "observe(signal);", "if (curious) keepBuilding();",
@@ -130,12 +155,10 @@ export function AboutSection() {
       ].map(line => <span key={line}>{line}</span>)}</div>
       <svg viewBox="0 0 600 70" preserveAspectRatio="none"><path pathLength="1" d="M0 35H80L100 35L117 15L133 55L150 5L171 65L192 35H257L283 35L308 25L331 35H400L430 35L445 15L468 55L489 35H600"/></svg>
     </div>
-    <nav className="story-chapter-nav" aria-label="Story chapters">
-      {storyLabels.map((label, index) => <a key={label} href={`#story-chapter-${index + 1}`} aria-label={`Read chapter ${index + 1}: ${label}`}><span>0{index + 1}</span><span>{label}</span><span aria-hidden="true">↓</span></a>)}
-    </nav>
     <div className="story-chapters">{copy.en.story.map((beat, index) => <article id={`story-chapter-${index + 1}`} className="story-chapter" key={storyLabels[index]} aria-labelledby={`story-heading-${index + 1}`} tabIndex={-1}>
       <div className="story-chapter-heading"><h3 id={`story-heading-${index + 1}`} className="story-marker">0{index + 1} / {storyLabels[index]}</h3><span className="story-coordinate">{storyCoordinates[index]}</span></div><p>{beat}</p>
-    </article>)}</div>
+    </article>)}</div><div className="story-frame-foot" aria-hidden="true"><span>THE CURIOSITY STAYED.</span><span>↓</span></div><div className="story-progress" aria-hidden="true"><i /></div></div>
+    </div></div>
     <div className="about-actions reveal"><button className="command-action command-action-quiet cv-command" type="button" onClick={() => window.dispatchEvent(new CustomEvent("an-os-open-terminal", { detail: "cv" }))}><span>&gt; read_cv.txt</span><span className="action-tail">↗</span></button><span className="cv-note">{"// read the document in the terminal"}</span></div>
   </section>;
 }

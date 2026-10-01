@@ -45,7 +45,7 @@ try {
     await jump('about');
     for (let i=1;i<=4;i++) {
       await page.locator(`.story-chapter-nav a[href="#story-chapter-${i}"]`).click();
-      await page.waitForFunction(i => document.querySelector(`#story-chapter-${i}`)?.dataset.arriving==='true',i);
+      await page.waitForFunction(i => document.querySelector('#about')?.dataset.storyCurrent===String(i),i);
       await page.waitForTimeout(1150);
       await page.waitForFunction(i=>getComputedStyle(document.querySelector(`#story-chapter-${i} p`)).opacity==='1',i);
       assert.equal(await page.locator(`#story-chapter-${i} p`).evaluate(e=>getComputedStyle(e).opacity),'1');
@@ -71,7 +71,7 @@ try {
     await page.getByRole('dialog').waitFor();
     await page.screenshot({path:`${dir}/confirm-${width}-${reduced}.png`});
     await page.getByRole('button',{name:'No',exact:true}).click();
-    assert.equal(await page.locator('[data-terminal-window]').count(),3);
+    assert.equal(await page.locator('[data-terminal-window]').count(),18);
     assert.equal(await page.locator('[data-terminal-window]').first().locator('..').getAttribute('aria-hidden'),'true');
     assert.equal(await page.locator('[data-terminal-window]').first().locator('..').evaluate(e=>getComputedStyle(e).zIndex),'3');
     await page.getByRole('button',{name:/Hack me/}).click();

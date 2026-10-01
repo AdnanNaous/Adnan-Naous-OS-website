@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import styles from "./ContactIncident.module.css";
 
@@ -10,6 +10,16 @@ const terminalScripts = [
   { name: "channel.watch", lines: ["> handshake / mail", "packet 001 ...... dropped", "carrier ........ unavailable"] },
   { name: "session.trace", lines: ["> trace --local", "buffer ......... fragmented", "route /home .... suspended"] },
   { name: "override.exec", lines: ["> terminate --simulation", "process ........ stopped", "exit 404 ....... no signal"] },
+];
+
+// Fixed placements keep the same bounded sequence on every viewport.
+const terminalPlacements = [
+  [4, 7, 2, 4], [72, 16, 55, 12], [18, 73, 8, 77],
+  [61, 65, 48, 68], [32, 12, 25, 7], [6, 48, 0, 43],
+  [77, 78, 58, 82], [49, 5, 45, 2], [24, 56, 13, 59],
+  [75, 39, 57, 35], [9, 85, 0, 85], [54, 79, 33, 75],
+  [37, 33, 18, 25], [64, 8, 55, 6], [2, 28, 0, 20],
+  [43, 69, 27, 64], [80, 55, 59, 51], [20, 18, 10, 13],
 ];
 
 export default function ContactIncident({ emailHref, onClose, onFix }: {
@@ -93,10 +103,17 @@ export default function ContactIncident({ emailHref, onClose, onFix }: {
     <div className={styles.scanlines} aria-hidden="true" />
     {phase !== "confirm" && <div className={styles.faultField} aria-hidden="true"><span>AN/OS // SIGNAL LOST<br />FRAME 001—404<br />MEMORY DESYNC</span><span>01001011 00110110<br />NO CARRIER / NO RESPONSE<br />RECOVERY MODE ACTIVE</span></div>}
     {(phase === "pending" || phase === "destroying" || phase === "locked") && <div key={phase} className={styles.terminalWindows} aria-hidden="true">
-      {terminalScripts.map((script, index) => <div key={script.name} data-terminal-window={index + 1} className={styles.terminalWindow}>
-        <div className={styles.windowTitle}><span>{script.name}</span><span>− ×</span></div>
-        <pre>{script.lines.join("\n")}</pre>
-      </div>)}
+      {terminalPlacements.map(([x, y, mobileX, mobileY], index) => {
+        const script = terminalScripts[index % terminalScripts.length];
+        return <div key={index} data-terminal-window={index + 1} className={styles.terminalWindow} style={{
+          "--burst-index": index, "--window-x": `${x}%`, "--window-y": `${y}%`,
+          "--mobile-x": `${mobileX}%`, "--mobile-y": `${mobileY}%`,
+        } as CSSProperties}>
+          <div className={styles.windowTitle}><span>{script.name} / {String(index + 1).padStart(2, "0")}</span><span>− ×</span></div>
+          <pre>{script.lines.join("\n")}</pre>
+          <div className={styles.windowCaption}>LOCAL FICTION / SIMULATION</div>
+        </div>;
+      })}
     </div>}
     <div ref={dialog} className={`${styles.panel} ${phase === "confirm" ? styles.confirmPanel : styles.incidentPanel} ${phase === "destroying" ? styles.destroying : ""}`} role="dialog" aria-modal="true" aria-labelledby="contact-incident-title" aria-describedby="contact-incident-description" tabIndex={-1}>
       {phase === "confirm" ? <>

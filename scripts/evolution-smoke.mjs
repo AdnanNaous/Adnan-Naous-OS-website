@@ -66,9 +66,9 @@ try {
     await page.waitForTimeout(6500);
     assert.equal(await page.locator(".codex-menu button").nth(1).getAttribute("aria-pressed"),"true");
     await chapter("about");
-    assert.equal(await page.locator(".story-chapter:visible").count(),4,"All factual chapters remain readable in every motion mode");
+    assert.equal(await page.locator(".story-chapter:visible").count(),reduced?4:1,"One story frame advances through all original chapters");
     await page.locator('.story-chapter-nav a[href="#story-chapter-3"]').click();
-    await page.waitForFunction(()=>Math.abs(document.getElementById("story-chapter-3").getBoundingClientRect().top)<200);
+    await page.waitForFunction(()=>document.querySelector('#about').dataset.storyCurrent==='3');
     assert((await page.locator("#story-chapter-3").textContent()).includes("Adnan OS"));
     assert((await page.locator("#story-chapter-4").textContent()).includes("portfolio"));
     await page.locator(".cv-command").click();

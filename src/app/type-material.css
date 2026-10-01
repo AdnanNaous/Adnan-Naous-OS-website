@@ -18,6 +18,10 @@
   }
   .pulse-ready #home.is-booted .hero-name-line[data-type-material]:nth-child(2){animation-delay:.12s,.65s!important}
   @keyframes type-material-light{0%{background-position:100% 50%}16%,100%{background-position:0% 50%}}
+  #home .hero-title[data-text-hover="true"] .hero-name-line[data-type-material]{
+    background-image:radial-gradient(ellipse 160px 100px at var(--name-light-x,50%) var(--name-light-y,50%),#fff 0%,#f0f0f0 30%,#a5a5a5 75%,#bebebe 100%);
+    background-size:100% 100%;
+  }
 }
 
 .pulse-ready #home[data-pulse-visible="false"] .hero-name-line[data-type-material],

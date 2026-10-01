@@ -22,7 +22,8 @@
 .now-v2-readout{background:linear-gradient(90deg,#0b0b0bc9,transparent);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
 /* A broad, soft bounce from the open portal keeps the light spatial, not a white slab. */
 .contact-section{position:relative;isolation:isolate}
-.contact-section:before{content:"";position:absolute;z-index:0;inset:0;pointer-events:none;background:radial-gradient(ellipse 17% 35% at 53% 44%,#ffffff28,transparent 94%),radial-gradient(ellipse 43% 22% at 53% 96%,#ffffff24,transparent 94%);filter:blur(24px);opacity:0;transition:opacity 1s ease}
+.contact-section:before{content:"";position:absolute;z-index:0;inset:0;pointer-events:none;background:none;opacity:0;transition:opacity 1s ease}
+.contact-content:before{background:none;filter:none}
 body:has(.live-world[data-chapter="contact"]) .contact-section:before{opacity:1}
 .contact-content{position:relative;z-index:1}
 /* The work trace assembles in staggered blocks, then releases the project rows. */

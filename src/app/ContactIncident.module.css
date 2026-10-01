@@ -45,20 +45,15 @@
 .processLog span:nth-child(2){animation-delay:.3s}.processLog span:nth-child(3){animation-delay:.65s}
 .shutdownBar{height:8px;margin-top:22px;border:1px solid #aaa;overflow:hidden}
 .shutdownBar span{display:block;height:100%;width:100%;transform-origin:left;background:#bbb;animation:drain 1.15s steps(14,end) forwards}
-.terminalWindows{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:3}
-.terminalWindow{position:absolute;width:290px;border:1px solid #666;background:#090909;box-shadow:7px 7px 0 #0009;color:#b7b7b7;font:500 10px/1.8 var(--terminal-font);opacity:0;animation:window-cycle .35s steps(1,end) both}
-.terminalWindow:nth-child(1){left:5%;top:8%;animation-delay:.05s}
-.terminalWindow:nth-child(2){right:3%;top:26%;animation-delay:.4s}
-.terminalWindow:nth-child(3){left:12%;bottom:8%;animation-delay:.75s}
-.windowTitle{display:flex;justify-content:space-between;padding:5px 10px;border-bottom:1px solid #555;background:#ffffff0a;font-size:9px;letter-spacing:.04em}
-.terminalWindow pre{margin:0;padding:12px;font:inherit;white-space:pre-wrap}
-.incidentOverlay[data-phase="pending"] .terminalWindow{animation-duration:.25s}
-.incidentOverlay[data-phase="pending"] .terminalWindow:nth-child(2){animation-delay:.35s}
-.incidentOverlay[data-phase="pending"] .terminalWindow:nth-child(3){animation-delay:.65s}
-.incidentOverlay[data-phase="locked"] .terminalWindow{animation-duration:.5s}
-.incidentOverlay[data-phase="locked"] .terminalWindow:nth-child(1){animation-delay:.15s}
-.incidentOverlay[data-phase="locked"] .terminalWindow:nth-child(2){animation-delay:.8s}
-.incidentOverlay[data-phase="locked"] .terminalWindow:nth-child(3){animation-delay:1.45s}
+/* Each phase runs 18 localized windows once; the final burst ends at 1.786s. */
+.terminalWindows{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:3;--burst-step:58ms}
+.terminalWindow{position:absolute;left:var(--window-x);top:var(--window-y);width:220px;border:1px solid #666;background:#090909;box-shadow:4px 4px 0 #0009;color:#b7b7b7;font:500 8px/1.6 var(--terminal-font);opacity:0;pointer-events:none;animation:window-cycle 120ms steps(1,end) both;animation-delay:calc(var(--burst-index) * var(--burst-step))}
+.windowTitle{display:flex;justify-content:space-between;padding:4px 7px;border-bottom:1px solid #555;background:#ffffff0a;font-size:8px;letter-spacing:.02em}
+.terminalWindow pre{margin:0;padding:8px;font:inherit;white-space:pre-wrap}
+.windowCaption{padding:3px 7px;border-top:1px solid #333;color:#888;font-size:6px;letter-spacing:.08em}
+.incidentOverlay[data-phase="pending"] .terminalWindows{--burst-step:48ms}
+.incidentOverlay[data-phase="destroying"] .terminalWindows{--burst-step:58ms}
+.incidentOverlay[data-phase="locked"] .terminalWindows{--burst-step:98ms}
 .incidentOverlay[data-phase="locked"]{background:radial-gradient(ellipse at 50% 45%,#111 0%,#000 56%)}
 .incidentOverlay[data-phase="locked"] .incidentPanel{width:min(100%,900px);border-color:#ffffff50;box-shadow:none;animation:error-settle .65s steps(1,end) both}
 .errorCode{font:550 clamp(140px,25vw,290px)/.8 var(--font-interface),sans-serif!important;letter-spacing:-.09em!important}
@@ -67,12 +62,12 @@
 .reboot:hover{background:#aaa}
 @keyframes signal-cut{0%,100%{opacity:0;transform:none}28%{opacity:.55;transform:translateY(55px)}53%{opacity:0}78%{opacity:.35;transform:translateY(120px)}}
 @keyframes panel-tear{0%,100%{opacity:0;transform:none}30%{opacity:.8;top:24%;transform:translateX(-7px)}55%{opacity:0}75%{opacity:.5;top:70%;transform:translateX(6px)}90%{opacity:0}}
-@keyframes window-cycle{0%{opacity:0;transform:translateY(5px)}12%,85%{opacity:.8;transform:none}100%{opacity:0;transform:translateY(-3px)}}
+@keyframes window-cycle{0%{opacity:0;transform:translate(2px,3px)}10%,78%{opacity:.9;transform:none}79%,94%{opacity:.6;transform:translateX(-2px)}100%{opacity:0;transform:none}}
 @keyframes log-register{from{opacity:0}to{opacity:1}}
 @keyframes command-register{0%,100%{transform:none}35%{transform:translateX(2px)}70%{transform:translateX(-1px)}}
 @keyframes error-settle{0%{transform:translateX(-3px);clip-path:inset(0 0 4% 0)}45%{transform:translateX(2px);clip-path:inset(1% 0 0 0)}100%{transform:none;clip-path:none}}
 @keyframes drain{to{transform:scaleX(0)}}
-@media(max-width:600px){.panel{padding:30px 20px}.panel h2{font-size:41px}.panel p:not(.eyebrow){font-size:13px}.eyebrow{font-size:8px;margin-bottom:22px}.confirmPanel{padding:62px 24px 58px}.confirmPanel h2{font-size:36px}.choices{gap:10px}.choices button{min-width:120px}.routeChoices{grid-template-columns:1fr;margin-top:25px}.routeChoices button{min-height:122px;padding:15px;gap:7px}.faultField{inset:16px;font-size:8px;opacity:.22}.faultField span:last-child{display:none}.terminalWindow{width:240px;font-size:9px}.terminalWindow:nth-child(1){left:-20px;top:4%}.terminalWindow:nth-child(2){right:-25px;top:45%}.terminalWindow:nth-child(3){left:15%;bottom:3%}.errorCode{font-size:clamp(125px,32vw,190px)!important}}
+@media(max-width:600px){.panel{padding:30px 20px}.panel h2{font-size:41px}.panel p:not(.eyebrow){font-size:13px}.eyebrow{font-size:8px;margin-bottom:22px}.confirmPanel{padding:62px 24px 58px}.confirmPanel h2{font-size:36px}.choices{gap:10px}.choices button{min-width:120px}.routeChoices{grid-template-columns:1fr;margin-top:25px}.routeChoices button{min-height:122px;padding:15px;gap:7px}.faultField{inset:16px;font-size:8px;opacity:.22}.faultField span:last-child{display:none}.terminalWindow{left:var(--mobile-x);top:var(--mobile-y);width:150px;font-size:6px}.windowTitle{font-size:6px}.terminalWindow pre{padding:6px}.windowCaption{font-size:5px}.errorCode{font-size:clamp(125px,32vw,190px)!important}}
 @media(max-height:500px){.overlay{place-items:start center;padding-block:14px}.panel{margin-block:auto;padding:26px}.confirmPanel{padding:58px 24px 50px}.panel h2{font-size:36px}.eyebrow{margin-bottom:16px}.routeChoices{margin-top:18px;grid-template-columns:1fr 1fr}.routeChoices button{min-height:118px;padding:14px;gap:7px}.routeChoices strong{font-size:25px}.errorCode{font-size:130px!important}.reboot{margin-top:18px}.errorDetail{margin-top:16px}.faultField{display:none}}
 @media(max-width:380px){.routeChoices{grid-template-columns:1fr}.instrumentHeader,.instrumentFooter{font-size:7px;letter-spacing:.07em}.confirmPanel{padding-inline:20px}.confirmPanel h2{font-size:32px}}
 @media(prefers-reduced-motion:reduce){.incidentOverlay:after,.incidentPanel:after,.terminalWindow{animation:none;display:none}.shutdownBar span,.processLog span,.overrideButton:hover strong,.overrideButton:focus-visible strong,.incidentOverlay[data-phase="locked"] .incidentPanel{animation:none}.shutdownBar span{transform:scaleX(0)}.processLog span{opacity:1}.routeChoices button,.routeChoices code,.routeChoices code b,.overrideButton:before{transition:none}}

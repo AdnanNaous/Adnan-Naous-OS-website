@@ -49,7 +49,7 @@ try {
     await jump('story-chapter-3');
     assert.notEqual(await variable('#about','--story-progress'),initial);
     assert.equal(await page.locator('.story-chapter-nav a[aria-current="step"]').count(),1);
-    assert.equal(await page.locator('.story-chapter:visible').count(),4);
+    assert.equal(await page.locator('.story-chapter:visible').count(),reduced?4:1);
     await page.screenshot({path:`${dir}/story-${width}${reduced?'-reduced':''}.png`});
     await jump('codex');
     await page.waitForFunction(()=>document.documentElement.dataset.chapter==='codex');

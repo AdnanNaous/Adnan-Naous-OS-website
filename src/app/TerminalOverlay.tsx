@@ -7,7 +7,48 @@ import { runSandboxedCode, runSandboxedDots } from "./terminalSandbox";
 import styles from "./TerminalOverlay.module.css";
 import { subscribeMotion } from "@/motion/runtime";
 
-type Entry = { command?: string; lines: string[] };
+type Entry = { command?: string; lines: string[]; document?: "cv" };
+
+const cvHeadings = new Set([
+  "PROFESSIONAL SUMMARY", "TECHNICAL SKILLS", "PROJECTS", "EDUCATION",
+  "CERTIFICATIONS AND TRAINING", "TECHNICAL KNOWLEDGE",
+]);
+
+function CvDocument() {
+  const sections: { heading: string; blocks: string[] }[] = [];
+  for (const line of cvText.slice(4)) {
+    if (cvHeadings.has(line)) {
+      sections.push({ heading: line, blocks: [] });
+      continue;
+    }
+    const blocks = sections[sections.length - 1].blocks;
+    const last = blocks.length - 1;
+    // The PDF's trailing spaces mark wrapped lines, including wrapped bullets.
+    if (last >= 0 && blocks[last].endsWith(" ") && !line.startsWith("- ")) blocks[last] += line;
+    else blocks.push(line);
+  }
+  return <article className={styles.cvDocument} aria-label="Curriculum vitae">
+    <header className={styles.cvHeader}>
+      <h2>{cvText[0]}</h2>
+      <p className={styles.cvRole}>{cvText[1]}</p>
+      <p>{cvText[2]}</p>
+      <p>{cvText[3]}</p>
+    </header>
+    {sections.map(section => <section className={styles.cvSection} key={section.heading}>
+      <h3>{section.heading}</h3>
+      {section.blocks.map((block, index) => {
+        if (block.startsWith("- ")) {
+          if (index > 0 && section.blocks[index - 1].startsWith("- ")) return null;
+          const following = section.blocks.slice(index);
+          const end = following.findIndex(item => !item.startsWith("- "));
+          return <ul key={index}>{following.slice(0, end < 0 ? undefined : end).map((item, itemIndex) => <li key={itemIndex}>{item}</li>)}</ul>;
+        }
+        const isTitle = section.heading === "PROJECTS" || (section.heading === "EDUCATION" && (block.startsWith("Bachelor") || block.startsWith("Previous")));
+        return <p className={isTitle ? styles.cvItemTitle : undefined} key={index}>{block}</p>;
+      })}
+    </section>)}
+  </article>;
+}
 
 const welcome = [
   "AN/OS 2026 — visitor shell",
@@ -23,7 +64,7 @@ const startingDotCode = `function pixel(x, y, t) {
 }`;
 
 export default function TerminalOverlay({ onClose, initialDocument }: { onClose: () => void; initialDocument?: string }) {
-  const [entries, setEntries] = useState<Entry[]>([{ lines: welcome }, ...(initialDocument === "cv" ? [{ command: "cat cv.txt", lines: cvText }] : [])]);
+  const [entries, setEntries] = useState<Entry[]>([{ lines: welcome }, ...(initialDocument === "cv" ? [{ command: "cat cv.txt", lines: cvText, document: "cv" as const }] : [])]);
   const [value, setValue] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
@@ -61,7 +102,12 @@ export default function TerminalOverlay({ onClose, initialDocument }: { onClose:
     return () => { document.body.style.overflow = overflow; removeEventListener("keydown", closeOnEscape); previous?.focus({ preventScroll: true }); };
   }, [onClose]);
 
-  useEffect(() => { if (screen.current) screen.current.scrollTop = screen.current.scrollHeight; }, [entries]);
+  useEffect(() => {
+    const viewport = screen.current;
+    if (!viewport) return;
+    const latest = viewport.querySelector<HTMLElement>(".terminal-entry:last-of-type");
+    viewport.scrollTop = entries.at(-1)?.document === "cv" && latest ? latest.offsetTop : viewport.scrollHeight;
+  }, [entries]);
   useEffect(() => { if (codeOpen) editor.current?.focus({ preventScroll: true }); }, [codeOpen]);
   useEffect(() => () => cleanupRun.current?.(), []);
   useEffect(() => {
@@ -156,7 +202,7 @@ export default function TerminalOverlay({ onClose, initialDocument }: { onClose:
       window.open(`https://duckduckgo.com/?q=${encodeURIComponent(query)}`, "_blank", "noopener,noreferrer");
       lines = [`Searching DuckDuckGo for: ${query}`, "Results open in a new tab."];
     } else lines = [`Command not found: ${command}`, "Type help for supported commands."];
-    setEntries(items => [...items, { command, lines }]);
+    setEntries(items => [...items, { command, lines, ...(lines === cvText ? { document: "cv" as const } : {}) }]);
   };
 
   return <div className="terminal-overlay" role="presentation" onMouseDown={event => { if (event.target === event.currentTarget) onClose(); }}>
@@ -166,12 +212,11 @@ export default function TerminalOverlay({ onClose, initialDocument }: { onClose:
         <button type="button" onClick={() => run("help")}>⌘ Help</button>
         <button type="button" onClick={openCode}>⌘ Write code</button>
         <button type="button" onClick={() => { setValue("search "); input.current?.focus(); }}>⌕ Search web</button>
-        <button type="button" onClick={() => run("dots")}>● Dot motion</button>
         <button type="button" onClick={() => run("python")}>⌘ Python</button>
         <button type="button" onClick={() => run("java")}>⌘ Java</button>
       </div>
       <div className="terminal-window-screen" ref={screen} onClick={event => { if (event.target === event.currentTarget) input.current?.focus({ preventScroll: true }); }}>
-        {entries.map((entry, index) => <div className="terminal-entry" key={index}>{entry.command && <div className="terminal-entry-command"><span>visitor@an-os:~$</span> {entry.command}</div>}{entry.lines.map((line, lineIndex) => <div className="terminal-output" key={lineIndex}>{line}</div>)}</div>)}
+        {entries.map((entry, index) => <div className="terminal-entry" key={index}>{entry.command && <div className="terminal-entry-command"><span>visitor@an-os:~$</span> {entry.command}</div>}{entry.document === "cv" ? <CvDocument /> : entry.lines.map((line, lineIndex) => <div className="terminal-output" key={lineIndex}>{line}</div>)}</div>)}
         <form className="terminal-input-line" onSubmit={event => { event.preventDefault(); run(value); }}><label htmlFor="terminal-input">visitor@an-os:~$</label><input id="terminal-input" ref={input} value={value} onChange={event => setValue(event.target.value)} onKeyDown={event => {
           if (event.key === "ArrowUp" && history.length) { event.preventDefault(); const next = historyIndex < 0 ? history.length - 1 : Math.max(0, historyIndex - 1); setHistoryIndex(next); setValue(history[next]); }
           if (event.key === "ArrowDown" && historyIndex >= 0) { event.preventDefault(); const next = historyIndex + 1; setHistoryIndex(next < history.length ? next : -1); setValue(next < history.length ? history[next] : ""); }

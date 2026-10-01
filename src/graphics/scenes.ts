@@ -1,5 +1,5 @@
 import type { Chapter } from "../motion/runtime";
-import { drawEnvironment } from "./scenes/environment";
+import { drawTerrain } from "./scenes/terrain";
 export type SceneInput = {
     time: number;
     progress: number;
@@ -23,7 +23,7 @@ export function paintChapter(c: C, chapter: Chapter, input: SceneInput, alpha: n
     c.globalAlpha = alpha;
     c.fillStyle = "#080a0b";
     c.fillRect(0, 0, 1200, 800);
-    drawEnvironment(c, chapter, input);
+    drawTerrain(c, chapter, input);
     c.restore();
 }
 export function paintSignal(c: C, input: SceneInput, outgoing: number) {

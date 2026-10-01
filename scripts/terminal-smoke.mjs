@@ -40,7 +40,8 @@ try {
   await search.close();
 
   assert.equal(await terminal.getByRole("button", { name: /free ai/i }).count(), 0);
-  await terminal.getByRole("button", { name: /dot motion/i }).click();
+  assert.equal(await terminal.getByRole("button", { name: /^● Dot motion$/i }).count(), 0);
+  await input.fill("dots"); await input.press("Enter");
   await terminal.getByRole("region", { name: "Animated dot motion" }).waitFor();
   await terminal.locator("pre").getByText("●", { exact: false }).waitFor({ timeout: 5000 });
   const firstFrame = await terminal.locator("pre").textContent();
@@ -54,6 +55,7 @@ try {
   assert((await terminal.textContent()).includes("No administrator privileges"));
   await input.fill("cat cv.txt"); await input.press("Enter");
   assert((await terminal.textContent()).includes("3.43/4.00"));
+  assert.equal(await terminal.getByRole("article", { name: "Curriculum vitae" }).getByRole("heading", { level: 3 }).count(), 6);
   await terminal.getByRole("button", { name: /⌘ Java/i }).click();
   await terminal.getByTitle("java code runner").waitFor();
   assert((await terminal.getByTitle("java code runner").getAttribute("src")).includes("onecompiler.com/embed/java"));

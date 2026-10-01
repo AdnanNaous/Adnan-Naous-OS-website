@@ -36,11 +36,10 @@ try {
     }
     if(width<700){await page.setViewportSize({width,height:height-120});await page.waitForTimeout(150);await page.setViewportSize({width,height});}
     await jump('about');
-    assert.equal(await page.locator('.story-chapter:visible').count(),4);
+    assert.equal(await page.locator('.story-chapter:visible').count(),1);
     for(let i=1;i<=4;i++){
       await page.locator(`.story-chapter-nav a[href="#story-chapter-${i}"]`).click();
-      await page.waitForFunction(i=>{const r=document.getElementById(`story-chapter-${i}`).getBoundingClientRect();return r.top>=0&&r.top<210;},i);
-      await page.waitForFunction(i=>document.getElementById(`story-chapter-${i}`).dataset.arriving==='true',i);
+      await page.waitForFunction(i=>document.querySelector('#about').dataset.storyCurrent===String(i),i);
       await page.waitForFunction(i=>getComputedStyle(document.querySelector(`#story-chapter-${i} p`)).opacity==='1',i);
       const text=await page.locator(`#story-chapter-${i} p`).evaluate(e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return {left:r.left,right:r.right,opacity:s.opacity,font:s.fontFamily};});
       assert(text.left>=0&&text.right<=width+1);assert.equal(text.opacity,'1');assert.match(text.font,/Inter/);

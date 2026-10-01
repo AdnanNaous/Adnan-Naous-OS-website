@@ -14,17 +14,26 @@ export function mountObjectPulse() {
   const interactiveText = new Set(document.querySelectorAll<HTMLElement>(textSelector));
   interactiveText.forEach(element => element.classList.add("text-reactive"));
   let hoveredText: HTMLElement | null = null;
+  const nameDisplacement = document.getElementById("an-name-displace");
+  const nameLines = [...document.querySelectorAll<HTMLElement>(".hero-name-line")];
+  let nameRects: DOMRect[] = [];
+  let pointerClientX = 0, pointerClientY = 0;
+  const trackNamePointer = (event: PointerEvent) => { pointerClientX = event.clientX; pointerClientY = event.clientY; };
+  const measureName = () => { nameRects = nameLines.map(line => line.getBoundingClientRect()); };
   const trackText = (event: PointerEvent) => {
     const target = event.type === "pointerout" ? event.relatedTarget : event.target;
     const next = target instanceof Element ? target.closest<HTMLElement>(textSelector) : null;
     if (next === hoveredText) return;
     if (hoveredText) { delete hoveredText.dataset.textHover; hoveredText.style.removeProperty("--text-energy"); }
     hoveredText = next;
+    if (next?.classList.contains("hero-title")) { measureName(); trackNamePointer(event); }
     if (next) { next.classList.add("text-reactive"); interactiveText.add(next); next.dataset.textHover = "true"; }
   };
   document.addEventListener("pointerover", trackText, { passive: true });
   document.addEventListener("pointerout", trackText, { passive: true });
   document.addEventListener("pointerdown", trackText, { passive: true });
+  document.addEventListener("pointermove", trackNamePointer, { passive: true });
+  window.addEventListener("resize", measureName, { passive: true });
   const releaseText = (event: PointerEvent) => {
     if (event.pointerType === "mouse" || !hoveredText) return;
     delete hoveredText.dataset.textHover;
@@ -59,6 +68,14 @@ export function mountObjectPulse() {
     root.dataset.pulseReduced = String(frame.reduced);
     root.dataset.pulseQuiet = String(frame.quiet);
     if (hoveredText) write(hoveredText, "--text-energy", frame.reduced || frame.quiet ? "0" : Math.min(1, frame.pointerForce).toFixed(3));
+    const nameActive = hoveredText?.classList.contains("hero-title") && sections[0]?.visible && !frame.reduced && !frame.quiet;
+    const scale = nameActive ? (4 + Math.min(1, frame.pointerForce) * 14).toFixed(2) : "0";
+    if (nameDisplacement?.getAttribute("scale") !== scale) nameDisplacement?.setAttribute("scale", scale);
+    if (nameActive) nameLines.forEach((line, i) => {
+      const rect = nameRects[i]; if (!rect) return;
+      write(line, "--name-light-x", `${(pointerClientX - rect.left).toFixed(1)}px`);
+      write(line, "--name-light-y", `${(pointerClientY - rect.top).toFixed(1)}px`);
+    });
     for (const { id, element, visible } of sections) {
       if (!visible && id !== frame.chapter) continue;
       const progress = getRangeProgress(element, 1, 0);
@@ -78,6 +95,9 @@ export function mountObjectPulse() {
     unsubscribe(); observer.disconnect(); document.removeEventListener("visibilitychange", visibility);
     document.removeEventListener("pointerover", trackText); document.removeEventListener("pointerout", trackText);
     document.removeEventListener("pointerdown", trackText); document.removeEventListener("pointerup", releaseText); document.removeEventListener("pointercancel", releaseText);
+    document.removeEventListener("pointermove", trackNamePointer); window.removeEventListener("resize", measureName);
+    nameDisplacement?.setAttribute("scale", "0");
+    nameLines.forEach(line => { line.style.removeProperty("--name-light-x"); line.style.removeProperty("--name-light-y"); });
     interactiveText.forEach(element => { element.classList.remove("text-reactive"); delete element.dataset.textHover; element.style.removeProperty("--text-energy"); });
     root.classList.remove("pulse-ready"); delete root.dataset.pulsePaused; delete root.dataset.pulseReduced; delete root.dataset.pulseQuiet;
     sections.forEach(({ element }) => { delete element.dataset.pulseVisible; });
