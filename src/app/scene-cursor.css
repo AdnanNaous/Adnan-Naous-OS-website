@@ -1,4 +1,5 @@
-.scene-sight{position:fixed;inset:0;z-index:10000;pointer-events:none;opacity:0;transition:opacity .25s;contain:strict}
+.scene-sight{position:fixed;inset:0;z-index:2147483647;margin:0;padding:0;border:0;width:auto;height:auto;overflow:hidden;background:transparent;pointer-events:none;opacity:0;contain:strict}
+.scene-sight::backdrop{background:transparent;pointer-events:none}
 .scene-sight[data-active="true"]{opacity:1}
 .scene-sight i{position:absolute;pointer-events:none}
 .sight-x{left:0;right:0;top:var(--sight-y);height:1px;background:linear-gradient(90deg,transparent,#b8e8ec24 18%,#d9c9e035 70%,transparent)}
@@ -12,7 +13,7 @@
 .scene-sight[data-control="true"] .sight-mark:after{top:10px;left:13px}
 .scene-sight[data-editing="true"] .sight-mark{opacity:0}
 html[data-scene-pointer="mouse"] body,html[data-scene-pointer="mouse"] body *{cursor:none!important}
-html[data-scene-pointer="mouse"] :is(input,textarea,[contenteditable="true"],[contenteditable="true"] *){cursor:text!important}
-@media(pointer:coarse){.scene-sight .sight-mark{display:none}}
+html[data-scene-pointer="mouse"] :is(input,textarea,[contenteditable]:not([contenteditable="false"]),[contenteditable]:not([contenteditable="false"]) *){cursor:text!important}
+.scene-sight[data-pointer="touch"] .sight-mark{display:none}
 @media(prefers-reduced-motion:reduce){.scene-sight,.scene-sight .sight-mark{transition:none}.sight-x,.sight-y{display:none}}
 @media(forced-colors:active){.scene-sight{display:none}html[data-scene-pointer="mouse"] body,html[data-scene-pointer="mouse"] body *{cursor:auto!important}}

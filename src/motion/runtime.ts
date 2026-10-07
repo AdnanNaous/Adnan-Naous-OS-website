@@ -109,7 +109,7 @@ function tick(now: number) {
   dirty = false;
   const root = document.documentElement;
   if (root.dataset.chapter !== next.chapter) root.dataset.chapter = next.chapter;
-  root.dataset.visualChapter = next.visualChapter;
+  if (root.dataset.visualChapter !== next.visualChapter) root.dataset.visualChapter = next.visualChapter;
   if (changed) {
     root.style.setProperty("--scene-progress", next.chapterProgress.toFixed(4));
     root.style.setProperty("--scene-velocity", next.velocity.toFixed(3));

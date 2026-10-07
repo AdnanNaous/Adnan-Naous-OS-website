@@ -9,7 +9,7 @@ for(const engine of process.env.TEST_WEBKIT==='1'?[chromium,webkit]:[chromium]){
   const page=await browser.newPage({viewport:{width,height},hasTouch:width<700});const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.addInitScript(()=>sessionStorage.setItem('an-os-booted','1'));
   await page.goto(base);await page.locator('.live-world[data-ready="true"]').waitFor();await page.evaluate(()=>document.fonts.ready);await page.waitForTimeout(1200);
-  const isolate=await page.addStyleTag({content:'.live-world,.world-shade,.hero-imprint,.scene-sight{visibility:hidden!important}#home{--object-x:0px!important;--object-y:0px!important}#home .hero-name-line{animation:none!important;background-position:100% 50%!important}'});
+  const isolate=await page.addStyleTag({content:'.live-world,.world-shade,.hero-imprint,.scene-sight{visibility:hidden!important}#home .hero-title{--object-x:0px!important;--object-y:0px!important}#home .hero-name-line{animation:none!important;background-position:100% 50%!important}'});
   const name=page.locator('.hero-name-line').first();const box=await name.boundingBox();await page.mouse.move(5,5);await page.waitForTimeout(300);const before=await name.screenshot();
   await page.mouse.move(box.x+25,box.y+box.height*.5);await page.waitForTimeout(80);await page.mouse.move(box.x+65,box.y+box.height*.5,{steps:3});await page.waitForTimeout(60);const after=await name.screenshot();
   const result=await page.evaluate(async([a,b])=>{

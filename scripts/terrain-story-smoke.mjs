@@ -4,6 +4,13 @@ import { chromium, webkit } from 'playwright';
 
 const base = process.env.BASE_URL || 'http://localhost:3108';
 const dir = '.codex/review/terrain-story';
+// Exercise the retained Canvas2D fallback independently. The GPU scene's
+// movement, framing and loss/restoration are covered by gpu-scene-smoke.mjs.
+function canvasFallback() {
+  sessionStorage.setItem('an-os-booted','1');
+  const get=HTMLCanvasElement.prototype.getContext;
+  HTMLCanvasElement.prototype.getContext=function(type,...args){return type==='webgl'?null:get.call(this,type,...args);};
+}
 await mkdir(dir, { recursive: true });
 async function changedInk(page, before, after) {
   return page.evaluate(async ([a, b]) => {
@@ -19,12 +26,12 @@ for(const engine of process.env.TEST_WEBKIT==='1'?[chromium,webkit]:[chromium]) 
     for(const [width,height] of [[1440,900],[1074,668],[393,852],[320,700],[844,390]]) {
       const page=await browser.newPage({viewport:{width,height},hasTouch:width<700});
       const errors=[]; page.on('pageerror',e=>errors.push(e.message));
-      await page.addInitScript(()=>sessionStorage.setItem('an-os-booted','1'));
+      await page.addInitScript(canvasFallback);
       await page.goto(base); await page.locator('.live-world[data-ready="true"]').waitFor(); await page.evaluate(()=>document.fonts.ready); await page.waitForTimeout(1300);
       assert.equal(await page.locator('.live-world').getAttribute('data-depth-layers'),'10');
       assert.match(await page.locator('.hero-title').evaluate(e=>getComputedStyle(e).fontFamily),/IBM Plex Mono/);
       assert.equal(await page.getByRole('heading',{name:'Adnan Naous.',exact:true}).count(),1,'Optical echoes do not duplicate the accessible name');
-      const isolate=await page.addStyleTag({content:'.live-world,.world-shade,.hero-imprint,.scene-sight{visibility:hidden!important}#home .hero-name-line{animation:none!important}#home{--object-x:0px!important;--object-y:0px!important}'});
+      const isolate=await page.addStyleTag({content:'.live-world,.world-shade,.hero-imprint,.scene-sight{visibility:hidden!important}#home .hero-name-line{animation:none!important}#home .hero-title{--object-x:0px!important;--object-y:0px!important}'});
       const touch=engine===chromium && width<700 ? await page.context().newCDPSession(page) : null;
       for(let i=0;i<2;i++) {
         await page.mouse.move(5,5); await page.waitForTimeout(80);
@@ -123,7 +130,7 @@ for(const engine of process.env.TEST_WEBKIT==='1'?[chromium,webkit]:[chromium]) 
     // Freeze autonomous time to isolate geometry from legitimate camera motion.
     // Chapters share exactly the same terrain; Contact only eases the exposure.
     const continuity=await browser.newPage({viewport:{width:393,height:852},reducedMotion:'reduce'});
-    await continuity.addInitScript(()=>sessionStorage.setItem('an-os-booted','1'));
+    await continuity.addInitScript(canvasFallback);
     await continuity.goto(base);await continuity.locator('.live-world[data-ready="true"]').waitFor();
     let original;
     for(const id of ['home','brain','work','now','codex','about','contact','home']) {

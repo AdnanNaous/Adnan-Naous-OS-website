@@ -18,5 +18,5 @@ export default function VisualEngine() {
     }).catch(() => { if (!disposed && host.current) { host.current.dataset.fallback = "true"; ready(); } });
     return () => { disposed = true; cleanup?.(); };
   }, []);
-  return <div ref={host} className="live-world visual-engine" data-chapter="home" data-state="home" aria-hidden="true"><canvas ref={canvas} /></div>;
+  return <div ref={host} className="live-world visual-engine" data-chapter="home" data-state="home" aria-hidden="true"><canvas ref={canvas} /><span className="scene-caption">HOME / CONTINUOUS SIGNAL</span></div>;
 }

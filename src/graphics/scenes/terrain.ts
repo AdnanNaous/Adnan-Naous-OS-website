@@ -27,6 +27,11 @@ points.forEach((p, i) => {
 const tones = ["#536263", "#788d91", "#a0bec1", "#c4d9db", "#eef9f8"];
 let skyGrid: Path2D | undefined;
 
+/** Upload the reference relief once. No point projection or path allocation on GPU frames. */
+export function terrainVertices() {
+  return new Float32Array(points.flatMap(p => [p.x, p.z, p.h, p.nx, p.ny, p.nz, p.light, p.phase, p.layer]));
+}
+
 export function drawTerrain(c: CanvasRenderingContext2D, chapter: Chapter, input: SceneInput) {
   const still = input.reduced || input.quiet;
   const t = input.reduced ? 0 : input.time;

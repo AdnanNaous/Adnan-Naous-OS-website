@@ -15,6 +15,8 @@
 }
 .visual-engine[data-ready="true"] canvas { opacity: 1; }
 .visual-engine[data-fallback="true"] canvas { display: none; }
+.scene-caption { position:absolute; right:3.5vw; bottom:3.5vh; color:#bdb7a65e; font:9px var(--font-code,monospace); letter-spacing:.14em; pointer-events:none; }
+@media(max-width:700px){.scene-caption{font-size:7px;bottom:2vh;right:4vw;color:#bdb7a642}}
 .visual-engine[data-chapter="brain"] { background: radial-gradient(ellipse at 53% 45%, #252a2c, #08090a 70%); }
 .visual-engine[data-chapter="work"] { background: linear-gradient(125deg, #090a0a, #242523 72%, #090a0a); }
 .visual-engine[data-chapter="now"] { background: radial-gradient(ellipse at 62% 44%, #242b27, #08090a 72%); }

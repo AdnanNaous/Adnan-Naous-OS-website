@@ -8,7 +8,10 @@ export function mountObjectPulse() {
   const disposeCursor = mountSceneCursor();
   const sections = chapterIds.flatMap(id => {
     const element = document.getElementById(id);
-    return element ? [{ id, element, visible: false }] : [];
+    return element ? [{ id, element, visible: false,
+      objects: [...element.querySelectorAll<HTMLElement>(".section-title,.hero-title,.hero-imprint,.brain-depth-word,.brain-memory-trace,.contact-ending")],
+      trace: element.querySelector<SVGElement>(".brain-memory-trace"),
+    }] : [];
   });
   const headings = [...document.querySelectorAll<HTMLElement>("main .section-title")];
   const rail = document.querySelector<HTMLElement>(".timeline-rail");
@@ -61,7 +64,7 @@ export function mountObjectPulse() {
   };
   document.addEventListener("pointerup", releaseText, { passive: true });
   document.addEventListener("pointercancel", releaseText, { passive: true });
-  const write = (element: HTMLElement, name: string, value: string) => {
+  const write = (element: HTMLElement | SVGElement, name: string, value: string) => {
     if (element.style.getPropertyValue(name) !== value) element.style.setProperty(name, value);
   };
   root.classList.add("pulse-ready");
@@ -84,8 +87,8 @@ export function mountObjectPulse() {
   document.addEventListener("visibilitychange", visibility);
   visibility();
   const unsubscribe = subscribeMotion(frame => {
-    root.dataset.pulseReduced = String(frame.reduced);
-    root.dataset.pulseQuiet = String(frame.quiet);
+    if (root.dataset.pulseReduced !== String(frame.reduced)) root.dataset.pulseReduced = String(frame.reduced);
+    if (root.dataset.pulseQuiet !== String(frame.quiet)) root.dataset.pulseQuiet = String(frame.quiet);
     if (hoveredText) write(hoveredText, "--text-energy", frame.reduced || frame.quiet ? "0" : Math.min(1, frame.pointerForce).toFixed(3));
     const mix = 1 - Math.exp(-frame.delta / 55);
     smoothX += (pointerClientX - smoothX) * mix; smoothY += (pointerClientY - smoothY) * mix;
@@ -105,15 +108,18 @@ export function mountObjectPulse() {
       write(line, "--holo-y", `${(frame.pointerY * 4).toFixed(2)}px`);
       write(line, "--holo-tilt", `${(frame.pointerX * 7).toFixed(2)}deg`);
     });
-    for (const { id, element, visible } of sections) {
+    for (const { id, element, visible, objects, trace } of sections) {
       if (!visible && id !== frame.chapter) continue;
       const progress = getRangeProgress(element, 1, 0);
       const still = frame.reduced || frame.quiet;
-      write(element, "--object-progress", progress.toFixed(3));
-      write(element, "--object-x", still ? "0px" : `${(frame.pointerX * 2.2).toFixed(2)}px`);
-      write(element, "--object-y", still ? "0px" : `${(frame.pointerY * 1.6).toFixed(2)}px`);
-      write(element, "--object-depth", still ? "0px" : `${((progress - .5) * 18).toFixed(2)}px`);
-      if (id === "brain") write(element, "--memory-draw", (frame.reduced ? 1 : Math.min(1, Math.max(0, (progress - .1) * 2.7))).toFixed(3));
+      // Restrict inherited pointer variables to the objects which consume them.
+      // Updating a whole section used to restyle every card and control on each move.
+      for (const object of objects) {
+        write(object, "--object-x", still ? "0px" : `${(frame.pointerX * 2.2).toFixed(2)}px`);
+        write(object, "--object-y", still ? "0px" : `${(frame.pointerY * 1.6).toFixed(2)}px`);
+        write(object, "--object-depth", still ? "0px" : `${((progress - .5) * 18).toFixed(2)}px`);
+      }
+      if (id === "brain" && trace) write(trace, "--memory-draw", (frame.reduced ? 1 : Math.min(1, Math.max(0, (progress - .1) * 2.7))).toFixed(3));
     }
     if (rail) {
       const index = chapterIds.indexOf(frame.chapter);

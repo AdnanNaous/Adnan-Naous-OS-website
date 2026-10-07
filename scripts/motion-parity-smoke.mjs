@@ -23,7 +23,7 @@ try {
     assert.equal(await page.locator('.hero-title').getAttribute('data-text-hover'),'true');
     assert.notEqual(await page.locator('.hero-name-line').first().evaluate(e=>getComputedStyle(e,'::before').textShadow),'none','Optical shadow lives on the local masked copy');
     assert.match(await page.locator('.hero-name-line').first().evaluate(e=>getComputedStyle(e,'::before').maskImage),/radial-gradient/);
-    assert(Math.abs(await page.locator('#home').evaluate(e=>parseFloat(e.style.getPropertyValue('--object-x'))))>.01,'Pointer or touch moves the original title on both devices');
+    assert(Math.abs(await page.locator('.hero-title').evaluate(e=>parseFloat(e.style.getPropertyValue('--object-x'))))>.01,'Pointer or touch moves the original title on both devices');
     if(phone)await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
     else await page.mouse.move(width-2,height-2);
     await page.waitForTimeout(100);
@@ -38,7 +38,7 @@ try {
     for(const id of ['brain','work','now','codex','about','contact']) {
       await page.evaluate(id=>document.getElementById(id).scrollIntoView({behavior:'instant'}),id);await page.waitForTimeout(1100);
       assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
-      const depth=await page.locator(`#${id}`).evaluate(e=>({p:parseFloat(e.style.getPropertyValue('--object-progress')),d:parseFloat(e.style.getPropertyValue('--object-depth'))}));
+      const depth=await page.locator(`#${id}`).evaluate(e=>{const r=e.getBoundingClientRect();return {p:Math.max(0,Math.min(1,(innerHeight-r.top)/(r.height+innerHeight))),d:parseFloat(e.querySelector('.section-title').style.getPropertyValue('--object-depth'))};});
       assert(Math.abs(depth.d-(depth.p-.5)*18)<.025,'Scroll depth uses the same amplitude at each width');
     }
     await page.locator('.brain-open').click();

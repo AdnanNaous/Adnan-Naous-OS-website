@@ -85,11 +85,12 @@ export function AboutSection() {
     const render = (progress: number, reduced: boolean) => {
       const position = Math.min(chapters.length - .00001, progress * chapters.length);
       const current = Math.floor(position);
-      node.dataset.storyCurrent = String(current + 1);
+      const chapterChanged = node.dataset.storyCurrent !== String(current + 1);
+      if (chapterChanged) node.dataset.storyCurrent = String(current + 1);
       node.style.setProperty("--story-progress", progress.toFixed(4));
-      if (count) count.textContent = String(current + 1).padStart(2, "0");
+      if (count && chapterChanged) count.textContent = String(current + 1).padStart(2, "0");
       transition.setCurrent(current, reduced);
-      links.forEach((link, index) => {
+      if (chapterChanged) links.forEach((link, index) => {
         link.setAttribute("data-current", String(index === current));
         if (index === current) link.setAttribute("aria-current", "step");
         else link.removeAttribute("aria-current");
@@ -117,8 +118,10 @@ export function AboutSection() {
     let initialHashHandled = false;
     const unsubscribe = subscribeMotion(frame => {
       enhanced = !frame.reduced;
-      node.dataset.storyMotion = frame.reduced ? "reduced" : "active";
-      node.dataset.storyQuiet = String(frame.quiet || document.hidden || frame.chapter !== "about");
+      const motion = frame.reduced ? "reduced" : "active";
+      const quiet = String(frame.quiet || document.hidden || frame.chapter !== "about");
+      if (node.dataset.storyMotion !== motion) node.dataset.storyMotion = motion;
+      if (node.dataset.storyQuiet !== quiet) node.dataset.storyQuiet = quiet;
       const progress = frame.reduced
         ? chapters.reduce((current, chapter, index) => getRangeProgress(chapter, .5, .5) >= .5 ? index / chapters.length : current, 0)
         : getRangeProgress(track, .14, 1);

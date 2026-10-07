@@ -69,10 +69,10 @@ try {
     await jump('home'); await page.waitForTimeout(1200);
     if(width>700&&!reduced){
       await page.mouse.move(width-40,120); await page.waitForTimeout(220);
-      const x=parseFloat(await variable('#home','--object-x'));
+      const x=parseFloat(await variable('.hero-title','--object-x'));
       assert(x>0&&x<=2.2,'Pointer presence stays within two pixels');
       await page.waitForTimeout(2100);
-      assert(Math.abs(parseFloat(await variable('#home','--object-x')))<Math.abs(x),'Pointer presence settles during reading');
+      assert(Math.abs(parseFloat(await variable('.hero-title','--object-x')))<Math.abs(x),'Pointer presence settles during reading');
     }
     assert.deepEqual(errors,[]); await page.close();
     console.log(`PASS object progression, reading pause, preservation: ${width}×${height}${reduced?' reduced':''}`);
